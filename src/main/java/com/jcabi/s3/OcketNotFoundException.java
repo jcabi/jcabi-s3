@@ -29,6 +29,7 @@
  */
 package com.jcabi.s3;
 
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import java.io.IOException;
 
 /**
@@ -45,4 +46,13 @@ public class OcketNotFoundException extends IOException {
      */
     private static final long serialVersionUID = -2854185226779232378L;
 
+    /**
+     * Public ctor.
+     * @param msg Message to show
+     * @param cause Cause of it
+     */
+    public OcketNotFoundException(final String msg,
+        final AmazonS3Exception cause) {
+        super(msg, cause);
+    }
 }

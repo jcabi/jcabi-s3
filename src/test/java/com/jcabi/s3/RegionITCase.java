@@ -116,4 +116,14 @@ public final class RegionITCase {
         this.bucket.remove(name);
     }
 
+    /**
+     * Region can throw when ocket is absent.
+     * @throws Exception If fails
+     */
+    @Test(expected = OcketNotFoundException.class)
+    public void throwsWhenObjectIsAbsent() throws Exception {
+        Assume.assumeThat(RegionITCase.KEY, Matchers.notNullValue());
+        new Ocket.Text(this.bucket.ocket("key-is-absent.txt")).read();
+    }
+
 }

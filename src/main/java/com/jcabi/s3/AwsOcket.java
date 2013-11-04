@@ -30,6 +30,7 @@
 package com.jcabi.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.GetObjectMetadataRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -97,12 +98,21 @@ final class AwsOcket implements Ocket {
     @Override
     public void read(final OutputStream output) throws IOException {
         final AmazonS3 aws = this.bkt.region().aws();
-        final S3Object obj = aws.getObject(
-            new GetObjectRequest(this.bkt.name(), this.name)
-        );
-        final InputStream input = obj.getObjectContent();
-        IOUtils.copy(input, output);
-        input.close();
+        try {
+            final S3Object obj = aws.getObject(
+                new GetObjectRequest(this.bkt.name(), this.name)
+            );
+            final InputStream input = obj.getObjectContent();
+            IOUtils.copy(input, output);
+            input.close();
+        } catch (AmazonS3Exception ex) {
+            throw new OcketNotFoundException(
+                String.format(
+                    "ocket '%s' not found in '%s'", this.name, this.bkt.name()
+                ),
+                ex
+            );
+        }
     }
 
     @Override
