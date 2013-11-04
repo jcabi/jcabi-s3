@@ -45,7 +45,7 @@ import lombok.ToString;
  * @version $Id$
  */
 @Immutable
-interface Region {
+public interface Region {
 
     /**
      * Get bucket.
@@ -81,14 +81,19 @@ interface Region {
          * @param akey Amazon key
          * @param scrt Amazon secret
          */
-        public Simple(@NotNull final String akey, @NotNull final String scrt) {
+        public Simple(
+            @NotNull(message = "key can't be NULL") final String akey,
+            @NotNull(message = "secret can't be NULL") final String scrt) {
             this.key = akey;
             this.secret = scrt;
         }
+        @NotNull
         @Override
-        public Bucket bucket(final String name) {
+        public Bucket bucket(@NotNull(message = "bucket name can't be NULL")
+            final String name) {
             return new AwsBucket(this, name);
         }
+        @NotNull
         @Override
         public AmazonS3 aws() {
             return new AmazonS3Client(

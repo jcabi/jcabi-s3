@@ -37,6 +37,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.io.Charsets;
@@ -53,9 +54,17 @@ import org.apache.commons.lang3.CharEncoding;
 public interface Ocket {
 
     /**
+     * Get bucket we're in.
+     * @return Bucket
+     */
+    @NotNull
+    Bucket bucket();
+
+    /**
      * Get object key.
      * @return Key
      */
+    @NotNull
     String key();
 
     /**
@@ -63,6 +72,7 @@ public interface Ocket {
      * @return Metadata
      * @throws IOException If fails
      */
+    @NotNull
     ObjectMetadata meta() throws IOException;
 
     /**
@@ -70,7 +80,7 @@ public interface Ocket {
      * @param output Where to write
      * @throws IOException If fails
      */
-    void read(OutputStream output) throws IOException;
+    void read(@NotNull OutputStream output) throws IOException;
 
     /**
      * Write new content to the object.
@@ -78,16 +88,17 @@ public interface Ocket {
      * @param meta Metadata to save
      * @throws IOException If fails
      */
-    void write(InputStream input, ObjectMetadata meta) throws IOException;
+    void write(@NotNull InputStream input,
+        @NotNull ObjectMetadata meta) throws IOException;
 
     /**
-     * Plain and simple S3 object with supplementary functions.
+     * Unicode text S3 object with supplementary functions.
      */
     @Immutable
     @ToString
     @EqualsAndHashCode(of = "origin")
     @Loggable(Loggable.DEBUG)
-    final class Plain {
+    final class Text {
         /**
          * Original encapsulated ocket.
          */
@@ -96,7 +107,7 @@ public interface Ocket {
          * Public ctor.
          * @param ocket Original ocket
          */
-        public Plain(final Ocket ocket) {
+        public Text(@NotNull final Ocket ocket) {
             this.origin = ocket;
         }
         /**
@@ -104,6 +115,7 @@ public interface Ocket {
          * @return Content
          * @throws IOException If fails
          */
+        @NotNull
         public String read() throws IOException {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             this.origin.read(baos);
@@ -114,7 +126,7 @@ public interface Ocket {
          * @param text Text to write
          * @throws IOException If fails
          */
-        public void write(final String text) throws IOException {
+        public void write(@NotNull final String text) throws IOException {
             final ObjectMetadata meta = new ObjectMetadata();
             meta.setContentType("text/plain");
             meta.setContentLength((long) text.getBytes(Charsets.UTF_8).length);

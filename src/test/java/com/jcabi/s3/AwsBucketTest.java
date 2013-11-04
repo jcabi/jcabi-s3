@@ -29,64 +29,28 @@
  */
 package com.jcabi.s3;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.jcabi.aspects.Immutable;
-import com.jcabi.aspects.Loggable;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
- * Amazon S3 bucket.
+ * Test case for {@link AwsBucket}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.1
  */
-@Immutable
-@ToString
-@EqualsAndHashCode(of = { "regn", "bkt" })
-@Loggable(Loggable.DEBUG)
-final class AwsBucket implements Bucket {
-
+public final class AwsBucketTest {
     /**
-     * Region we're in.
+     * AwsBucket can find and return ockets.
+     * @throws Exception If fails
      */
-    private final transient Region regn;
-
-    /**
-     * Bucket name.
-     */
-    private final transient String bkt;
-
-    /**
-     * Public ctor.
-     * @param reg Region we're in
-     * @param name Bucket name
-     */
-    AwsBucket(final Region reg, final String name) {
-        this.regn = reg;
-        this.bkt = name;
+    @Test
+    public void findsAndReturnsOckets() throws Exception {
+        final Region region = Mockito.mock(Region.class);
+        final Bucket bucket = new AwsBucket(region, "example.com");
+        final Ocket ocket = bucket.ocket("test");
+        MatcherAssert.assertThat(ocket, Matchers.notNullValue());
     }
-
-    @Override
-    public Region region() {
-        return this.regn;
-    }
-
-    @Override
-    public String name() {
-        return this.bkt;
-    }
-
-    @Override
-    public Ocket ocket(final String key) {
-        return new AwsOcket(this, key);
-    }
-
-    @Override
-    public void remove(final String key) {
-        final AmazonS3 aws = this.regn.aws();
-        aws.deleteObject(new DeleteObjectRequest(this.bkt, key));
-    }
-
 }

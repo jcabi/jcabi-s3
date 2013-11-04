@@ -31,6 +31,7 @@ package com.jcabi.s3;
 
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
+import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -44,18 +45,33 @@ import lombok.ToString;
 public interface Bucket {
 
     /**
+     * Get region we're in.
+     * @return Region
+     */
+    @NotNull
+    Region region();
+
+    /**
+     * Get bucket name.
+     * @return Bucket name
+     */
+    @NotNull
+    String name();
+
+    /**
      * Get object.
      * @param key Name of it in the bucket
      * @return Ocket
      */
-    Ocket ocket(String key);
+    @NotNull
+    Ocket ocket(@NotNull String key);
 
     /**
      * Delete object from bucket.
      * @param key Name of it in the bucket
      * @throws OcketNotFoundException If not found
      */
-    void remove(String key) throws OcketNotFoundException;
+    void remove(@NotNull String key) throws OcketNotFoundException;
 
     /**
      * Prefixed.
@@ -81,6 +97,14 @@ public interface Bucket {
         public Prefixed(final Bucket bucket, final String pfx) {
             this.origin = bucket;
             this.prefix = pfx;
+        }
+        @Override
+        public Region region() {
+            return this.origin.region();
+        }
+        @Override
+        public String name() {
+            return this.origin.name();
         }
         @Override
         public Ocket ocket(final String key) {

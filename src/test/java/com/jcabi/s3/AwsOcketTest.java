@@ -30,86 +30,44 @@
 package com.jcabi.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.GetObjectMetadataRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
-import com.jcabi.aspects.Immutable;
-import com.jcabi.aspects.Loggable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.io.ByteArrayOutputStream;
 import org.apache.commons.io.IOUtils;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
- * Amazon S3 bucket.
+ * Test case for {@link AwsOcket}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.1
  */
-@Immutable
-@ToString
-@EqualsAndHashCode(of = { "bkt", "name" })
-@Loggable(Loggable.DEBUG)
-final class AwsOcket implements Ocket {
+public final class AwsOcketTest {
 
     /**
-     * Bucket we're in.
+     * AwsOcket can find and return ockets.
+     * @throws Exception If fails
      */
-    private final transient Bucket bkt;
-
-    /**
-     * Object name.
-     */
-    private final transient String name;
-
-    /**
-     * Public ctor.
-     * @param bucket Bucket name
-     * @param obj Object name
-     */
-    AwsOcket(final Bucket bucket, final String obj) {
-        this.bkt = bucket;
-        this.name = obj;
-    }
-
-    @Override
-    public Bucket bucket() {
-        return this.bkt;
-    }
-
-    @Override
-    public String key() {
-        return this.name;
-    }
-
-    @Override
-    public ObjectMetadata meta() {
-        final AmazonS3 aws = this.bkt.region().aws();
-        return aws.getObjectMetadata(
-            new GetObjectMetadataRequest(this.bkt.name(), this.name)
-        );
-    }
-
-    @Override
-    public void read(final OutputStream output) throws IOException {
-        final AmazonS3 aws = this.bkt.region().aws();
-        final S3Object obj = aws.getObject(
-            new GetObjectRequest(this.bkt.name(), this.name)
-        );
-        final InputStream input = obj.getObjectContent();
-        IOUtils.copy(input, output);
-        input.close();
-    }
-
-    @Override
-    public void write(final InputStream input, final ObjectMetadata meta)
-        throws IOException {
-        final AmazonS3 aws = this.bkt.region().aws();
-        aws.putObject(this.bkt.name(), this.name, input, meta);
-        input.close();
+    @Test
+    public void readsContentFromAwsObject() throws Exception {
+        final String content = "some text \u20ac\n\t\rtest";
+        final S3Object object = new S3Object();
+        object.setObjectContent(IOUtils.toInputStream(content));
+        final AmazonS3 aws = Mockito.mock(AmazonS3.class);
+        Mockito.doReturn(object).when(aws)
+            .getObject(Mockito.any(GetObjectRequest.class));
+        final Region region = Mockito.mock(Region.class);
+        Mockito.doReturn(aws).when(region).aws();
+        final Bucket bucket = Mockito.mock(Bucket.class);
+        Mockito.doReturn(region).when(bucket).region();
+        final Ocket ocket = new AwsOcket(bucket, "test.txt");
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ocket.read(baos);
+        MatcherAssert.assertThat(baos.toString(), Matchers.equalTo(content));
     }
 
 }
