@@ -31,7 +31,6 @@ package com.jcabi.s3;
 
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
-import java.io.IOException;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -70,9 +69,9 @@ public interface Bucket {
     /**
      * Delete object from bucket.
      * @param key Name of it in the bucket
-     * @throws IOException If not found
+     * @throws OcketNotFoundException If not found
      */
-    void remove(@NotNull String key) throws IOException;
+    void remove(@NotNull String key) throws OcketNotFoundException;
 
     /**
      * Prefixed.
@@ -112,7 +111,7 @@ public interface Bucket {
             return this.origin.ocket(this.extend(key));
         }
         @Override
-        public void remove(final String key) throws IOException {
+        public void remove(final String key) throws OcketNotFoundException {
             this.origin.remove(this.extend(key));
         }
         /**
