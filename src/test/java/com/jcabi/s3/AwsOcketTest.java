@@ -31,7 +31,10 @@ package com.jcabi.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GetObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.MatcherAssert;
@@ -49,7 +52,7 @@ import org.mockito.Mockito;
 public final class AwsOcketTest {
 
     /**
-     * AwsOcket can find and return ockets.
+     * AwsOcket can read ocket content.
      * @throws Exception If fails
      */
     @Test
@@ -68,6 +71,26 @@ public final class AwsOcketTest {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ocket.read(baos);
         MatcherAssert.assertThat(baos.toString(), Matchers.equalTo(content));
+    }
+
+    /**
+     * AwsOcket can write ocket content.
+     * @throws Exception If fails
+     */
+    @Test
+    public void writesContentToAwsObject() throws Exception {
+        final AmazonS3 aws = Mockito.mock(AmazonS3.class);
+        final Region region = Mockito.mock(Region.class);
+        Mockito.doReturn(aws).when(region).aws();
+        final Bucket bucket = Mockito.mock(Bucket.class);
+        Mockito.doReturn(region).when(bucket).region();
+        final Ocket ocket = new AwsOcket(bucket, "test-3.txt");
+        final String content = "text \u20ac\n\t\rtest";
+        ocket.write(
+            new ByteArrayInputStream(content.getBytes()),
+            new ObjectMetadata()
+        );
+        Mockito.verify(aws).putObject(Mockito.any(PutObjectRequest.class));
     }
 
 }

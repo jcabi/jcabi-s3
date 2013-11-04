@@ -33,6 +33,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GetObjectMetadataRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
@@ -108,7 +109,9 @@ final class AwsOcket implements Ocket {
     public void write(final InputStream input, final ObjectMetadata meta)
         throws IOException {
         final AmazonS3 aws = this.bkt.region().aws();
-        aws.putObject(this.bkt.name(), this.name, input, meta);
+        aws.putObject(
+            new PutObjectRequest(this.bkt.name(), this.name, input, meta)
+        );
         input.close();
     }
 
