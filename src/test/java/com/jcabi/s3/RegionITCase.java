@@ -126,4 +126,19 @@ public final class RegionITCase {
         new Ocket.Text(this.bucket.ocket("key-is-absent.txt")).read();
     }
 
+    /**
+     * Region can read and write large S3 content.
+     * @throws Exception If fails
+     */
+    @Test
+    public void readsAndWritesLargeObjectContent() throws Exception {
+        Assume.assumeThat(RegionITCase.KEY, Matchers.notNullValue());
+        final String name = "test-44.txt";
+        final Ocket.Text ocket = new Ocket.Text(this.bucket.ocket(name));
+        final String data = RandomStringUtils.random(Tv.HUNDRED * Tv.THOUSAND);
+        ocket.write(data);
+        MatcherAssert.assertThat(ocket.read(), Matchers.equalTo(data));
+        this.bucket.remove(name);
+    }
+
 }
