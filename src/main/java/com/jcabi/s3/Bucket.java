@@ -48,14 +48,14 @@ public interface Bucket {
      * Get region we're in.
      * @return Region
      */
-    @NotNull
+    @NotNull(message = "region is never NULL")
     Region region();
 
     /**
      * Get bucket name.
      * @return Bucket name
      */
-    @NotNull
+    @NotNull(message = "bucket name is never NULL")
     String name();
 
     /**
@@ -63,15 +63,16 @@ public interface Bucket {
      * @param key Name of it in the bucket
      * @return Ocket
      */
-    @NotNull
-    Ocket ocket(@NotNull String key);
+    @NotNull(message = "ocket is never NULL")
+    Ocket ocket(@NotNull(message = "S3 key can't be NULL") String key);
 
     /**
      * Delete object from bucket.
      * @param key Name of it in the bucket
      * @throws OcketNotFoundException If not found
      */
-    void remove(@NotNull String key) throws OcketNotFoundException;
+    void remove(@NotNull(message = "S3 key can't be NULL") String key)
+        throws OcketNotFoundException;
 
     /**
      * Prefixed.
@@ -94,7 +95,9 @@ public interface Bucket {
          * @param bucket Original bucket
          * @param pfx Prefix
          */
-        public Prefixed(final Bucket bucket, final String pfx) {
+        public Prefixed(
+            @NotNull(message = "bucket can't be NULL") final Bucket bucket,
+            @NotNull(message = "prefix can't be NULL") final String pfx) {
             this.origin = bucket;
             this.prefix = pfx;
         }

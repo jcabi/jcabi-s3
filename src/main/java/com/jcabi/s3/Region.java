@@ -52,12 +52,14 @@ public interface Region {
      * @param name Name of the bucket to get
      * @return Bucket
      */
-    Bucket bucket(String name);
+    @NotNull(message = "bucket is never NULL")
+    Bucket bucket(@NotNull(message = "bucket name can't be NULL") String name);
 
     /**
      * Get a client.
      * @return Amazon S3
      */
+    @NotNull(message = "AWS client is never NULL")
     AmazonS3 aws();
 
     /**

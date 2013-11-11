@@ -122,13 +122,23 @@ public interface Ocket {
             return baos.toString(CharEncoding.UTF_8);
         }
         /**
-         * Read content as string.
+         * Write content as string.
          * @param text Text to write
          * @throws IOException If fails
          */
         public void write(@NotNull final String text) throws IOException {
+            this.write(text, "text/plain");
+        }
+        /**
+         * Write content as string, with a specified content type.
+         * @param text Text to write
+         * @param type Content type
+         * @throws IOException If fails
+         */
+        public void write(@NotNull final String text,
+            @NotNull final String type) throws IOException {
             final ObjectMetadata meta = new ObjectMetadata();
-            meta.setContentType("text/plain");
+            meta.setContentType(type);
             meta.setContentLength((long) text.getBytes(Charsets.UTF_8).length);
             meta.setContentEncoding(CharEncoding.UTF_8);
             this.origin.write(
