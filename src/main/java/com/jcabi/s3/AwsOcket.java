@@ -148,7 +148,7 @@ final class AwsOcket implements Ocket {
         try {
             final AmazonS3 aws = this.bkt.region().aws();
             final PutObjectResult result = aws.putObject(
-                new PutObjectRequest(this.bkt.name(), this.name, input, meta)
+                new PutObjectRequest(this.bkt.name(), this.name, cnt, meta)
             );
             Logger.info(
                 this,
