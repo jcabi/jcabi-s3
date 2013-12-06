@@ -29,10 +29,17 @@
  */
 package com.jcabi.s3;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedList;
+import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -41,6 +48,7 @@ import lombok.ToString;
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
+ * @since 0.1
  */
 @Immutable
 @ToString
@@ -79,14 +87,44 @@ final class AwsBucket implements Bucket {
     }
 
     @Override
-    public Ocket ocket(final String key) {
+    public Ocket ocket(@NotNull(message = "key can't be NULL")
+        final String key) {
         return new AwsOcket(this, key);
     }
 
     @Override
-    public void remove(final String key) {
-        final AmazonS3 aws = this.regn.aws();
-        aws.deleteObject(new DeleteObjectRequest(this.bkt, key));
+    public void remove(@NotNull(message = "key can't be NULL")
+        final String key) throws IOException {
+        try {
+            final AmazonS3 aws = this.regn.aws();
+            aws.deleteObject(new DeleteObjectRequest(this.bkt, key));
+        } catch (AmazonServiceException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     * @todo #2 Large lists are not supported. The method doesn't
+     *  support marker functionality, provided by ObjectListing. We should
+     *  create a test that reproduces the problem and fix the method. The
+     *  method should return an iterable, which should fetch portions
+     *  of objects from S3 on demand.
+     */
+    @Override
+    public Iterable<String> list(@NotNull(message = "prefix can't be NULL")
+        final String pfx) throws IOException {
+        try {
+            final AmazonS3 aws = this.regn.aws();
+            final ObjectListing listing = aws.listObjects(this.bkt, pfx);
+            final Collection<String> list = new LinkedList<String>();
+            for (final S3ObjectSummary sum : listing.getObjectSummaries()) {
+                list.add(sum.getKey());
+            }
+            return list;
+        } catch (AmazonServiceException ex) {
+            throw new IOException(ex);
+        }
     }
 
 }

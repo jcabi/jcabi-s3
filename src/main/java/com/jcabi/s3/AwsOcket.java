@@ -29,6 +29,7 @@
  */
 package com.jcabi.s3;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.GetObjectMetadataRequest;
@@ -41,6 +42,7 @@ import com.jcabi.aspects.Loggable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.io.IOUtils;
@@ -88,15 +90,20 @@ final class AwsOcket implements Ocket {
     }
 
     @Override
-    public ObjectMetadata meta() {
-        final AmazonS3 aws = this.bkt.region().aws();
-        return aws.getObjectMetadata(
-            new GetObjectMetadataRequest(this.bkt.name(), this.name)
-        );
+    public ObjectMetadata meta() throws IOException {
+        try {
+            final AmazonS3 aws = this.bkt.region().aws();
+            return aws.getObjectMetadata(
+                new GetObjectMetadataRequest(this.bkt.name(), this.name)
+            );
+        } catch (AmazonServiceException ex) {
+            throw new IOException(ex);
+        }
     }
 
     @Override
-    public void read(final OutputStream output) throws IOException {
+    public void read(@NotNull(message = "output stream can't be NULL")
+        final OutputStream output) throws IOException {
         final AmazonS3 aws = this.bkt.region().aws();
         try {
             final S3Object obj = aws.getObject(
@@ -112,17 +119,25 @@ final class AwsOcket implements Ocket {
                 ),
                 ex
             );
+        } catch (AmazonServiceException ex) {
+            throw new IOException(ex);
         }
     }
 
     @Override
-    public void write(final InputStream input, final ObjectMetadata meta)
+    public void write(
+        @NotNull(message = "input can't be NULL") final InputStream input,
+        @NotNull(message = "metadata can't be NULL") final ObjectMetadata meta)
         throws IOException {
-        final AmazonS3 aws = this.bkt.region().aws();
-        aws.putObject(
-            new PutObjectRequest(this.bkt.name(), this.name, input, meta)
-        );
-        input.close();
+        try {
+            final AmazonS3 aws = this.bkt.region().aws();
+            aws.putObject(
+                new PutObjectRequest(this.bkt.name(), this.name, input, meta)
+            );
+            input.close();
+        } catch (AmazonServiceException ex) {
+            throw new IOException(ex);
+        }
     }
 
 }

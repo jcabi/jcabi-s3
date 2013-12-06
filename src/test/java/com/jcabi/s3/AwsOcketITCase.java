@@ -29,20 +29,21 @@
  */
 package com.jcabi.s3;
 
-import com.amazonaws.services.s3.AmazonS3;
+import com.jcabi.aspects.Tv;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * Integration case for {@link Region}.
+ * Integration case for {@link AwsOcket}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
  */
-public final class RegionITCase {
+public final class AwsOcketITCase {
 
     /**
      * Bucket we're working with.
@@ -52,17 +53,49 @@ public final class RegionITCase {
     public final transient BucketRule rule = new BucketRule();
 
     /**
-     * Region can connect to AWS and check bucket existence.
+     * AwsOcket can read and write S3 content.
      * @throws Exception If fails
      */
     @Test
-    public void connectsToAmazon() throws Exception {
+    public void readsAndWritesObjectContent() throws Exception {
         final Bucket bucket = this.rule.bucket();
-        final AmazonS3 aws = bucket.region().aws();
-        MatcherAssert.assertThat(
-            aws.doesBucketExist(bucket.name()),
-            Matchers.is(true)
-        );
+        final String name = "a/b/c/test.txt";
+        final Ocket.Text ocket = new Ocket.Text(bucket.ocket(name));
+        final String content = "text \u20ac\n\t\rtest";
+        ocket.write(content);
+        try {
+            MatcherAssert.assertThat(ocket.read(), Matchers.equalTo(content));
+        } finally {
+            bucket.remove(name);
+        }
+    }
+
+    /**
+     * AwsOcket can read and write large S3 content.
+     * @throws Exception If fails
+     */
+    @Test
+    public void readsAndWritesLargeObjectContent() throws Exception {
+        final Bucket bucket = this.rule.bucket();
+        final String name = "test-44.txt";
+        final Ocket.Text ocket = new Ocket.Text(bucket.ocket(name));
+        final String data = RandomStringUtils.random(Tv.HUNDRED * Tv.THOUSAND);
+        ocket.write(data);
+        try {
+            MatcherAssert.assertThat(ocket.read(), Matchers.equalTo(data));
+        } finally {
+            bucket.remove(name);
+        }
+    }
+
+    /**
+     * Region can throw when ocket is absent.
+     * @throws Exception If fails
+     */
+    @Test(expected = OcketNotFoundException.class)
+    public void throwsWhenObjectIsAbsent() throws Exception {
+        final Bucket bucket = this.rule.bucket();
+        new Ocket.Text(bucket.ocket("key-is-absent.txt")).read();
     }
 
 }

@@ -48,7 +48,7 @@ import org.apache.commons.lang3.CharEncoding;
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 1.0
+ * @since 0.1
  */
 @Immutable
 public interface Ocket {
@@ -57,14 +57,14 @@ public interface Ocket {
      * Get bucket we're in.
      * @return Bucket
      */
-    @NotNull
+    @NotNull(message = "bucket is never NULL")
     Bucket bucket();
 
     /**
      * Get object key.
      * @return Key
      */
-    @NotNull
+    @NotNull(message = "ocket key is never NULL")
     String key();
 
     /**
@@ -72,7 +72,7 @@ public interface Ocket {
      * @return Metadata
      * @throws IOException If fails
      */
-    @NotNull
+    @NotNull(message = "ocket meta is never NULL")
     ObjectMetadata meta() throws IOException;
 
     /**
@@ -80,7 +80,8 @@ public interface Ocket {
      * @param output Where to write
      * @throws IOException If fails
      */
-    void read(@NotNull OutputStream output) throws IOException;
+    void read(@NotNull(message = "output stream can't be NULL")
+        OutputStream output) throws IOException;
 
     /**
      * Write new content to the object.
@@ -88,8 +89,10 @@ public interface Ocket {
      * @param meta Metadata to save
      * @throws IOException If fails
      */
-    void write(@NotNull InputStream input,
-        @NotNull ObjectMetadata meta) throws IOException;
+    void write(
+        @NotNull(message = "input stream can't NULL") InputStream input,
+        @NotNull(message = "object meta can't be NULL") ObjectMetadata meta)
+        throws IOException;
 
     /**
      * Unicode text S3 object with supplementary functions.

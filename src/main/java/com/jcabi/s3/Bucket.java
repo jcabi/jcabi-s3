@@ -31,6 +31,8 @@ package com.jcabi.s3;
 
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
+import java.io.IOException;
+import java.util.Iterator;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -69,10 +71,20 @@ public interface Bucket {
     /**
      * Delete object from bucket.
      * @param key Name of it in the bucket
-     * @throws OcketNotFoundException If not found
+     * @throws IOException If not found or any other failure
      */
     void remove(@NotNull(message = "S3 key can't be NULL") String key)
-        throws OcketNotFoundException;
+        throws IOException;
+
+    /**
+     * List object names with a given prefix.
+     * @param pfx Prefix to use
+     * @return Iterable of names
+     * @throws IOException If fails
+     * @since 0.3
+     */
+    Iterable<String> list(@NotNull(message = "prefix can't be NULL")
+        String pfx) throws IOException;
 
     /**
      * Prefixed.
@@ -114,8 +126,35 @@ public interface Bucket {
             return this.origin.ocket(this.extend(key));
         }
         @Override
-        public void remove(final String key) throws OcketNotFoundException {
+        public void remove(final String key) throws IOException {
             this.origin.remove(this.extend(key));
+        }
+        @Override
+        public Iterable<String> list(final String pfx) throws IOException {
+            final Iterator<String> list = this.origin
+                .list(this.extend(pfx)).iterator();
+            // @checkstyle AnonInnerLength (50 lines)
+            return new Iterable<String>() {
+                @Override
+                public Iterator<String> iterator() {
+                    return new Iterator<String>() {
+                        @Override
+                        public boolean hasNext() {
+                            return list.hasNext();
+                        }
+                        @Override
+                        public String next() {
+                            return list.next().substring(
+                                Bucket.Prefixed.this.prefix.length()
+                            );
+                        }
+                        @Override
+                        public void remove() {
+                            list.remove();
+                        }
+                    };
+                }
+            };
         }
         /**
          * Extend name with a prefix.
