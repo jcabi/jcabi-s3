@@ -44,6 +44,7 @@ import lombok.ToString;
  * @version $Id$
  */
 @Immutable
+@SuppressWarnings("PMD.TooManyMethods")
 public interface Bucket {
 
     /**
@@ -131,12 +132,17 @@ public interface Bucket {
         }
         @Override
         public Iterable<String> list(final String pfx) throws IOException {
-            final Iterator<String> list = this.origin
-                .list(this.extend(pfx)).iterator();
             // @checkstyle AnonInnerLength (50 lines)
             return new Iterable<String>() {
                 @Override
                 public Iterator<String> iterator() {
+                    final Iterator<String> list;
+                    try {
+                        list = Bucket.Prefixed.this.origin
+                            .list(Bucket.Prefixed.this.extend(pfx)).iterator();
+                    } catch (IOException ex) {
+                        throw new IllegalStateException(ex);
+                    }
                     return new Iterator<String>() {
                         @Override
                         public boolean hasNext() {

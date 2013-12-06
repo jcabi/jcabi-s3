@@ -36,9 +36,11 @@ import com.amazonaws.services.s3.model.GetObjectMetadataRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
+import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -46,6 +48,7 @@ import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.CountingInputStream;
 
 /**
  * Amazon S3 bucket.
@@ -93,9 +96,15 @@ final class AwsOcket implements Ocket {
     public ObjectMetadata meta() throws IOException {
         try {
             final AmazonS3 aws = this.bkt.region().aws();
-            return aws.getObjectMetadata(
+            final ObjectMetadata meta = aws.getObjectMetadata(
                 new GetObjectMetadataRequest(this.bkt.name(), this.name)
             );
+            Logger.info(
+                this,
+                "metadata loaded for ocket %s in bucket %s, etag=%s",
+                this.name, this.bkt.name(), meta.getETag()
+            );
+            return meta;
         } catch (AmazonServiceException ex) {
             throw new IOException(ex);
         }
@@ -110,8 +119,14 @@ final class AwsOcket implements Ocket {
                 new GetObjectRequest(this.bkt.name(), this.name)
             );
             final InputStream input = obj.getObjectContent();
-            IOUtils.copy(input, output);
+            final int bytes = IOUtils.copy(input, output);
             input.close();
+            Logger.info(
+                this,
+                "loaded %d byte(s) from ocket %s in bucket %s, etag=%s",
+                bytes, this.name, this.bkt.name(),
+                obj.getObjectMetadata().getETag()
+            );
         } catch (AmazonS3Exception ex) {
             throw new OcketNotFoundException(
                 String.format(
@@ -129,14 +144,22 @@ final class AwsOcket implements Ocket {
         @NotNull(message = "input can't be NULL") final InputStream input,
         @NotNull(message = "metadata can't be NULL") final ObjectMetadata meta)
         throws IOException {
+        final CountingInputStream cnt = new CountingInputStream(input);
         try {
             final AmazonS3 aws = this.bkt.region().aws();
-            aws.putObject(
+            final PutObjectResult result = aws.putObject(
                 new PutObjectRequest(this.bkt.name(), this.name, input, meta)
             );
-            input.close();
+            Logger.info(
+                this,
+                "saved %d byte(s) to ocket %s in bucket %s, etag=%s",
+                cnt.getByteCount(), this.name, this.bkt.name(),
+                result.getETag()
+            );
         } catch (AmazonServiceException ex) {
             throw new IOException(ex);
+        } finally {
+            cnt.close();
         }
     }
 

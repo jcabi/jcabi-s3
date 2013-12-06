@@ -42,6 +42,7 @@ import org.mockito.Mockito;
  * @since 0.1
  */
 public final class AwsBucketTest {
+
     /**
      * AwsBucket can find and return ockets.
      * @throws Exception If fails
@@ -53,4 +54,5 @@ public final class AwsBucketTest {
         final Ocket ocket = bucket.ocket("test");
         MatcherAssert.assertThat(ocket, Matchers.notNullValue());
     }
+
 }

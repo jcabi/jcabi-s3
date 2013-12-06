@@ -98,6 +98,7 @@ public final class AwsBucketITCase {
                 bkt.list(""),
                 Matchers.allOf(
                     Matchers.<String>iterableWithSize(1),
+                    // @checkstyle MultipleStringLiterals (1 line)
                     Matchers.hasItem("bar/file.txt")
                 )
             );

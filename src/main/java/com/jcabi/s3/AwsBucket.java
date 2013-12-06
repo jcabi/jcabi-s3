@@ -36,6 +36,7 @@ import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
+import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -98,6 +99,11 @@ final class AwsBucket implements Bucket {
         try {
             final AmazonS3 aws = this.regn.aws();
             aws.deleteObject(new DeleteObjectRequest(this.bkt, key));
+            Logger.info(
+                this,
+                "ocket %s removed in bucket %s",
+                key, this.bkt
+            );
         } catch (AmazonServiceException ex) {
             throw new IOException(ex);
         }

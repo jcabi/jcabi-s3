@@ -33,6 +33,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -80,6 +81,9 @@ public final class AwsOcketTest {
     @Test
     public void writesContentToAwsObject() throws Exception {
         final AmazonS3 aws = Mockito.mock(AmazonS3.class);
+        Mockito.doReturn(new PutObjectResult()).when(aws).putObject(
+            Mockito.any(PutObjectRequest.class)
+        );
         final Region region = Mockito.mock(Region.class);
         Mockito.doReturn(aws).when(region).aws();
         final Bucket bucket = Mockito.mock(Bucket.class);
