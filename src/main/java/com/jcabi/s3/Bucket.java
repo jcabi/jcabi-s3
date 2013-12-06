@@ -29,10 +29,12 @@
  */
 package com.jcabi.s3;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import java.io.IOException;
-import java.util.Iterator;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -132,35 +134,25 @@ public interface Bucket {
         }
         @Override
         public Iterable<String> list(final String pfx) throws IOException {
-            // @checkstyle AnonInnerLength (50 lines)
-            return new Iterable<String>() {
-                @Override
-                public Iterator<String> iterator() {
-                    final Iterator<String> list;
-                    try {
-                        list = Bucket.Prefixed.this.origin
-                            .list(Bucket.Prefixed.this.extend(pfx)).iterator();
-                    } catch (IOException ex) {
-                        throw new IllegalStateException(ex);
-                    }
-                    return new Iterator<String>() {
+            return Iterables.filter(
+                Iterables.transform(
+                    this.origin.list(this.extend(pfx)),
+                    new Function<String, String>() {
                         @Override
-                        public boolean hasNext() {
-                            return list.hasNext();
-                        }
-                        @Override
-                        public String next() {
-                            return list.next().substring(
+                        public String apply(final String input) {
+                            return input.substring(
                                 Bucket.Prefixed.this.prefix.length()
                             );
                         }
-                        @Override
-                        public void remove() {
-                            list.remove();
-                        }
-                    };
+                    }
+                ),
+                new Predicate<String>() {
+                    @Override
+                    public boolean apply(final String input) {
+                        return !input.isEmpty();
+                    }
                 }
-            };
+            );
         }
         /**
          * Extend name with a prefix.

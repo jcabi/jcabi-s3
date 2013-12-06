@@ -127,9 +127,9 @@ public final class AwsBucketITCase {
     public void listsInPrefixedBucketWithouCollisions() throws Exception {
         final Bucket bucket = this.rule.bucket();
         // @checkstyle MultipleStringLiterals (1 line)
-        final String[] names = {"alpha/alpha.xml", "alpha.xml"};
+        final String[] names = {"alpha/", "alpha/beta.xml"};
         for (final String name : names) {
-            new Ocket.Text(bucket.ocket(name)).write("whatsup");
+            new Ocket.Text(bucket.ocket(name)).write("");
         }
         final Bucket bkt = new Bucket.Prefixed(bucket, "alpha/");
         try {
@@ -137,7 +137,7 @@ public final class AwsBucketITCase {
                 bkt.list(""),
                 Matchers.allOf(
                     Matchers.<String>iterableWithSize(1),
-                    Matchers.hasItem("alpha.xml")
+                    Matchers.hasItem("beta.xml")
                 )
             );
         } finally {

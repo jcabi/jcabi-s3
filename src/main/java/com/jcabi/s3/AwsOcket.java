@@ -101,7 +101,7 @@ final class AwsOcket implements Ocket {
             );
             Logger.info(
                 this,
-                "metadata loaded for ocket %s in bucket %s, etag=%s",
+                "metadata loaded for ocket '%s' in bucket '%s', etag=%s",
                 this.name, this.bkt.name(), meta.getETag()
             );
             return meta;
@@ -123,7 +123,7 @@ final class AwsOcket implements Ocket {
             input.close();
             Logger.info(
                 this,
-                "loaded %d byte(s) from ocket %s in bucket %s, etag=%s",
+                "loaded %d byte(s) from ocket '%s' in bucket '%s', etag=%s",
                 bytes, this.name, this.bkt.name(),
                 obj.getObjectMetadata().getETag()
             );
@@ -152,7 +152,7 @@ final class AwsOcket implements Ocket {
             );
             Logger.info(
                 this,
-                "saved %d byte(s) to ocket %s in bucket %s, etag=%s",
+                "saved %d byte(s) to ocket '%s' in bucket '%s', etag=%s",
                 cnt.getByteCount(), this.name, this.bkt.name(),
                 result.getETag()
             );

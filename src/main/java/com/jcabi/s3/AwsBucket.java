@@ -32,6 +32,7 @@ package com.jcabi.s3;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.jcabi.aspects.Immutable;
@@ -101,7 +102,7 @@ final class AwsBucket implements Bucket {
             aws.deleteObject(new DeleteObjectRequest(this.bkt, key));
             Logger.info(
                 this,
-                "ocket %s removed in bucket %s",
+                "ocket '%s' removed in bucket '%s'",
                 key, this.bkt
             );
         } catch (AmazonServiceException ex) {
@@ -122,14 +123,18 @@ final class AwsBucket implements Bucket {
         final String pfx) throws IOException {
         try {
             final AmazonS3 aws = this.regn.aws();
-            final ObjectListing listing = aws.listObjects(this.bkt, pfx);
+            final ObjectListing listing = aws.listObjects(
+                new ListObjectsRequest()
+                    .withBucketName(this.bkt)
+                    .withPrefix(pfx)
+            );
             final Collection<String> list = new LinkedList<String>();
             for (final S3ObjectSummary sum : listing.getObjectSummaries()) {
                 list.add(sum.getKey());
             }
             Logger.info(
                 this,
-                "listed %d ocket(s) with prefix '%s' in bucket %s",
+                "listed %d ocket(s) with prefix '%s' in bucket '%s'",
                 listing.getObjectSummaries().size(), pfx, this.bkt
             );
             return list;
