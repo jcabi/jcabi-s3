@@ -127,6 +127,11 @@ final class AwsBucket implements Bucket {
             for (final S3ObjectSummary sum : listing.getObjectSummaries()) {
                 list.add(sum.getKey());
             }
+            Logger.info(
+                this,
+                "listed %d ocket(s) with prefix '%s' in bucket %s",
+                listing.getObjectSummaries().size(), pfx, this.bkt
+            );
             return list;
         } catch (AmazonServiceException ex) {
             throw new IOException(ex);

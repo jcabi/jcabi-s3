@@ -123,8 +123,10 @@ public final class AwsBucketITCase {
      * @throws Exception If fails
      */
     @Test
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public void listsInPrefixedBucketWithouCollisions() throws Exception {
         final Bucket bucket = this.rule.bucket();
+        // @checkstyle MultipleStringLiterals (1 line)
         final String[] names = {"alpha/alpha.xml", "alpha.xml"};
         for (final String name : names) {
             new Ocket.Text(bucket.ocket(name)).write("whatsup");
