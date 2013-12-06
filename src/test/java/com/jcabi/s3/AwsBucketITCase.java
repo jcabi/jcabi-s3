@@ -118,4 +118,31 @@ public final class AwsBucketITCase {
         }
     }
 
+    /**
+     * AwsBucket can list objects in a prefixed bucket, without collisions.
+     * @throws Exception If fails
+     */
+    @Test
+    public void listsInPrefixedBucketWithouCollisions() throws Exception {
+        final Bucket bucket = this.rule.bucket();
+        final String[] names = {"alpha/alpha.xml", "alpha.xml"};
+        for (final String name : names) {
+            new Ocket.Text(bucket.ocket(name)).write("whatsup");
+        }
+        final Bucket bkt = new Bucket.Prefixed(bucket, "alpha/");
+        try {
+            MatcherAssert.assertThat(
+                bkt.list(""),
+                Matchers.allOf(
+                    Matchers.<String>iterableWithSize(1),
+                    Matchers.hasItem("alpha.xml")
+                )
+            );
+        } finally {
+            for (final String name : names) {
+                bucket.remove(name);
+            }
+        }
+    }
+
 }
