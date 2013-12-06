@@ -23,14 +23,14 @@ You need just this dependency:
 <dependency>
   <groupId>com.jcabi</groupId>
   <artifactId>jcabi-s3</artifactId>
-  <version>0.1</version>
+  <version>0.3</version>
 </dependency>
 ```
 
 ## Questions?
 
 If you have any questions about the framework, or something doesn't work as expected,
-please [submit an issue here](https://github.com/yegor256/jcabi/issues/new).
+please [submit an issue here](https://github.com/jcabi/jcabi-s3/issues/new).
 If you want to discuss, please use our [Google Group](https://groups.google.com/forum/#!forum/jcabi).
 
 ## How to contribute?
