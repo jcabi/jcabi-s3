@@ -5,6 +5,8 @@ More details are here: [www.jcabi.com/jcabi-s3](http://www.jcabi.com/jcabi-s3/in
 It's an object layer on top of Amazon S3 SDK:
 
 ```java
+import com.jcabi.s3.Bucket;
+import com.jcabi.s3.Ocket;
 import com.jcabi.s3.Region;
 public class Main {
   public static void main(String[] args) {
