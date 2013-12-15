@@ -66,7 +66,8 @@ import org.apache.commons.lang3.CharEncoding;
  * @since 0.1
  */
 @Immutable
-public interface Ocket {
+@SuppressWarnings("PMD.TooManyMethods")
+public interface Ocket extends Comparable<Ocket> {
 
     /**
      * Get bucket we're in.
@@ -196,6 +197,10 @@ public interface Ocket {
         public void write(final InputStream input, final ObjectMetadata meta)
             throws IOException {
             this.origin.write(input, meta);
+        }
+        @Override
+        public int compareTo(final Ocket ocket) {
+            return this.origin.compareTo(ocket);
         }
     }
 

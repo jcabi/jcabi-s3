@@ -143,4 +143,8 @@ final class AwsBucket implements Bucket {
         }
     }
 
+    @Override
+    public int compareTo(final Bucket bucket) {
+        return this.name().compareTo(bucket.name());
+    }
 }

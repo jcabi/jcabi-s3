@@ -187,4 +187,8 @@ final class AwsOcket implements Ocket {
         }
     }
 
+    @Override
+    public int compareTo(final Ocket ocket) {
+        return this.key().compareTo(ocket.key());
+    }
 }

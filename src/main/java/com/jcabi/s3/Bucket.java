@@ -58,7 +58,7 @@ import lombok.ToString;
  */
 @Immutable
 @SuppressWarnings("PMD.TooManyMethods")
-public interface Bucket {
+public interface Bucket extends Comparable<Bucket> {
 
     /**
      * Get region we're in.
@@ -164,6 +164,10 @@ public interface Bucket {
                     }
                 }
             );
+        }
+        @Override
+        public int compareTo(final Bucket bucket) {
+            return this.origin.compareTo(bucket);
         }
         /**
          * Extend name with a prefix.
