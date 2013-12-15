@@ -41,6 +41,13 @@ import lombok.ToString;
 /**
  * Amazon S3 abstraction.
  *
+ * <p>To get an instance of this interface, instantiate {@code Region.Simple},
+ * for example:
+ *
+ * <pre> Region region = new Region.Simple(key, secret);
+ * Bucket bucket = region.bucket("my.example.com");
+ * bucket.remove("README.txt");</pre>
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1

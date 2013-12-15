@@ -42,6 +42,17 @@ import lombok.ToString;
 /**
  * Amazon S3 bucket.
  *
+ * <p>You get an instance of this interface from {@link Region}, for example:
+ *
+ * <pre> Region region = new Region.Simple(key, secret);
+ * Bucket bucket = region.bucket("my.example.com");
+ * for (String key : bucket.list("")) {
+ *   System.out.println(
+ *     "key: " + key + ", last modified: "
+ *     + bucket.get(key).meta().getLastModified()
+ *   );
+ * }</pre>
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  */

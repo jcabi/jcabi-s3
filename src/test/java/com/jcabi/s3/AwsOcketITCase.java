@@ -89,6 +89,29 @@ public final class AwsOcketITCase {
     }
 
     /**
+     * AwsOcket can check S3 object existence.
+     * @throws Exception If fails
+     */
+    @Test
+    public void checksObjectExistenceInBucket() throws Exception {
+        final Bucket bucket = this.rule.bucket();
+        final String name = "a/b/ffo/test.txt";
+        new Ocket.Text(bucket.ocket(name)).write("test me");
+        try {
+            MatcherAssert.assertThat(
+                bucket.ocket(name).exists(),
+                Matchers.is(true)
+            );
+            MatcherAssert.assertThat(
+                bucket.ocket("a/b/ffo/test-2.txt").exists(),
+                Matchers.is(false)
+            );
+        } finally {
+            bucket.remove(name);
+        }
+    }
+
+    /**
      * Region can throw when ocket is absent.
      * @throws Exception If fails
      */

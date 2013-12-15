@@ -34,6 +34,8 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.GetObjectMetadataRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
@@ -105,6 +107,28 @@ final class AwsOcket implements Ocket {
                 this.name, this.bkt.name(), meta.getETag()
             );
             return meta;
+        } catch (AmazonServiceException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
+    public boolean exists() throws IOException {
+        try {
+            final AmazonS3 aws = this.bkt.region().aws();
+            final ObjectListing listing = aws.listObjects(
+                new ListObjectsRequest()
+                    .withBucketName(this.bkt.name())
+                    .withPrefix(this.name)
+                    .withMaxKeys(1)
+            );
+            final boolean exists = !listing.getObjectSummaries().isEmpty();
+            Logger.info(
+                this,
+                "ocket '%s' existence checked in bucket '%s' (%b)",
+                this.name, this.bkt.name(), exists
+            );
+            return exists;
         } catch (AmazonServiceException ex) {
             throw new IOException(ex);
         }

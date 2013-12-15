@@ -46,6 +46,21 @@ import org.apache.commons.lang3.CharEncoding;
 /**
  * Amazon S3 object abstraction.
  *
+ * <p>You get an instance of this interface from {@link Bucket}, for example:
+ *
+ * <pre> Region region = new Region.Simple(key, secret);
+ * Bucket bucket = region.bucket("my.example.com");
+ * Ocket ocket = bucket.ocket("src/main/README.txt");</pre>
+ *
+ * <p>In order to read and write plain text content in Unicode we recommend
+ * to use {@code Ocket.Text} decorator:
+ *
+ * <pre> Ocket.Text ocket = new Ocket.Smart(
+ *   bucket.ocket("src/main/README.txt")
+ * );
+ * ocket.write("hello, world!", "text/plain");
+ * </pre>
+ *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
@@ -76,6 +91,14 @@ public interface Ocket {
     ObjectMetadata meta() throws IOException;
 
     /**
+     * Check whether this S3 object exists.
+     * @return TRUE if it exists in S3, FALSE otherwise
+     * @throws IOException If fails
+     * @since 0.4
+     */
+    boolean exists() throws IOException;
+
+    /**
      * Read content.
      * @param output Where to write
      * @throws IOException If fails
@@ -101,7 +124,7 @@ public interface Ocket {
     @ToString
     @EqualsAndHashCode(of = "origin")
     @Loggable(Loggable.DEBUG)
-    final class Text {
+    final class Text implements Ocket {
         /**
          * Original encapsulated ocket.
          */
@@ -148,6 +171,31 @@ public interface Ocket {
                 new ByteArrayInputStream(text.getBytes(CharEncoding.UTF_8)),
                 meta
             );
+        }
+        @Override
+        public Bucket bucket() {
+            return this.origin.bucket();
+        }
+        @Override
+        public String key() {
+            return this.origin.key();
+        }
+        @Override
+        public ObjectMetadata meta() throws IOException {
+            return this.origin.meta();
+        }
+        @Override
+        public boolean exists() throws IOException {
+            return this.origin.exists();
+        }
+        @Override
+        public void read(final OutputStream output) throws IOException {
+            this.origin.read(output);
+        }
+        @Override
+        public void write(final InputStream input, final ObjectMetadata meta)
+            throws IOException {
+            this.origin.write(input, meta);
         }
     }
 
