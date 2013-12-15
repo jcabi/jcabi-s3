@@ -1,19 +1,24 @@
-# Object Layer of Amazon S3 SDk
+# Object Layer of Amazon S3 SDK
 
 For example:
 
-```
-import com.jcabi.s3.JdbcSession;
+```java
+import com.jcabi.s3.Bucket;
+import com.jcabi.s3.Ocket;
+import com.jcabi.s3.Region;
 public class Main {
   public static void main(String[] args) {
     Region region = new Region.Simple("key", "secret");
     Bucket bucket = region.bucket("my.example.com");
-    Ocket ocket = bucket.ocket("test.txt");
-    String content = new Ocket.Plain(ocket).read();
-    new Ocket.Plain(ocket).write("hello, world!");
+    Ocket.Text ocket = new Ocket.Text(bucket.ocket("test.txt"));
+    String content = ocket.read();
+    ocket.write("hello, world!");
   }
 }
 ```
+
+Check [JavaDoc](./apidocs-${project.version}/index.html)
+for more details.
 
 The only dependency you need is
 (you can also download
@@ -28,10 +33,11 @@ and add it to the classpath):
 </dependency>
 ```
 
-## Cutting Edge Version
+Cutting Edge Version
+-----------------------
 
 If you want to use current version of the product, you can do it with
-this configuration in your <<<pom.xml>>>:
+this configuration in your `pom.xml`:
 
 ```
 <repositories>
