@@ -1,6 +1,6 @@
 <img src="http://img.jcabi.com/logo.png" width="200px" height="48px" />
 
-More details are here: [www.jcabi.com/jcabi-s3](http://www.jcabi.com/jcabi-s3/index.html)
+More details are here: [s3.jcabi.com](http://s3.jcabi.com/index.html)
 
 It's an object layer on top of Amazon S3 SDK:
 
@@ -12,9 +12,9 @@ public class Main {
   public static void main(String[] args) {
     Region region = new Region.Simple("key", "secret");
     Bucket bucket = region.bucket("my.example.com");
-    Ocket ocket = bucket.ocket("test.txt");
-    String content = new Ocket.Plain(ocket).read();
-    new Ocket.Plain(ocket).write("hello, world!");
+    Ocket.Text ocket = new Ocket.Text(bucket.ocket("test.txt"));
+    String content = ocket.read();
+    ocket.write("hello, world!");
   }
 }
 ```
@@ -25,7 +25,7 @@ You need just this dependency:
 <dependency>
   <groupId>com.jcabi</groupId>
   <artifactId>jcabi-s3</artifactId>
-  <version>0.3</version>
+  <version>0.4</version>
 </dependency>
 ```
 
