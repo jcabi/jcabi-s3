@@ -48,7 +48,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.CountingInputStream;
 
@@ -59,7 +58,6 @@ import org.apache.commons.io.input.CountingInputStream;
  * @version $Id$
  */
 @Immutable
-@ToString
 @EqualsAndHashCode(of = { "bkt", "name" })
 @Loggable(Loggable.DEBUG)
 final class AwsOcket implements Ocket {
@@ -82,6 +80,11 @@ final class AwsOcket implements Ocket {
     AwsOcket(final Bucket bucket, final String obj) {
         this.bkt = bucket;
         this.name = obj;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 
     @Override

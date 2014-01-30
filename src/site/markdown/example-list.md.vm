@@ -1,0 +1,18 @@
+# List S3 Objects
+
+To list objects in an S3 bucket use `Bucket.list()` method:
+
+```java
+import com.jcabi.s3.Bucket;
+import com.jcabi.s3.Region;
+public class Main {
+  public static void main(String[] args) {
+    Region region = new Region.Simple("key", "secret");
+    Bucket bucket = region.bucket("my.example.com");
+    Iterable<String> names = bucket.list("path/to/them/");
+    for (String name : names) {
+      System.out.println("found: " + name);
+    }
+  }
+}
+```

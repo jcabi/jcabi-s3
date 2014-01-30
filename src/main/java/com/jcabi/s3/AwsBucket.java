@@ -43,7 +43,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 /**
  * Amazon S3 bucket.
@@ -53,7 +52,6 @@ import lombok.ToString;
  * @since 0.1
  */
 @Immutable
-@ToString
 @EqualsAndHashCode(of = { "regn", "bkt" })
 @Loggable(Loggable.DEBUG)
 final class AwsBucket implements Bucket {
@@ -76,6 +74,11 @@ final class AwsBucket implements Bucket {
     AwsBucket(final Region reg, final String name) {
         this.regn = reg;
         this.bkt = name;
+    }
+
+    @Override
+    public String toString() {
+        return this.bkt;
     }
 
     @Override
