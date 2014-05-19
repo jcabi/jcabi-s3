@@ -27,7 +27,7 @@ You need just this dependency:
 <dependency>
   <groupId>com.jcabi</groupId>
   <artifactId>jcabi-s3</artifactId>
-  <version>0.4</version>
+  <version>0.5</version>
 </dependency>
 ```
 
