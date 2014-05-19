@@ -32,6 +32,7 @@ package com.jcabi.s3;
 import com.amazonaws.services.s3.AmazonS3;
 import com.jcabi.aspects.Tv;
 import com.jcabi.log.Logger;
+import com.jcabi.s3.retry.ReRegion;
 import java.util.Locale;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.rules.TestRule;
@@ -64,43 +65,6 @@ final class BucketRule implements TestRule {
      */
     private transient Bucket subj;
 
-    /**
-     * Get bucket.
-     * @return Bucket
-     */
-    public Bucket bucket() {
-        return this.subj;
-    }
-
-    /**
-     * Create S3 subj.
-     * @throws Exception If fails
-     */
-    private void create() throws Exception {
-        final Region region = new Region.Simple(
-            BucketRule.KEY, BucketRule.SECRET
-        );
-        final String name = String.format(
-            "%s.s3.jcabi.com",
-            RandomStringUtils.randomAlphabetic(Tv.FIVE)
-                .toLowerCase(Locale.ENGLISH)
-        );
-        this.subj = region.bucket(name);
-        final AmazonS3 aws = this.subj.region().aws();
-        aws.createBucket(name);
-        Logger.info(this, "S3 bucket %s created", name);
-    }
-
-    /**
-     * Drop S3 subj.
-     * @throws Exception If fails
-     */
-    private void drop() throws Exception {
-        final AmazonS3 aws = this.subj.region().aws();
-        aws.deleteBucket(this.subj.name());
-        Logger.info(this, "S3 bucket %s deleted", this.subj.name());
-    }
-
     @Override
     public Statement apply(final Statement stmt, final Description desc) {
         // @checkstyle IllegalThrows (10 lines)
@@ -123,4 +87,42 @@ final class BucketRule implements TestRule {
             }
         };
     }
+
+    /**
+     * Get bucket.
+     * @return Bucket
+     */
+    public Bucket bucket() {
+        return this.subj;
+    }
+
+    /**
+     * Create S3 subj.
+     * @throws Exception If fails
+     */
+    private void create() throws Exception {
+        final Region region = new ReRegion(
+            new Region.Simple(BucketRule.KEY, BucketRule.SECRET)
+        );
+        final String name = String.format(
+            "%s.s3.jcabi.com",
+            RandomStringUtils.randomAlphabetic(Tv.FIVE)
+                .toLowerCase(Locale.ENGLISH)
+        );
+        this.subj = region.bucket(name);
+        final AmazonS3 aws = this.subj.region().aws();
+        aws.createBucket(name);
+        Logger.info(this, "S3 bucket %s created", name);
+    }
+
+    /**
+     * Drop S3 subj.
+     * @throws Exception If fails
+     */
+    private void drop() throws Exception {
+        final AmazonS3 aws = this.subj.region().aws();
+        aws.deleteBucket(this.subj.name());
+        Logger.info(this, "S3 bucket %s deleted", this.subj.name());
+    }
+
 }

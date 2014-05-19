@@ -110,7 +110,7 @@ final class AwsOcket implements Ocket {
                 this.name, this.bkt.name(), meta.getETag()
             );
             return meta;
-        } catch (AmazonServiceException ex) {
+        } catch (final AmazonServiceException ex) {
             throw new IOException(ex);
         }
     }
@@ -132,7 +132,7 @@ final class AwsOcket implements Ocket {
                 this.name, this.bkt.name(), exists
             );
             return exists;
-        } catch (AmazonServiceException ex) {
+        } catch (final AmazonServiceException ex) {
             throw new IOException(ex);
         }
     }
@@ -154,14 +154,14 @@ final class AwsOcket implements Ocket {
                 bytes, this.name, this.bkt.name(),
                 obj.getObjectMetadata().getETag()
             );
-        } catch (AmazonS3Exception ex) {
+        } catch (final AmazonS3Exception ex) {
             throw new OcketNotFoundException(
                 String.format(
                     "ocket '%s' not found in '%s'", this.name, this.bkt.name()
                 ),
                 ex
             );
-        } catch (AmazonServiceException ex) {
+        } catch (final AmazonServiceException ex) {
             throw new IOException(ex);
         }
     }
@@ -183,7 +183,7 @@ final class AwsOcket implements Ocket {
                 cnt.getByteCount(), this.name, this.bkt.name(),
                 result.getETag()
             );
-        } catch (AmazonServiceException ex) {
+        } catch (final AmazonServiceException ex) {
             throw new IOException(ex);
         } finally {
             cnt.close();

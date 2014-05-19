@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-<!--
- *
+/**
  * Copyright (c) 2012-2013, JCabi.com
  * All rights reserved.
  *
@@ -28,39 +26,13 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- -->
-<project xmlns="http://maven.apache.org/DECORATION/1.3.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.3.0 http://maven.apache.org/xsd/decoration-1.3.0.xsd"
-    name="jcabi-s3">
-    <skin>
-        <groupId>com.jcabi</groupId>
-        <artifactId>jcabi-maven-skin</artifactId>
-        <version>1.3</version>
-    </skin>
-    <bannerLeft>
-        <name>jcabi</name>
-        <src>http://img.jcabi.com/logo-square.png</src>
-        <href>http://www.jcabi.com/</href>
-        <width>64</width>
-        <height>64</height>
-    </bannerLeft>
-    <googleAnalyticsAccountId>UA-1963507-23</googleAnalyticsAccountId>
-    <body>
-        <head>
-            <link href="http://img.jcabi.com/favicon.ico" rel="shortcut icon"/>
-            <link href="https://plus.google.com/u/0/114792568016408327418?rel=author" rel="author"/>
-        </head>
-        <menu name="Overview">
-            <item name="Introduction" href="index.html"/>
-            <item name="JavaDoc ${project.version}" href="./apidocs-${project.version}/index.html"/>
-            <item name="Test coverage" href="./cobertura/index.html"/>
-            <item name="Release History" href="https://github.com/jcabi/jcabi-s3/releases"/>
-        </menu>
-        <menu name="Examples">
-            <item name="Read/write S3 objects" href="example-read.html"/>
-            <item name="List objects" href="example-list.html"/>
-        </menu>
-        <menu ref="reports"/>
-    </body>
-</project>
+ */
+
+/**
+ * Auto-retry classes.
+ *
+ * @author Yegor Bugayenko (yegor@tpc2.com)
+ * @version $Id$
+ * @since 0.5
+ */
+package com.jcabi.s3.retry;

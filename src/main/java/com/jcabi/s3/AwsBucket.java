@@ -108,7 +108,7 @@ final class AwsBucket implements Bucket {
                 "ocket '%s' removed in bucket '%s'",
                 key, this.bkt
             );
-        } catch (AmazonServiceException ex) {
+        } catch (final AmazonServiceException ex) {
             throw new IOException(ex);
         }
     }
@@ -141,7 +141,7 @@ final class AwsBucket implements Bucket {
                 listing.getObjectSummaries().size(), pfx, this.bkt
             );
             return list;
-        } catch (AmazonServiceException ex) {
+        } catch (final AmazonServiceException ex) {
             throw new IOException(ex);
         }
     }
