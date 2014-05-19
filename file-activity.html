@@ -1,13 +1,10 @@
 <!DOCTYPE html>
-<!--
- * Copyright (c) 2012-2013, JCabi.com
- * All rights reserved.
- -->
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>jcabi-s3 - File Activity Report</title>
+        <link media="all" rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"/>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
                             <script>
                 var _gaq = _gaq || [];
@@ -23,15 +20,19 @@
 <link rel="shortcut icon" href="http://img.jcabi.com/favicon.ico"/>
                                                                                                                 
 <link rel="author" href="https://plus.google.com/u/0/114792568016408327418?rel=author"/>
-                                            <link rel="stylesheet" href="./css/highlight.css" />
-        <script src="./js/jquery-1.8.3.min.js"></script>
-        <script src="./js/highlight-7.3.min.js"></script>
+                                            <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
         <script>
             $(document).ready(
                 function() {
-                    $('div.source pre').each(
-                        function (idx, element) {
-                            hljs.highlightBlock(element);
+                    $(".menu-button").click(
+                        function() {
+                            if ($("#here-goes-menu").attr("class") == "menu-off") {
+                                $("#menu").clone().attr("class", "mobile-menu").appendTo("#here-goes-menu");
+                                $("#here-goes-menu").attr("class", "menu-on");
+                            } else {
+                                $(".mobile-menu").hide();
+                                $("#here-goes-menu").attr("class", "menu-off");
+                            }
                         }
                     );
                 }
@@ -39,185 +40,233 @@
         </script>
     </head>
     <body>
-                <ul id="menu">
-                                                    <li>
-                    Overview
-                                            <ul>
-                                                                            <li>
-                                                                    <a href="index.html" title="Introduction">Introduction</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="apidocs-0.4.1/index.html" title="API 0.4.1 (JavaDoc)">API 0.4.1 (JavaDoc)</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="cobertura/index.html" title="Test coverage">Test coverage</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="https://github.com/jcabi/jcabi-s3/releases" title="Release History">Release History</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                </ul>
-                                    </li>
-                            <li>
-                    Examples
-                                            <ul>
-                                                                            <li>
-                                                                    <a href="example-read.html" title="Read/write S3 objects">Read/write S3 objects</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="example-list.html" title="List objects">List objects</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                </ul>
-                                    </li>
-                            <li>
-                    Project Documentation
-                                            <ul>
-                                                                            <li>
-                                                                    <a href="project-info.html" title="Project Information">Project Information</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
-                                                                                        <li>
-                                                                    <a href="project-reports.html" title="Project Reports">Project Reports</a>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <ul>
-                                                                            <li>
-                                                                    <a href="rempl.html" title="REMPL">REMPL</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="xref/index.html" title="Source Xref">Source Xref</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="xref-test/index.html" title="Test Source Xref">Test Source Xref</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="surefire-report.html" title="Surefire Report">Surefire Report</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="changelog.html" title="Change Log">Change Log</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="dev-activity.html" title="Developer Activity">Developer Activity</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                            <strong>                        <a href="file-activity.html" title="File Activity">File Activity</a>
-        </strong>
-                                                                                                                <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="dependency-updates-report.html" title="Dependency Updates Report">Dependency Updates Report</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="plugin-updates-report.html" title="Plugin Updates Report">Plugin Updates Report</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="apidocs-0.4.1/index.html" title="JavaDocs">JavaDocs</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="cobertura/index.html" title="Cobertura Test Coverage">Cobertura Test Coverage</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="github-report.html" title="GitHub Report">GitHub Report</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                                        <li>
-                                                                    <a href="changes-report.html" title="Changes Report">Changes Report</a>
-                                                                                                                        <ul>
-                                                    </ul>
-                                    </li>
-                                                                </ul>
-                                    </li>
-                                                                </ul>
-                                    </li>
-                    </ul>
-        <div id="content">
-                            <a href="https://github.com/jcabi/jcabi-s3">
-                    <img style="position: absolute; top: 0; right: 0; border: 0; width: 100px; height: 100px;"
-                        src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"
-                        alt="Fork me on GitHub" />
-                </a>
-                        <a href="../" title="${decoration.bannerLeft.title}">
-                <img src="http://img.jcabi.com/logo.png"
-                    alt="jcabi"
-                                            width="200"
-                                                                height="48"
+                <section class="page" itemscope="" itemtype="http://schema.org/BlogPosting">
+            <nav class="menu-section" role="navigation">
+                <ul class="menu">
+                                                                                    <li>
+                            Overview
+                                                            <ul>
+                                                                                                    <li >
+                            <span>                        <a href="index.html" title="Introduction">Introduction</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="apidocs-0.5/index.html" title="JavaDoc 0.5">JavaDoc 0.5</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="cobertura/index.html" title="Test coverage">Test coverage</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="https://github.com/jcabi/jcabi-s3/releases" title="Release History">Release History</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                        </ul>
+                                                    </li>
+                                            <li>
+                            Examples
+                                                            <ul>
+                                                                                                    <li >
+                            <span>                        <a href="example-read.html" title="Read/write S3 objects">Read/write S3 objects</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="example-list.html" title="List objects">List objects</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                        </ul>
+                                                    </li>
+                                            <li>
+                            Project Documentation
+                                                            <ul>
+                                                                                                    <li >
+                            <span>                        <a href="project-info.html" title="Project Information">Project Information</a>
+        </span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="project-reports.html" title="Project Reports">Project Reports</a>
+        </span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <ul>
+                                                                                                    <li >
+                            <span>                        <a href="rempl.html" title="REMPL">REMPL</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="xref-test/index.html" title="Test Source Xref">Test Source Xref</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="xref/index.html" title="Source Xref">Source Xref</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="surefire-report.html" title="Surefire Report">Surefire Report</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="changelog.html" title="Change Log">Change Log</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="dev-activity.html" title="Developer Activity">Developer Activity</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li  class='active' >
+                            <span>                        <a href="file-activity.html" title="File Activity">File Activity</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="dependency-updates-report.html" title="Dependency Updates Report">Dependency Updates Report</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="plugin-updates-report.html" title="Plugin Updates Report">Plugin Updates Report</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="apidocs-0.5/index.html" title="JavaDocs">JavaDocs</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="cobertura/index.html" title="Cobertura Test Coverage">Cobertura Test Coverage</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="github-report.html" title="GitHub Report">GitHub Report</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="changes-report.html" title="Changes Report">Changes Report</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                        </ul>
+                                                    </li>
+                                                                                        </ul>
+                                                    </li>
+                                    </ul>
+            </nav>
+            <div class="right-side">
+                <main role="main">
+                    <div class="content">
+                        <header>
+                            <i class="menu-button fa fa-align-justify"></i>
+                            <div class="logo">
+                                <a href="../"
+                                    title=" logo ">
+                                    <img src="http://img.jcabi.com/logo-square.png"
+                                        alt="jcabi"
+                                                                                    width="64"
+                                                                                                                            height="64"
+                                                                                itemprop="image"
                                     />
-            </a>
-                        <p>
-                
-                30-Jan-2014
-                0.4.1
-            </p>
-            <article>
-                <div class="section">
+                                </a>
+                            </div>
+                            <div class="date">
+                                <div class="date-numbers">
+                                    <strong itemprop="version">0.5</strong>
+                                    
+                                    <time itemprop="datePublished" datetime="2014-05-19T06:06:09Z">
+                                        
+                                        19-May-2014
+                                    </time>
+                                </div>
+                                                                                                    <div>
+                                        <iframe src="http://ghbtns.com/github-btn.html?user=jcabi&amp;repo=jcabi-s3&amp;type=watch&amp;count=true&amp;size=large"
+                                            style="border-width:0px;overflow:hidden;width:170px;height:30px;">
+                                        </iframe>
+                                    </div>
+                                                            </div>
+                            <div id="here-goes-menu" class="menu-off"></div>
+                        </header>
+                        <article role="article" itemprop="articleBody">
+                            <div class="section">
 <h2>File Activity Report<a name="File_Activity_Report"></a></h2>
 <div class="section">
-<h3>Changes between 2013-12-31 and 2014-01-31<a name="Changes_between_2013-12-31_and_2014-01-31"></a></h3>
-<p>Total commits: 2<br />Total number of files changed: 6</p>
+<h3>Changes between 2014-04-19 and 2014-05-20<a name="Changes_between_2014-04-19_and_2014-05-20"></a></h3>
+<p>Total commits: 2<br />Total number of files changed: 9</p>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Filename</th>
 <th>Number of Times Changed</th></tr>
 <tr class="b">
+<td><a class="externalLink" href="https://github.com/jcabi/jcabi-s3/pom.xml"><b>pom.xml</b></a> </td>
+<td>2</td></tr>
+<tr class="a">
 <td><a class="externalLink" href="https://github.com/jcabi/jcabi-s3/src/main/java/com/jcabi/s3/AwsBucket.java">src/main/java/com/jcabi/s3/<b>AwsBucket.java</b></a> </td>
 <td>1</td></tr>
-<tr class="a">
+<tr class="b">
 <td><a class="externalLink" href="https://github.com/jcabi/jcabi-s3/src/main/java/com/jcabi/s3/AwsOcket.java">src/main/java/com/jcabi/s3/<b>AwsOcket.java</b></a> </td>
 <td>1</td></tr>
+<tr class="a">
+<td><a class="externalLink" href="https://github.com/jcabi/jcabi-s3/src/main/java/com/jcabi/s3/retry/ReBucket.java">src/main/java/com/jcabi/s3/retry/<b>ReBucket.java</b></a> </td>
+<td>1</td></tr>
 <tr class="b">
-<td><a class="externalLink" href="https://github.com/jcabi/jcabi-s3/src/site/markdown/example-list.md.vm">src/site/markdown/<b>example-list.md.vm</b></a> </td>
+<td><a class="externalLink" href="https://github.com/jcabi/jcabi-s3/src/main/java/com/jcabi/s3/retry/ReOcket.java">src/main/java/com/jcabi/s3/retry/<b>ReOcket.java</b></a> </td>
 <td>1</td></tr>
 <tr class="a">
-<td><a class="externalLink" href="https://github.com/jcabi/jcabi-s3/src/site/markdown/example-read.md.vm">src/site/markdown/<b>example-read.md.vm</b></a> </td>
+<td><a class="externalLink" href="https://github.com/jcabi/jcabi-s3/src/main/java/com/jcabi/s3/retry/ReRegion.java">src/main/java/com/jcabi/s3/retry/<b>ReRegion.java</b></a> </td>
 <td>1</td></tr>
 <tr class="b">
+<td><a class="externalLink" href="https://github.com/jcabi/jcabi-s3/src/main/java/com/jcabi/s3/retry/package-info.java">src/main/java/com/jcabi/s3/retry/<b>package-info.java</b></a> </td>
+<td>1</td></tr>
+<tr class="a">
 <td><a class="externalLink" href="https://github.com/jcabi/jcabi-s3/src/site/site.xml">src/site/<b>site.xml</b></a> </td>
 <td>1</td></tr>
-<tr class="a">
-<td><a class="externalLink" href="https://github.com/jcabi/jcabi-s3/pom.xml"><b>pom.xml</b></a> </td>
+<tr class="b">
+<td><a class="externalLink" href="https://github.com/jcabi/jcabi-s3/src/test/java/com/jcabi/s3/BucketRule.java">src/test/java/com/jcabi/s3/<b>BucketRule.java</b></a> </td>
 <td>1</td></tr></table></div></div>
-            </article>
-            <p style="margin-bottom: 3em; margin-top: 2em;">
-                Copyright &#169;
-                                                    2012-2014
-                                jcabi.com, All Rights Reserved.
-                <a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.
-            </p>
-            <a href="http://maven.apache.org" title="site is built by Apache Maven"
-                style='position: absolute; bottom: 1em; right: 1em;'>
-                <img src='images/built-by-maven.png' style='width: 50px; height: 17px;'
-                    alt='site is built by Apache Maven'/>
-            </a>
-        </div>
+                            <img class="maven-logo" src="//img.jcabi.com/built-by-maven.png" alt="built by maven"/>
+                        </article>
+                    </div>
+                </main>
+                <footer class="legal-notes">
+                    <div>
+                        Copyright &#169;
+                                                                            2012-2014
+                                            </div>
+                    <div>jcabi.com, All Rights Reserved.</div>
+                    <div><a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.</div>
+                </footer>
+            </div>
+        </section>
     </body>
 </html>

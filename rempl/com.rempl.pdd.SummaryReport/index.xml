@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?xml-stylesheet type='text/xsl' href='puzzles.xsl'?><puzzles>
-   <puzzle>
-      <ticket>2</ticket>
-      <file>src/main/java/com/jcabi/s3/AwsBucket.java</file>
-      <prefix>     * </prefix>
-      <body>Large lists are not supported. The method doesn't support marker functionality, provided by ObjectListing. We should create a test that reproduces the problem and fix the method. The method should return an iterable, which should fetch portions of objects from S3 on demand.</body>
-      <estimate>0</estimate>
-      <lines>118-122</lines>
-      <owner>someone</owner>
-   </puzzle>
+<puzzle>
+<ticket>2</ticket>
+<file>src/main/java/com/jcabi/s3/AwsBucket.java</file>
+<prefix>     * </prefix>
+<body>Large lists are not supported. The method doesn't support marker functionality, provided by ObjectListing. We should create a test that reproduces the problem and fix the method. The method should return an iterable, which should fetch portions of objects from S3 on demand.</body>
+<estimate>0</estimate>
+<lines>118-122</lines>
+<owner>someone</owner>
+</puzzle>
 </puzzles>
