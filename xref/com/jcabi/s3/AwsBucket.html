@@ -7,7 +7,7 @@
 <body>
 <div id="overview"><a href="../../../../apidocs/com/jcabi/s3/AwsBucket.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_javadoccomment"> * Copyright (c) 2012-2013, JCabi.com</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_javadoccomment"> * Copyright (c) 2012-2014, jcabi.com</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_javadoccomment"> * All rights reserved.</em>
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_javadoccomment"> * Redistribution and use in source and binary forms, with or without</em>
@@ -110,55 +110,58 @@
 <a class="jxr_linenumber" name="L102" href="#L102">102</a>         <strong class="jxr_keyword">final</strong> String key) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L104" href="#L104">104</a>             <strong class="jxr_keyword">final</strong> AmazonS3 aws = <strong class="jxr_keyword">this</strong>.regn.aws();
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>             aws.deleteObject(<strong class="jxr_keyword">new</strong> DeleteObjectRequest(<strong class="jxr_keyword">this</strong>.bkt, key));
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>             Logger.info(
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>                 <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>                 <span class="jxr_string">"ocket '%s' removed in bucket '%s'"</span>,
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>                 key, <strong class="jxr_keyword">this</strong>.bkt
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>             );
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> AmazonServiceException ex) {
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(ex);
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>         }
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>     }
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment">     * {@inheritDoc}</em>
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment">     * @todo #2 Large lists are not supported. The method doesn't</em>
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">     *  support marker functionality, provided by ObjectListing. We should</em>
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">     *  create a test that reproduces the problem and fix the method. The</em>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">     *  method should return an iterable, which should fetch portions</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">     *  of objects from S3 on demand.</em>
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>     @Override
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>     <strong class="jxr_keyword">public</strong> Iterable&lt;String&gt; list(@NotNull(message = <span class="jxr_string">"prefix can't be NULL"</span>)
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>         <strong class="jxr_keyword">final</strong> String pfx) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>             <strong class="jxr_keyword">final</strong> AmazonS3 aws = <strong class="jxr_keyword">this</strong>.regn.aws();
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>             <strong class="jxr_keyword">final</strong> ObjectListing listing = aws.listObjects(
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>                 <strong class="jxr_keyword">new</strong> ListObjectsRequest()
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>                     .withBucketName(<strong class="jxr_keyword">this</strong>.bkt)
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>                     .withPrefix(pfx)
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>             );
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>             <strong class="jxr_keyword">final</strong> Collection&lt;String&gt; list = <strong class="jxr_keyword">new</strong> LinkedList&lt;String&gt;();
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> S3ObjectSummary sum : listing.getObjectSummaries()) {
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>                 list.add(sum.getKey());
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>             }
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>             Logger.info(
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>                 <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>                 <span class="jxr_string">"listed %d ocket(s) with prefix '%s' in bucket '%s'"</span>,
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>                 listing.getObjectSummaries().size(), pfx, <strong class="jxr_keyword">this</strong>.bkt
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>             );
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>             <strong class="jxr_keyword">return</strong> list;
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> AmazonServiceException ex) {
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(ex);
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>         }
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>     }
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>     @Override
-<a class="jxr_linenumber" name="L150" href="#L150">150</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(<strong class="jxr_keyword">final</strong> <a href="../../../com/jcabi/s3/Bucket.html">Bucket</a> bucket) {
-<a class="jxr_linenumber" name="L151" href="#L151">151</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.name().compareTo(bucket.name());
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>     }
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> }
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> start = System.currentTimeMillis();
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>             aws.deleteObject(<strong class="jxr_keyword">new</strong> DeleteObjectRequest(<strong class="jxr_keyword">this</strong>.bkt, key));
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>             Logger.info(
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>                 <strong class="jxr_keyword">this</strong>,
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>                 <span class="jxr_string">"ocket '%s' removed in bucket '%s' in %[ms]s"</span>,
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>                 key, <strong class="jxr_keyword">this</strong>.bkt, System.currentTimeMillis() - start
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>             );
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> AmazonServiceException ex) {
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(ex);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>         }
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>     }
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment">     * {@inheritDoc}</em>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">     * @todo #2 Large lists are not supported. The method doesn't</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">     *  support marker functionality, provided by ObjectListing. We should</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">     *  create a test that reproduces the problem and fix the method. The</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">     *  method should return an iterable, which should fetch portions</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">     *  of objects from S3 on demand.</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>     @Override
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>     <strong class="jxr_keyword">public</strong> Iterable&lt;String&gt; list(@NotNull(message = <span class="jxr_string">"prefix can't be NULL"</span>)
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>         <strong class="jxr_keyword">final</strong> String pfx) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>             <strong class="jxr_keyword">final</strong> AmazonS3 aws = <strong class="jxr_keyword">this</strong>.regn.aws();
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> start = System.currentTimeMillis();
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>             <strong class="jxr_keyword">final</strong> ObjectListing listing = aws.listObjects(
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>                 <strong class="jxr_keyword">new</strong> ListObjectsRequest()
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>                     .withBucketName(<strong class="jxr_keyword">this</strong>.bkt)
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>                     .withPrefix(pfx)
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>             );
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>             <strong class="jxr_keyword">final</strong> Collection&lt;String&gt; list = <strong class="jxr_keyword">new</strong> LinkedList&lt;String&gt;();
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> S3ObjectSummary sum : listing.getObjectSummaries()) {
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>                 list.add(sum.getKey());
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>             }
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>             Logger.info(
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>                 <strong class="jxr_keyword">this</strong>,
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>                 <span class="jxr_string">"listed %d ocket(s) with prefix '%s' in bucket '%s' in %[ms]s"</span>,
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>                 listing.getObjectSummaries().size(), pfx, <strong class="jxr_keyword">this</strong>.bkt,
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>                 System.currentTimeMillis() - start
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>             );
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>             <strong class="jxr_keyword">return</strong> list;
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> AmazonServiceException ex) {
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(ex);
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>         }
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>     }
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>     @Override
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(<strong class="jxr_keyword">final</strong> <a href="../../../com/jcabi/s3/Bucket.html">Bucket</a> bucket) {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.name().compareTo(bucket.name());
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>     }
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2012&#x2013;2014 <a href="http://www.jcabi.com">jcabi.com</a>. All rights reserved.</div>

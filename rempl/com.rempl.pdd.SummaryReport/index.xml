@@ -6,7 +6,7 @@
 <prefix>     * </prefix>
 <body>Large lists are not supported. The method doesn't support marker functionality, provided by ObjectListing. We should create a test that reproduces the problem and fix the method. The method should return an iterable, which should fetch portions of objects from S3 on demand.</body>
 <estimate>0</estimate>
-<lines>118-122</lines>
+<lines>119-123</lines>
 <owner>someone</owner>
 </puzzle>
 </puzzles>
