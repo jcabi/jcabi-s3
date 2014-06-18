@@ -45,7 +45,7 @@ import lombok.EqualsAndHashCode;
  * @since 0.6
  */
 @Immutable
-@EqualsAndHashCode(of = "origin")
+@EqualsAndHashCode(of = "bkt")
 @Loggable(Loggable.DEBUG)
 public final class MkBucket implements Bucket {
 
@@ -56,6 +56,7 @@ public final class MkBucket implements Bucket {
 
     /**
      * Ctor.
+     * @param name Name of the bucket
      */
     public MkBucket(final String name) {
         this.bkt = name;

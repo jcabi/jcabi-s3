@@ -44,7 +44,7 @@ import lombok.EqualsAndHashCode;
  * @since 0.6
  */
 @Immutable
-@EqualsAndHashCode(of = "origin")
+@EqualsAndHashCode
 @Loggable(Loggable.DEBUG)
 public final class MkRegion implements Region {
 
