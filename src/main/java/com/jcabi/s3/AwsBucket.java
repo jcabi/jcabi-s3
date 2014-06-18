@@ -102,11 +102,12 @@ final class AwsBucket implements Bucket {
         final String key) throws IOException {
         try {
             final AmazonS3 aws = this.regn.aws();
+            final long start = System.currentTimeMillis();
             aws.deleteObject(new DeleteObjectRequest(this.bkt, key));
             Logger.info(
                 this,
-                "ocket '%s' removed in bucket '%s'",
-                key, this.bkt
+                "ocket '%s' removed in bucket '%s' in %[ms]s",
+                key, this.bkt, System.currentTimeMillis() - start
             );
         } catch (final AmazonServiceException ex) {
             throw new IOException(ex);
