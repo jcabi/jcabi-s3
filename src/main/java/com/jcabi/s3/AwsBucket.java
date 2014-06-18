@@ -127,6 +127,7 @@ final class AwsBucket implements Bucket {
         final String pfx) throws IOException {
         try {
             final AmazonS3 aws = this.regn.aws();
+            final long start = System.currentTimeMillis();
             final ObjectListing listing = aws.listObjects(
                 new ListObjectsRequest()
                     .withBucketName(this.bkt)
@@ -138,8 +139,9 @@ final class AwsBucket implements Bucket {
             }
             Logger.info(
                 this,
-                "listed %d ocket(s) with prefix '%s' in bucket '%s'",
-                listing.getObjectSummaries().size(), pfx, this.bkt
+                "listed %d ocket(s) with prefix '%s' in bucket '%s' in %[ms]s",
+                listing.getObjectSummaries().size(), pfx, this.bkt,
+                System.currentTimeMillis() - start
             );
             return list;
         } catch (final AmazonServiceException ex) {

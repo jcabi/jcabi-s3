@@ -101,13 +101,17 @@ final class AwsOcket implements Ocket {
     public ObjectMetadata meta() throws IOException {
         try {
             final AmazonS3 aws = this.bkt.region().aws();
+            final long start = System.currentTimeMillis();
             final ObjectMetadata meta = aws.getObjectMetadata(
                 new GetObjectMetadataRequest(this.bkt.name(), this.name)
             );
             Logger.info(
                 this,
-                "metadata loaded for ocket '%s' in bucket '%s', etag=%s",
-                this.name, this.bkt.name(), meta.getETag()
+                // @checkstyle LineLength (1 line)
+                "metadata loaded for ocket '%s' in bucket '%s' in %[ms]s (etag=%s)",
+                this.name, this.bkt.name(),
+                System.currentTimeMillis() - start,
+                meta.getETag()
             );
             return meta;
         } catch (final AmazonServiceException ex) {
@@ -119,6 +123,7 @@ final class AwsOcket implements Ocket {
     public boolean exists() throws IOException {
         try {
             final AmazonS3 aws = this.bkt.region().aws();
+            final long start = System.currentTimeMillis();
             final ObjectListing listing = aws.listObjects(
                 new ListObjectsRequest()
                     .withBucketName(this.bkt.name())
@@ -128,8 +133,10 @@ final class AwsOcket implements Ocket {
             final boolean exists = !listing.getObjectSummaries().isEmpty();
             Logger.info(
                 this,
-                "ocket '%s' existence checked in bucket '%s' (%b)",
-                this.name, this.bkt.name(), exists
+                "ocket '%s' existence checked in bucket '%s' in %[ms]s (%b)",
+                this.name, this.bkt.name(),
+                System.currentTimeMillis() - start,
+                exists
             );
             return exists;
         } catch (final AmazonServiceException ex) {
@@ -142,6 +149,7 @@ final class AwsOcket implements Ocket {
         final OutputStream output) throws IOException {
         final AmazonS3 aws = this.bkt.region().aws();
         try {
+            final long start = System.currentTimeMillis();
             final S3Object obj = aws.getObject(
                 new GetObjectRequest(this.bkt.name(), this.name)
             );
@@ -150,8 +158,10 @@ final class AwsOcket implements Ocket {
             input.close();
             Logger.info(
                 this,
-                "loaded %d byte(s) from ocket '%s' in bucket '%s', etag=%s",
+                // @checkstyle LineLength (1 line)
+                "loaded %d byte(s) from ocket '%s' in bucket '%s' in %[ms]s (etag=%s)",
                 bytes, this.name, this.bkt.name(),
+                System.currentTimeMillis() - start,
                 obj.getObjectMetadata().getETag()
             );
         } catch (final AmazonS3Exception ex) {
@@ -174,13 +184,16 @@ final class AwsOcket implements Ocket {
         final CountingInputStream cnt = new CountingInputStream(input);
         try {
             final AmazonS3 aws = this.bkt.region().aws();
+            final long start = System.currentTimeMillis();
             final PutObjectResult result = aws.putObject(
                 new PutObjectRequest(this.bkt.name(), this.name, cnt, meta)
             );
             Logger.info(
                 this,
-                "saved %d byte(s) to ocket '%s' in bucket '%s', etag=%s",
+                // @checkstyle LineLength (1 line)
+                "saved %d byte(s) to ocket '%s' in bucket '%s' in %[ms]s (etag=%s)",
                 cnt.getByteCount(), this.name, this.bkt.name(),
+                System.currentTimeMillis() - start,
                 result.getETag()
             );
         } catch (final AmazonServiceException ex) {
