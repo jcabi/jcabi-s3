@@ -38,6 +38,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.CharEncoding;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -60,7 +61,9 @@ public final class AwsOcketTest {
     public void readsContentFromAwsObject() throws Exception {
         final String content = "some text \u20ac\n\t\rtest";
         final S3Object object = new S3Object();
-        object.setObjectContent(IOUtils.toInputStream(content));
+        object.setObjectContent(
+            IOUtils.toInputStream(content, CharEncoding.UTF_8)
+        );
         final AmazonS3 aws = Mockito.mock(AmazonS3.class);
         Mockito.doReturn(object).when(aws)
             .getObject(Mockito.any(GetObjectRequest.class));
