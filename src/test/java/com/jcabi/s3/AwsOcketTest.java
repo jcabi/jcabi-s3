@@ -94,7 +94,7 @@ public final class AwsOcketTest {
         final Ocket ocket = new AwsOcket(bucket, "test-3.txt");
         final String content = "text \u20ac\n\t\rtest";
         ocket.write(
-            new ByteArrayInputStream(content.getBytes()),
+            new ByteArrayInputStream(content.getBytes(CharEncoding.UTF_8)),
             new ObjectMetadata()
         );
         Mockito.verify(aws).putObject(Mockito.any(PutObjectRequest.class));
