@@ -74,7 +74,10 @@ public final class AwsOcketTest {
         final Ocket ocket = new AwsOcket(bucket, "test.txt");
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ocket.read(baos);
-        MatcherAssert.assertThat(baos.toString(), Matchers.equalTo(content));
+        MatcherAssert.assertThat(
+            baos.toString(CharEncoding.UTF_8),
+            Matchers.equalTo(content)
+        );
     }
 
     /**
