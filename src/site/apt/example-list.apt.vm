@@ -1,8 +1,16 @@
-# List S3 Objects
+  ---
+  List S3 Objects
+  ---
+  Yegor Bugayenko
+  ---
+  2014-11-02
+  ---
 
-To list objects in an S3 bucket use `Bucket.list()` method:
+List S3 Objects
 
-```java
+To list objects in an S3 bucket use <<<Bucket.list()>>> method:
+
++--
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Region;
 public class Main {
@@ -15,4 +23,4 @@ public class Main {
     }
   }
 }
-```
++--

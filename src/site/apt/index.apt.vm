@@ -1,8 +1,16 @@
-# Object Layer of Amazon S3 SDK
+  ---
+  Object Layer of Amazon S3 SDK
+  ---
+  Yegor Bugayenko
+  ---
+  2014-11-02
+  ---
 
-For example:
+Object Layer of Amazon S3 SDK
 
-```java
+  For example:
+
++--
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
 import com.jcabi.s3.Region;
@@ -15,31 +23,30 @@ public class Main {
     ocket.write("hello, world!");
   }
 }
-```
++--
 
-Check [JavaDoc](./apidocs-${project.version}/index.html)
-for more details.
+  Check {{{./apidocs-${project.version}/index.html}JavaDoc}}
+  for more details.
 
-The only dependency you need is
-(you can also download
-[jcabi-s3-${project.version}.jar](http://repo1.maven.org/maven2/com/jcabi/jcabi-s3/${project.version}/jcabi-s3-${project.version}.jar)
-and add it to the classpath):
+  The only dependency you need is
+  (you can also download
+  {{{http://repo1.maven.org/maven2/com/jcabi/jcabi-s3/${project.version}/jcabi-s3-${project.version}.jar}<<<jcabi-s3-${project.version}.jar>>>}}
+  and add it to the classpath):
 
-```
++--
 <dependency>
   <groupId>com.jcabi</groupId>
   <artifactId>jcabi-s3</artifactId>
   <version>${project.version}</version>
 </dependency>
-```
++--
 
-Cutting Edge Version
------------------------
+* Cutting Edge Version
 
-If you want to use current version of the product, you can do it with
-this configuration in your `pom.xml`:
+  If you want to use current version of the product, you can do it with
+  this configuration in your <<<pom.xml>>>:
 
-```
++--
 <repositories>
   <repository>
     <id>oss.sonatype.org</id>
@@ -53,4 +60,4 @@ this configuration in your `pom.xml`:
     <version>1.0-SNAPSHOT</version>
   </dependency>
 </dependencies>
-```
++--

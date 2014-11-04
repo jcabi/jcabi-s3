@@ -1,8 +1,16 @@
-# Read and Write S3 Objects
+  ---
+  Read and Write S3 Objects
+  ---
+  Yegor Bugayenko
+  ---
+  2014-11-02
+  ---
 
-All you need to read an object is to know its bucket and its name:
+Read and Write S3 Objects
 
-```java
+  All you need to read an object is to know its bucket and its name:
+
++--
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
 import com.jcabi.s3.Region;
@@ -15,4 +23,4 @@ public class Main {
     ocket.write("hello, world!");
   }
 }
-```
++--
