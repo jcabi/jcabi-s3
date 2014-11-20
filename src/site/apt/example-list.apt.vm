@@ -8,7 +8,7 @@
 
 List S3 Objects
 
-To list objects in an S3 bucket use <<<Bucket.list()>>> method:
+  To list objects in an S3 bucket use <<<Bucket.list()>>> method:
 
 +--
 import com.jcabi.s3.Bucket;

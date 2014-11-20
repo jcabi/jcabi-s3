@@ -1,0 +1,30 @@
+  ---
+  Cached Reading of S3 Content
+  ---
+  Yegor Bugayenko
+  ---
+  2014-11-20
+  ---
+
+Cached Reading of S3 Content
+
+  To avoid multiple reading of the same content, use `CdRegion`:
+
++--
+import com.jcabi.s3.Bucket;
+import com.jcabi.s3.Region;
+import com.jcabi.s3.cached.CdRegion;
+public class Main {
+  public static void main(String[] args) {
+    Region region = new CdRegion(
+      new Region.Simple("key", "secret")
+    );
+    Bucket bucket = region.bucket("my.example.com");
+    Ocket.Text ocket = new Ocket.Text(bucket.ocket("test.txt"));
+    System.out.println(ocket.read()); // reads from AWS S3 server
+    System.out.println(ocket.read()); // will be taken from cache
+    ocket.write("hello!"); // cached cleaned automatically
+    System.out.println(ocket.read()); // again reads from AWS
+  }
+}
++--

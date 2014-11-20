@@ -60,6 +60,7 @@
         <menu name="Examples">
             <item name="Read/write S3 objects" href="example-read.html"/>
             <item name="List objects" href="example-list.html"/>
+            <item name="Cached reading" href="example-cached.html"/>
         </menu>
         <menu ref="reports"/>
     </body>
