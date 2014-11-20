@@ -15,9 +15,12 @@ It's an object layer on top of Amazon S3 SDK:
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
 import com.jcabi.s3.Region;
+import com.jcabi.s3.cached.Region;
 public class Main {
   public static void main(String[] args) {
-    Region region = new Region.Simple("key", "secret");
+    Region region = new CdRegion(
+      new Region.Simple("key", "secret")
+    );
     Bucket bucket = region.bucket("my.example.com");
     Ocket.Text ocket = new Ocket.Text(bucket.ocket("test.txt"));
     String content = ocket.read();
@@ -25,6 +28,9 @@ public class Main {
   }
 }
 ```
+
+It is highly recommended to use `CdRegion` to avoid multiple duplicate
+reads from the same S3 object.
 
 ## Questions?
 
