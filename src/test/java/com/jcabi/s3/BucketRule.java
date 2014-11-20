@@ -32,6 +32,7 @@ package com.jcabi.s3;
 import com.amazonaws.services.s3.AmazonS3;
 import com.jcabi.aspects.Tv;
 import com.jcabi.log.Logger;
+import com.jcabi.s3.cached.CdRegion;
 import com.jcabi.s3.retry.ReRegion;
 import java.util.Locale;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -101,8 +102,10 @@ final class BucketRule implements TestRule {
      * @throws Exception If fails
      */
     private void create() throws Exception {
-        final Region region = new ReRegion(
-            new Region.Simple(BucketRule.KEY, BucketRule.SECRET)
+        final Region region = new CdRegion(
+            new ReRegion(
+                new Region.Simple(BucketRule.KEY, BucketRule.SECRET)
+            )
         );
         final String name = String.format(
             "%s.s3.jcabi.com",
