@@ -66,7 +66,7 @@ public final class MkBucketTest {
         new Ocket.Text(bucket.ocket("a/b/hello.txt")).write("");
         new Ocket.Text(bucket.ocket("a/b/f/2.txt")).write("");
         MatcherAssert.assertThat(
-            bucket.list("a/b/"),
+            new Bucket.Prefixed(bucket, "a/b/").list(""),
             Matchers.allOf(
                 Matchers.<String>iterableWithSize(2),
                 Matchers.hasItem("hello.txt"),
