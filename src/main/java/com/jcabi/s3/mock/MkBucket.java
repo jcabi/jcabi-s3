@@ -94,9 +94,9 @@ public final class MkBucket implements Bucket {
 
     @Override
     public Iterable<String> list(final String pfx) {
-        final File home = new File(this.home(), pfx);
+        final File home = this.home();
         return Iterables.transform(
-            FileUtils.listFiles(home, null, true),
+            FileUtils.listFiles(new File(home, pfx), null, true),
             new Function<File, String>() {
                 @Override
                 public String apply(final File file) {
