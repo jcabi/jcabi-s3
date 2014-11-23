@@ -27,47 +27,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jcabi.s3.mock;
-
-import com.jcabi.s3.Bucket;
-import com.jcabi.s3.Ocket;
-import com.jcabi.s3.Region;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 /**
- * Test case for {@link MkRegion}.
+ * Mock/fake classes, tests.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.8.1
  */
-public final class MkRegionTest {
-
-    /**
-     * Temp directory.
-     * @checkstyle VisibilityModifierCheck (5 lines)
-     */
-    @Rule
-    public final transient TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * MkRegion can read/write ocket content.
-     * @throws Exception If fails
-     */
-    @Test
-    public void readsWritesContentFromFiles() throws Exception {
-        final Region region = new MkRegion(this.temp.newFolder());
-        final Bucket bucket = region.bucket("test");
-        final Ocket ocket = bucket.ocket("hello.txt");
-        new Ocket.Text(ocket).write("hello, world!");
-        MatcherAssert.assertThat(
-            new Ocket.Text(bucket.ocket(ocket.key())).read(),
-            Matchers.containsString("world!")
-        );
-    }
-
-}
+package com.jcabi.s3.mock;

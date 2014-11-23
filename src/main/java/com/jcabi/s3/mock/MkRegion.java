@@ -34,6 +34,7 @@ import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Region;
+import java.io.File;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -48,9 +49,28 @@ import lombok.EqualsAndHashCode;
 @Loggable(Loggable.DEBUG)
 public final class MkRegion implements Region {
 
+    /**
+     * Directory we're working in.
+     */
+    private final transient String dir;
+
+    /**
+     * Ctor.
+     * @param file Directory to keep files in
+     * @since 0.8.1
+     */
+    public MkRegion(final File file) {
+        if (!file.isDirectory()) {
+            throw new IllegalArgumentException(
+                String.format("%s is not a directory", file)
+            );
+        }
+        this.dir = file.getAbsolutePath();
+    }
+
     @Override
     public Bucket bucket(final String name) {
-        return new MkBucket(name);
+        return new MkBucket(new File(this.dir), name);
     }
 
     @Override

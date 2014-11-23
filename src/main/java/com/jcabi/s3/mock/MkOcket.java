@@ -34,6 +34,9 @@ import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -52,6 +55,11 @@ import lombok.EqualsAndHashCode;
 public final class MkOcket implements Ocket {
 
     /**
+     * Directory we're working in.
+     */
+    private final transient String dir;
+
+    /**
      * My bucket.
      */
     private final transient String bkt;
@@ -63,17 +71,19 @@ public final class MkOcket implements Ocket {
 
     /**
      * Ctor.
+     * @param file Dir we're in
      * @param bucket Bucket
      * @param key Key
      */
-    public MkOcket(final String bucket, final String key) {
+    public MkOcket(final File file, final String bucket, final String key) {
+        this.dir = file.getAbsolutePath();
         this.bkt = bucket;
         this.name = key;
     }
 
     @Override
     public Bucket bucket() {
-        return new MkBucket(this.bkt);
+        return new MkBucket(new File(this.dir), this.bkt);
     }
 
     @Override
@@ -88,22 +98,55 @@ public final class MkOcket implements Ocket {
 
     @Override
     public boolean exists() {
-        return true;
+        return this.file().exists();
     }
 
     @Override
     public void read(final OutputStream output) throws IOException {
-        output.close();
+        final InputStream input = new FileInputStream(this.file());
+        try {
+            while (input.available() > 0) {
+                output.write(input.read());
+            }
+        } finally {
+            input.close();
+            output.close();
+        }
     }
 
     @Override
     public void write(final InputStream input, final ObjectMetadata meta)
         throws IOException {
-        input.close();
+        final File file = this.file();
+        file.getParentFile().mkdirs();
+        final OutputStream output = new FileOutputStream(file);
+        try {
+            while (input.available() > 0) {
+                output.write(input.read());
+            }
+        } finally {
+            output.close();
+            input.close();
+        }
     }
 
     @Override
     public int compareTo(final Ocket ocket) {
         return this.name.compareTo(ocket.key());
     }
+
+    /**
+     * Get my file.
+     * @return File
+     */
+    private File file() {
+        return new File(
+            new File(
+                new File(this.dir),
+                this.bkt
+            ),
+            this.name
+        );
+    }
+
 }

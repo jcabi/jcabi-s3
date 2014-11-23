@@ -29,13 +29,16 @@
  */
 package com.jcabi.s3.mock;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
 import com.jcabi.s3.Region;
-import java.util.Collections;
+import java.io.File;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.io.FileUtils;
 
 /**
  * Mock/fake bucket.
@@ -55,16 +58,23 @@ public final class MkBucket implements Bucket {
     private final transient String bkt;
 
     /**
+     * Directory we're working in.
+     */
+    private final transient String dir;
+
+    /**
      * Ctor.
+     * @param file Directory to keep files in
      * @param name Name of the bucket
      */
-    public MkBucket(final String name) {
+    public MkBucket(final File file, final String name) {
+        this.dir = file.getAbsolutePath();
         this.bkt = name;
     }
 
     @Override
     public Region region() {
-        return new MkRegion();
+        return new MkRegion(new File(this.dir));
     }
 
     @Override
@@ -74,21 +84,41 @@ public final class MkBucket implements Bucket {
 
     @Override
     public Ocket ocket(final String key) {
-        return new MkOcket(this.bkt, key);
+        return new MkOcket(new File(this.dir), this.bkt, key);
     }
 
     @Override
     public void remove(final String key) {
-        // done;
+        new File(this.home(), key).delete();
     }
 
     @Override
     public Iterable<String> list(final String pfx) {
-        return Collections.emptyList();
+        final File home = new File(this.home(), pfx);
+        return Iterables.transform(
+            FileUtils.listFiles(home, null, true),
+            new Function<File, String>() {
+                @Override
+                public String apply(final File file) {
+                    return file.getAbsolutePath().substring(
+                        home.getAbsolutePath().length() + 1
+                    );
+                }
+            }
+        );
     }
 
     @Override
     public int compareTo(final Bucket bucket) {
         return this.bkt.compareTo(bucket.name());
     }
+
+    /**
+     * Get my file.
+     * @return File
+     */
+    private File home() {
+        return new File(new File(this.dir), this.bkt);
+    }
+
 }

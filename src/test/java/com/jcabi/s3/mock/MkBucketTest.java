@@ -39,13 +39,13 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 /**
- * Test case for {@link MkRegion}.
+ * Test case for {@link MkBucket}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.8.1
  */
-public final class MkRegionTest {
+public final class MkBucketTest {
 
     /**
      * Temp directory.
@@ -55,18 +55,23 @@ public final class MkRegionTest {
     public final transient TemporaryFolder temp = new TemporaryFolder();
 
     /**
-     * MkRegion can read/write ocket content.
+     * MkBucket can list ockets.
      * @throws Exception If fails
      */
     @Test
-    public void readsWritesContentFromFiles() throws Exception {
+    public void listsOckets() throws Exception {
         final Region region = new MkRegion(this.temp.newFolder());
         final Bucket bucket = region.bucket("test");
-        final Ocket ocket = bucket.ocket("hello.txt");
-        new Ocket.Text(ocket).write("hello, world!");
+        new Ocket.Text(bucket.ocket("a/first.txt")).write("");
+        new Ocket.Text(bucket.ocket("a/b/hello.txt")).write("");
+        new Ocket.Text(bucket.ocket("a/b/f/2.txt")).write("");
         MatcherAssert.assertThat(
-            new Ocket.Text(bucket.ocket(ocket.key())).read(),
-            Matchers.containsString("world!")
+            bucket.list("a/b/"),
+            Matchers.allOf(
+                Matchers.<String>iterableWithSize(2),
+                Matchers.hasItem("hello.txt"),
+                Matchers.hasItem("f/2.txt")
+            )
         );
     }
 
