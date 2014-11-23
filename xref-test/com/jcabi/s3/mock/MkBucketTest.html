@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">new</strong> Ocket.Text(bucket.ocket(<span class="jxr_string">"a/b/hello.txt"</span>)).write(<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>          <strong class="jxr_keyword">new</strong> Ocket.Text(bucket.ocket(<span class="jxr_string">"a/b/f/2.txt"</span>)).write(<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>          MatcherAssert.assertThat(
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>              bucket.list(<span class="jxr_string">"a/b/"</span>),
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>              <strong class="jxr_keyword">new</strong> Bucket.Prefixed(bucket, <span class="jxr_string">"a/b/"</span>).list(<span class="jxr_string">""</span>),
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>              Matchers.allOf(
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>                  Matchers.&lt;String&gt;iterableWithSize(2),
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>                  Matchers.hasItem(<span class="jxr_string">"hello.txt"</span>),
