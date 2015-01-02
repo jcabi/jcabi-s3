@@ -103,7 +103,7 @@ final class AwsBucket implements Bucket {
         boolean result = false;
         try {
             result = aws.doesBucketExist(this.bkt);
-        } catch (AmazonServiceException ex) {
+        } catch (final AmazonServiceException ex) {
             Logger.warn(this, ex.getMessage());
         }
         Logger.debug(this, "Does backet '%s' exist? %b", this.bkt, result);
