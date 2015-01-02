@@ -88,6 +88,11 @@ public final class MkBucket implements Bucket {
     }
 
     @Override
+    public boolean exists() {
+        return true;
+    }
+
+    @Override
     public void remove(final String key) {
         new File(this.home(), key).delete();
     }

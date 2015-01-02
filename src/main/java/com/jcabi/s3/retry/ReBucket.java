@@ -80,6 +80,11 @@ public final class ReBucket implements Bucket {
     }
 
     @Override
+    public boolean exists() {
+        return this.origin.exists();
+    }
+
+    @Override
     @RetryOnFailure(verbose = false)
     public void remove(final String key) throws IOException {
         this.origin.remove(key);

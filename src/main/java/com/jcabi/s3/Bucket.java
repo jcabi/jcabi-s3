@@ -83,6 +83,12 @@ public interface Bucket extends Comparable<Bucket> {
     Ocket ocket(@NotNull(message = "S3 key can't be NULL") String key);
 
     /**
+     * Checks if the bucket exists.
+     * @return <code>true</code> if it exists, otherwise <code>false</code>
+     */
+    boolean exists();
+
+    /**
      * Delete object from bucket.
      * @param key Name of it in the bucket
      * @throws IOException If not found or any other failure
@@ -138,6 +144,10 @@ public interface Bucket extends Comparable<Bucket> {
         @Override
         public Ocket ocket(final String key) {
             return this.origin.ocket(this.extend(key));
+        }
+        @Override
+        public boolean exists() {
+            return this.origin.exists();
         }
         @Override
         public void remove(final String key) throws IOException {

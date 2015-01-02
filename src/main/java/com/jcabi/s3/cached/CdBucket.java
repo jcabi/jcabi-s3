@@ -78,6 +78,11 @@ public final class CdBucket implements Bucket {
     }
 
     @Override
+    public boolean exists() {
+        return this.origin.exists();
+    }
+
+    @Override
     public void remove(final String key) throws IOException {
         this.origin.remove(key);
     }

@@ -98,6 +98,19 @@ final class AwsBucket implements Bucket {
     }
 
     @Override
+    public boolean exists() {
+        final AmazonS3 aws = this.regn.aws();
+        boolean result = false;
+        try {
+            result = aws.doesBucketExist(this.bkt);
+        } catch (AmazonServiceException ex) {
+            Logger.warn(this, ex.getMessage());
+        }
+        Logger.debug(this, "Does backet '%s' exist? %b", this.bkt, result);
+        return result;
+    }
+
+    @Override
     public void remove(@NotNull(message = "key can't be NULL")
         final String key) throws IOException {
         try {
