@@ -85,8 +85,9 @@ public interface Bucket extends Comparable<Bucket> {
     /**
      * Checks if the bucket exists.
      * @return <code>True</code> if the bucket exists
+     * @throws IOException If any failure happens
      */
-    boolean exists();
+    boolean exists() throws IOException;
 
     /**
      * Delete object from bucket.
@@ -146,7 +147,7 @@ public interface Bucket extends Comparable<Bucket> {
             return this.origin.ocket(this.extend(key));
         }
         @Override
-        public boolean exists() {
+        public boolean exists() throws IOException {
             return this.origin.exists();
         }
         @Override

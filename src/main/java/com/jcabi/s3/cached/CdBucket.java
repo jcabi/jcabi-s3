@@ -78,7 +78,7 @@ public final class CdBucket implements Bucket {
     }
 
     @Override
-    public boolean exists() {
+    public boolean exists() throws IOException {
         return this.origin.exists();
     }
 

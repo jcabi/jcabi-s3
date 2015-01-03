@@ -98,15 +98,15 @@ final class AwsBucket implements Bucket {
     }
 
     @Override
-    public boolean exists() {
+    public boolean exists() throws IOException {
         final AmazonS3 aws = this.regn.aws();
         boolean result = false;
         try {
             result = aws.doesBucketExist(this.bkt);
         } catch (final AmazonServiceException ex) {
-            Logger.warn(this, ex.getMessage());
+            throw new IOException(ex);
         }
-        Logger.debug(this, "Does backet '%s' exist? %b", this.bkt, result);
+        Logger.debug(this, "Does bucket '%s' exist? %b", this.bkt, result);
         return result;
     }
 

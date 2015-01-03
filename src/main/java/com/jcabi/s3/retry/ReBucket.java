@@ -80,7 +80,7 @@ public final class ReBucket implements Bucket {
     }
 
     @Override
-    public boolean exists() {
+    public boolean exists() throws IOException {
         return this.origin.exists();
     }
 
