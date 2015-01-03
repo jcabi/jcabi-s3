@@ -84,7 +84,7 @@ public interface Bucket extends Comparable<Bucket> {
 
     /**
      * Checks if the bucket exists.
-     * @return <code>True</code> if the bucket exists
+     * @return If the bucket exists {@code true}, otherwise {@code false}
      * @throws IOException If any failure happens
      */
     boolean exists() throws IOException;
