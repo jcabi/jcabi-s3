@@ -29,8 +29,11 @@
  */
 package com.jcabi.s3;
 
+import com.amazonaws.services.s3.AmazonS3;
+import java.io.IOException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -145,6 +148,19 @@ public final class AwsBucketITCase {
                 bucket.remove(name);
             }
         }
+    }
+
+    /**
+     * AwsBucket can check if the bucket exists.
+     * @throws IOException If fails
+     */
+    @Test
+    public void checkBucketExistence() throws IOException {
+        final Bucket bucket = this.rule.bucket();
+        Assert.assertTrue(bucket.exists());
+        final AmazonS3 aws = bucket.region().aws();
+        aws.deleteBucket(bucket.name());
+        Assert.assertFalse(bucket.exists());
     }
 
 }
