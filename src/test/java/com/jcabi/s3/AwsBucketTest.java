@@ -60,20 +60,49 @@ public final class AwsBucketTest {
     }
 
     /**
-     * AwsBucket can check if the bucket exists.
+     * AwsBucket can correctly check the existence of the existing bucket.
      * @throws IOException If fails
      */
-    @Test(expected = IOException.class)
-    public void checkBucketExistence() throws IOException {
-        final String bucketName = "example1.com";
+    @Test
+    public void existsExistingBucket() throws IOException {
+        final String bucketName = "existing.bucket.com";
         final Region region = Mockito.mock(Region.class);
         final AmazonS3 aws = Mockito.mock(AmazonS3.class);
         Mockito.when(region.aws()).thenReturn(aws);
-        Mockito.when(aws.doesBucketExist(bucketName)).thenReturn(true, false)
-            .thenThrow(new AmazonServiceException("Test exception"));
+        Mockito.when(aws.doesBucketExist(bucketName)).thenReturn(true);
         final Bucket bucket = new AwsBucket(region, bucketName);
         Assert.assertTrue(bucket.exists());
+    }
+
+    /**
+     * AwsBucket can correctly check the existence of the non-existing bucket.
+     * @throws IOException If fails
+     */
+    @Test
+    public void existsNonExistingBucket() throws IOException {
+        final String bucketName = "non.existing.bucket.com";
+        final Region region = Mockito.mock(Region.class);
+        final AmazonS3 aws = Mockito.mock(AmazonS3.class);
+        Mockito.when(region.aws()).thenReturn(aws);
+        Mockito.when(aws.doesBucketExist(bucketName)).thenReturn(false);
+        final Bucket bucket = new AwsBucket(region, bucketName);
         Assert.assertFalse(bucket.exists());
+    }
+
+    /**
+     * AwsBucket can throw a proper exception.
+     * @throws IOException If succeeds
+     */
+    @Test(expected = IOException.class)
+    public void existsThrowsIOException() throws IOException {
+        final String bucketName = "throwing.bucket.com";
+        final Region region = Mockito.mock(Region.class);
+        final AmazonS3 aws = Mockito.mock(AmazonS3.class);
+        Mockito.when(region.aws()).thenReturn(aws);
+        Mockito.when(aws.doesBucketExist(bucketName)).thenThrow(
+            new AmazonServiceException("Test exception")
+        );
+        final Bucket bucket = new AwsBucket(region, bucketName);
         bucket.exists();
     }
 

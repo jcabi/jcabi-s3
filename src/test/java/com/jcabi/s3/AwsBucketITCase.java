@@ -151,13 +151,22 @@ public final class AwsBucketITCase {
     }
 
     /**
-     * AwsBucket can check if the bucket exists.
+     * AwsBucket can correctly check the existence of the existing bucket.
      * @throws IOException If fails
      */
     @Test
-    public void checkBucketExistence() throws IOException {
+    public void existsExistingBucket() throws IOException {
         final Bucket bucket = this.rule.bucket();
         Assert.assertTrue(bucket.exists());
+    }
+
+    /**
+     * AwsBucket can correctly check the existence of the non-existing bucket.
+     * @throws IOException If fails
+     */
+    @Test
+    public void existsNonExistingBucket() throws IOException {
+        final Bucket bucket = this.rule.bucket();
         final AmazonS3 aws = bucket.region().aws();
         aws.deleteBucket(bucket.name());
         Assert.assertFalse(bucket.exists());
