@@ -29,8 +29,12 @@
  */
 package com.jcabi.s3;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.AmazonS3;
+import java.io.IOException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -53,6 +57,24 @@ public final class AwsBucketTest {
         final Bucket bucket = new AwsBucket(region, "example.com");
         final Ocket ocket = bucket.ocket("test");
         MatcherAssert.assertThat(ocket, Matchers.notNullValue());
+    }
+
+    /**
+     * AwsBucket can check if the bucket exists.
+     * @throws IOException If fails
+     */
+    @Test(expected = IOException.class)
+    public void checkBucketExistence() throws IOException {
+        final String bucketName = "example1.com";
+        final Region region = Mockito.mock(Region.class);
+        final AmazonS3 aws = Mockito.mock(AmazonS3.class);
+        Mockito.when(region.aws()).thenReturn(aws);
+        Mockito.when(aws.doesBucketExist(bucketName)).thenReturn(true, false)
+            .thenThrow(new AmazonServiceException("Test exception"));
+        final Bucket bucket = new AwsBucket(region, bucketName);
+        Assert.assertTrue(bucket.exists());
+        Assert.assertFalse(bucket.exists());
+        bucket.exists();
     }
 
 }
