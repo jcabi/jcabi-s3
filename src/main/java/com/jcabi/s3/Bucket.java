@@ -120,7 +120,10 @@ public interface Bucket extends Comparable<Bucket> {
          */
         private final transient Bucket origin;
         /**
-         * Prefix.
+         * Prefix is a string which is used.
+         * to cut of first <code>prefix.length()</code> symbols
+         * match prefix from the input
+         * @see <code>com.jcabi.s3.mock.MkBucketTest#listsOckets()</code>
          */
         private final transient String prefix;
         /**
