@@ -108,7 +108,7 @@ public interface Bucket extends Comparable<Bucket> {
         String pfx) throws IOException;
 
     /**
-     * Prefixed.
+     * Creates bucket with specified origin bucket and prefix.
      */
     @Immutable
     @ToString
