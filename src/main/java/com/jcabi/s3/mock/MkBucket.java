@@ -39,6 +39,7 @@ import com.jcabi.s3.Region;
 import java.io.File;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * Mock/fake bucket.
@@ -105,9 +106,9 @@ public final class MkBucket implements Bucket {
             new Function<File, String>() {
                 @Override
                 public String apply(final File file) {
-                    return file.getAbsolutePath().substring(
+                    return FilenameUtils.separatorsToUnix(file.getAbsolutePath().substring(
                         home.getAbsolutePath().length() + 1
-                    );
+                    ));
                 }
             }
         );
