@@ -132,11 +132,6 @@ final class AwsBucket implements Bucket {
 
     /**
      * {@inheritDoc}
-     * @todo #2 Large lists are not supported. The method doesn't
-     *  support marker functionality, provided by ObjectListing. We should
-     *  create a test that reproduces the problem and fix the method. The
-     *  method should return an iterable, which should fetch portions
-     *  of objects from S3 on demand.
      */
     @Override
     public Iterable<String> list(@NotNull(message = "prefix can't be NULL")
@@ -196,6 +191,14 @@ final class AwsBucket implements Bucket {
         public String next() {
             this.loadDataIfNeeded();
             return this.partial.next();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("Remove is not supported");
         }
 
         /**
