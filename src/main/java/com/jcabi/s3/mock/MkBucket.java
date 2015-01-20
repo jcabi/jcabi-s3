@@ -106,9 +106,11 @@ public final class MkBucket implements Bucket {
             new Function<File, String>() {
                 @Override
                 public String apply(final File file) {
-                    return FilenameUtils.separatorsToUnix(file.getAbsolutePath().substring(
-                        home.getAbsolutePath().length() + 1
-                    ));
+                    return FilenameUtils.separatorsToUnix(
+                        file.getAbsolutePath().substring(
+                            home.getAbsolutePath().length() + 1
+                        )
+                    );
                 }
             }
         );
