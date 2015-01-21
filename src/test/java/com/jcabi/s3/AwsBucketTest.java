@@ -121,113 +121,111 @@ public final class AwsBucketTest {
      */
     @Test
     public void supportsListingLargeBuckets() throws Exception {
-        final ListingLargeBucketsTestData data =
-            new ListingLargeBucketsTestData();
-        final Region region = this.mockRegionForListingLargeBuckets(data);
-        final Bucket bucket = new AwsBucket(region, data.bucketName());
-        final Iterator<String> actual = bucket.list(data.prefix()).iterator();
-        Assert.assertTrue(actual.hasNext());
-        Assert.assertEquals(data.firstItem(), actual.next());
-        Assert.assertTrue(actual.hasNext());
-        Assert.assertEquals(data.secondItem(), actual.next());
-        Assert.assertFalse(actual.hasNext());
+        final String bucketName = "large.bucket";
+        final String prefix = "prefix";
+        final String firstItem = "first";
+        final String secondItem = "second";
+        final Region region = Mockito.mock(Region.class);
+        new RegionExpectations(region)
+            .expectResponse(firstItem, null, secondItem)
+            .expectResponse(secondItem, secondItem, null)
+            .apply(bucketName, prefix);
+        final Bucket bucket = new AwsBucket(region, bucketName);
+        final Iterator<String> actual = bucket.list(prefix).iterator();
+        MatcherAssert.assertThat(actual.hasNext(), Matchers.equalTo(true));
+        MatcherAssert.assertThat(firstItem, Matchers.equalTo(actual.next()));
+        MatcherAssert.assertThat(actual.hasNext(), Matchers.equalTo(true));
+        MatcherAssert.assertThat(secondItem, Matchers.equalTo(actual.next()));
+        MatcherAssert.assertThat(actual.hasNext(), Matchers.equalTo(false));
     }
 
-    /**
-     * Returns a mocked region for supportsListingLargeBuckets test.
-     * @param data Test data
-     * @return Mocked region
-     */
-    private Region mockRegionForListingLargeBuckets(
-        final ListingLargeBucketsTestData data
-    ) {
-        final Region region = Mockito.mock(Region.class);
-        final AmazonS3 aws = Mockito.mock(AmazonS3.class);
-        Mockito.when(region.aws()).thenReturn(aws);
-        final ObjectListing firstResponse = Mockito.mock(ObjectListing.class);
-        Mockito.when(firstResponse.getNextMarker()).thenReturn(
-            data.secondItem()
-        );
-        final List<S3ObjectSummary> firstSummaries =
-            new ArrayList<S3ObjectSummary>(1);
-        final S3ObjectSummary firstSummary = new S3ObjectSummary();
-        firstSummary.setKey(data.firstItem());
-        firstSummaries.add(firstSummary);
-        Mockito.when(firstResponse.getObjectSummaries())
-            .thenReturn(firstSummaries);
-        final ObjectListing secondResponse = Mockito.mock(ObjectListing.class);
-        Mockito.when(secondResponse.getNextMarker()).thenReturn(null);
-        final List<S3ObjectSummary> secondSummaries =
-            new ArrayList<S3ObjectSummary>(1);
-        final S3ObjectSummary secondSummary = new S3ObjectSummary();
-        secondSummary.setKey(data.secondItem());
-        secondSummaries.add(secondSummary);
-        Mockito.when(secondResponse.getObjectSummaries())
-            .thenReturn(secondSummaries);
-        Mockito.when(aws.listObjects(Mockito.any(ListObjectsRequest.class)))
-            .thenAnswer(
-                //@checkstyle AnonInnerLengthCheck (25 lines)
+    private static class RegionExpectations {
+
+        /**
+         * Mocked s3 service.
+         */
+        private final transient AmazonS3 aws;
+
+        /**
+         * Responses.
+         */
+        private final transient List<ObjectListing> responses =
+            new ArrayList<ObjectListing>(0);
+
+        /**
+         * Expected markers.
+         */
+        private final transient List<String> markers = new ArrayList<String>(0);
+
+        /**
+         * Constructs region expectations.
+         * @param region Mocked region
+         */
+        public RegionExpectations(final Region region) {
+            this.aws = Mockito.mock(AmazonS3.class);
+            Mockito.when(region.aws()).thenReturn(this.aws);
+        }
+
+        /**
+         * Expect request with start marker and provide in response single item,
+         * notify that marker is a next marker to request.
+         * @param item Item to respond with
+         * @param start Start marker to expect
+         * @param marker Next marker
+         * @return This instance
+         */
+        public RegionExpectations expectResponse(final String item,
+            final String start, final String marker) {
+            final ObjectListing response = Mockito.mock(ObjectListing.class);
+            Mockito.when(response.getNextMarker()).thenReturn(marker);
+            final List<S3ObjectSummary> summaries =
+                new ArrayList<S3ObjectSummary>(1);
+            final S3ObjectSummary summary = new S3ObjectSummary();
+            summary.setKey(item);
+            summaries.add(summary);
+            Mockito.when(response.getObjectSummaries())
+                .thenReturn(summaries);
+            this.responses.add(response);
+            this.markers.add(start);
+            return this;
+        }
+
+        /**
+         * Apply expectations.
+         * @param bucket Bucket name
+         * @param prefix Request prefix
+         */
+        public void apply(final String bucket, final String prefix) {
+            Mockito.when(
+                this.aws.listObjects(Mockito.any(ListObjectsRequest.class))
+            ).thenAnswer(
+                //@checkstyle IndentationCheck (2 lines)
+                //@checkstyle AnonInnerLengthCheck (23 lines)
                 new Answer<ObjectListing>() {
                     private int counter;
                     @Override
                     public ObjectListing answer(
                         final InvocationOnMock invocation) {
                         final ListObjectsRequest request =
-                            (ListObjectsRequest) invocation.getArguments()[0];
+                            (ListObjectsRequest) invocation
+                                .getArguments()[0];
                         Assert.assertEquals(
-                            data.bucketName(), request.getBucketName()
+                            bucket, request.getBucketName()
                         );
-                        Assert.assertEquals(data.prefix(), request.getPrefix());
+                        Assert.assertEquals(prefix, request.getPrefix());
                         final ObjectListing result;
-                        if (counter == 0) {
-                            Assert.assertNull(request.getMarker());
-                            result = firstResponse;
-                        } else {
-                            Assert.assertEquals(
-                                data.secondItem(), request.getMarker()
-                            );
-                            result = secondResponse;
-                        }
+                        Assert.assertEquals(
+                            RegionExpectations.this.markers.get(counter),
+                            request.getMarker()
+                        );
+                        result = RegionExpectations.this.responses
+                            .get(counter);
                         counter = counter + 1;
                         return result;
                     }
                 }
+            //@checkstyle IndentationCheck (1 line)
             );
-        return region;
-    }
-
-    private static class ListingLargeBucketsTestData {
-
-        /**
-         * Returns test bucket name.
-         * @return Bucket name
-         */
-        public final String bucketName() {
-            return "large.bucket";
-        }
-
-        /**
-         * Returns test key prefix.
-         * @return Key prefix
-         */
-        public final String prefix() {
-            return "prefix";
-        }
-
-        /**
-         * Returns test first item.
-         * @return First item
-         */
-        public final String firstItem() {
-            return "firstItem";
-        }
-
-        /**
-         * Returns test secondItem.
-         * @return Second item
-         */
-        public final String secondItem() {
-            return "secondItem";
         }
 
     }

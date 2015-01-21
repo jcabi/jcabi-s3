@@ -242,7 +242,7 @@ final class AwsBucket implements Bucket {
                     AwsBucket.this.bkt, System.currentTimeMillis() - start
                 );
             } catch (final AmazonServiceException ex) {
-                throw new AwsListingException(ex);
+                throw new IllegalStateException(ex);
             }
         }
 
