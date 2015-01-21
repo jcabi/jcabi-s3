@@ -112,7 +112,8 @@ public interface Bucket extends Comparable<Bucket> {
      * <p>The goal:</p>
      * <pre>
      *  This class is involved to cut off ocket keys of underlying
-     *  bucket by some string known as prefix
+     *  bucket by some string known as prefix. If key is not started
+     *  with prefix, it will be omitted
      * </pre>
      * <p>Example of usage:</p>
      * <pre>
