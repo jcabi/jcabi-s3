@@ -109,6 +109,35 @@ public interface Bucket extends Comparable<Bucket> {
 
     /**
      * Creates bucket with specified origin bucket and prefix.
+     * Explanation of usage:
+     * 1. Create Region
+     * 2. Get bucket for region with name <code>test</code>
+     * 3. Put down ocket keys
+     * <code>
+     * "a/first.txt", "a/b/hello.txt" and "a/b/f/2.txt"
+     * </code>
+     * into bucket as text
+     * 4. Let's say that Prefix is "a/b"
+     * 5. Create new instance of <code>Prefix</code> with Prefix
+     * 6. Get iterator for all keys, which starts with Prefix, and
+     * <code>Prefix.length()</code> leading symbols cut off
+     * Other keys, don't start with Prefix, will be omitted.
+     * 7. Result keys will be: "hello.txt" and "f/2.txt"
+     * cause:
+     * "a/first.txt" - doesn't match conditions
+     * "a/b/hello.txt" - starts with Prefix and result is the same string
+     * but cut off first <code>Prefix.length</code> symbols
+     * "a/b/f/2.txt" - starts with Prefix and result is the same string but
+     * cut off first <code>Prefix.length</code> symbols
+     * Example of usage:
+     * final Region region = new MkRegion(this.temp.newFolder());
+     * final Bucket bucket = region.bucket("test");
+     * new Ocket.Text(bucket.ocket("a/first.txt")).write("");
+     * new Ocket.Text(bucket.ocket("a/b/hello.txt")).write("");
+     * new Ocket.Text(bucket.ocket("a/b/f/2.txt")).write("");
+     * Bucket.Prefixed prefixed = new Bucket.Prefixed(bucket, "a/b/");
+     * Iterable<String> list = .list("");
+     * result is Iterable of "hello.txt" and "f/2.txt"
      */
     @Immutable
     @ToString
