@@ -32,19 +32,13 @@ package com.jcabi.s3;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ListObjectsRequest;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Amazon S3 bucket.
@@ -139,7 +133,9 @@ final class AwsBucket implements Bucket {
         return new Iterable<String>() {
             @Override
             public Iterator<String> iterator() {
-                return new AwsListIterator(pfx);
+                return new AwsListIterator(
+                    AwsBucket.this.regn, AwsBucket.this.bkt, pfx
+                );
             }
         };
     }
@@ -147,105 +143,6 @@ final class AwsBucket implements Bucket {
     @Override
     public int compareTo(final Bucket bucket) {
         return this.name().compareTo(bucket.name());
-    }
-
-    private class AwsListIterator implements Iterator<String> {
-
-        /**
-         * Prefix to use.
-         */
-        private final transient String prefix;
-
-        /**
-         * Partial S3 response iterator.
-         */
-        private transient Iterator<String> partial;
-
-        /**
-         * Next marker for partial response or null if response contains no more
-         * data.
-         */
-        private transient String marker;
-
-        /**
-         * Constructs AwsListIterator.
-         * @param pfx Key prefix
-         */
-        public AwsListIterator(final String pfx) {
-            this.prefix = pfx;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean hasNext() {
-            this.loadDataIfNeeded();
-            return this.partial.hasNext() || this.marker != null;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String next() {
-            this.loadDataIfNeeded();
-            return this.partial.next();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException("Remove is not supported");
-        }
-
-        /**
-         * Loads next portion of data from S3 if current data is already
-         * consumed and more data is available.
-         */
-        private void loadDataIfNeeded() {
-            if (this.partial == null || (!this.partial.hasNext()
-                && this.marker != null)) {
-                this.loadPartialData();
-            }
-        }
-
-        /**
-         * Loads next portion of data from S3.
-         */
-        private void loadPartialData() {
-            try {
-                final AmazonS3 aws = AwsBucket.this.regn.aws();
-                final long start = System.currentTimeMillis();
-                final ObjectListing listing = aws.listObjects(
-                    new ListObjectsRequest()
-                        .withBucketName(AwsBucket.this.bkt)
-                        .withPrefix(this.prefix)
-                        .withMarker(this.marker)
-                );
-                this.marker = listing.getNextMarker();
-                final Collection<String> list = new LinkedList<String>();
-                for (final S3ObjectSummary sum
-                    : listing.getObjectSummaries()) {
-                    list.add(sum.getKey());
-                }
-                this.partial = list.iterator();
-                Logger.info(
-                    this,
-                    StringUtils.join(
-                        "listed %d ocket(s) with prefix '%s' in bucket ",
-                        "'%s' in %[ms]s"
-                    ),
-                    listing.getObjectSummaries().size(), this.prefix,
-                    AwsBucket.this.bkt, System.currentTimeMillis() - start
-                );
-            } catch (final AmazonServiceException ex) {
-                throw new IllegalStateException(ex);
-            }
-        }
-
     }
 
 }
