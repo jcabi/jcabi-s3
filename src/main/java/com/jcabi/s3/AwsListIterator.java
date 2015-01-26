@@ -45,9 +45,9 @@ import org.apache.commons.lang3.StringUtils;
  * Iterator for large lists returned by S3.
  * @author Roman Kisilenko (roman.kisilenko@gmail.com)
  * @version $Id$
- * @since 1.0
+ * @since 0.10
  */
-public class AwsListIterator implements Iterator<String> {
+class AwsListIterator implements Iterator<String> {
 
     /**
      * Region we're in.
@@ -93,8 +93,8 @@ public class AwsListIterator implements Iterator<String> {
      */
     @Override
     public final boolean hasNext() {
-        return this.partial == null || this.partial.hasNext()
-            || this.marker != null;
+        this.loadDataIfNeeded();
+        return this.partial.hasNext();
     }
 
     /**
@@ -107,7 +107,6 @@ public class AwsListIterator implements Iterator<String> {
                 "There are no more elements in this iterator"
             );
         }
-        this.loadDataIfNeeded();
         return this.partial.next();
     }
 
