@@ -176,15 +176,11 @@ public final class AwsBucketTest {
          */
         public RegionExpectations expectResponse(final String item,
             final String start, final String marker) {
-            final ObjectListing response = Mockito.mock(ObjectListing.class);
-            Mockito.when(response.getNextMarker()).thenReturn(marker);
-            final List<S3ObjectSummary> summaries =
-                new ArrayList<S3ObjectSummary>(1);
+            final ObjectListing response =new ObjectListing();
+            response.setNextMarker(marker);
             final S3ObjectSummary summary = new S3ObjectSummary();
             summary.setKey(item);
-            summaries.add(summary);
-            Mockito.when(response.getObjectSummaries())
-                .thenReturn(summaries);
+            response.getObjectSummaries().add(summary);
             this.responses.add(response);
             this.markers.add(start);
             return this;
