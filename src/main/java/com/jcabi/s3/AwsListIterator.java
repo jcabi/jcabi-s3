@@ -39,7 +39,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Iterator for large lists returned by S3.
@@ -93,7 +92,10 @@ class AwsListIterator implements Iterator<String> {
      */
     @Override
     public final boolean hasNext() {
-        this.loadDataIfNeeded();
+        if (this.partial == null || (!this.partial.hasNext()
+            && this.marker != null)) {
+            this.load();
+        }
         return this.partial.hasNext();
     }
 
@@ -119,20 +121,9 @@ class AwsListIterator implements Iterator<String> {
     }
 
     /**
-     * Loads next portion of data from S3 if current data is already
-     * consumed and more data is available.
-     */
-    private void loadDataIfNeeded() {
-        if (this.partial == null || (!this.partial.hasNext()
-            && this.marker != null)) {
-            this.loadPartialData();
-        }
-    }
-
-    /**
      * Loads next portion of data from S3.
      */
-    private void loadPartialData() {
+    private void load() {
         try {
             final AmazonS3 aws = this.region.aws();
             final long start = System.currentTimeMillis();
@@ -151,10 +142,7 @@ class AwsListIterator implements Iterator<String> {
             this.partial = list.iterator();
             Logger.info(
                 this,
-                StringUtils.join(
-                    "listed %d ocket(s) with prefix '%s' in bucket ",
-                    "'%s' in %[ms]s"
-                ),
+                "listed %d ocket(s) with prefix '%s' in bucket '%s' in %[ms]s",
                 listing.getObjectSummaries().size(), this.prefix,
                 this.bucket, System.currentTimeMillis() - start
             );

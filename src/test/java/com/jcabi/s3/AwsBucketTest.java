@@ -121,21 +121,21 @@ public final class AwsBucketTest {
      */
     @Test
     public void supportsListingLargeBuckets() throws Exception {
-        final String bucketName = "large.bucket";
+        final String name = "large.bucket";
         final String prefix = "prefix";
-        final String firstItem = "first";
-        final String secondItem = "second";
+        final String first = "first";
+        final String second = "second";
         final Region region = Mockito.mock(Region.class);
         new RegionExpectations(region)
-            .expectResponse(firstItem, null, secondItem)
-            .expectResponse(secondItem, secondItem, null)
-            .apply(bucketName, prefix);
-        final Bucket bucket = new AwsBucket(region, bucketName);
+            .expectResponse(first, null, second)
+            .expectResponse(second, second, null)
+            .apply(name, prefix);
+        final Bucket bucket = new AwsBucket(region, name);
         final Iterator<String> actual = bucket.list(prefix).iterator();
         MatcherAssert.assertThat(actual.hasNext(), Matchers.equalTo(true));
-        MatcherAssert.assertThat(firstItem, Matchers.equalTo(actual.next()));
+        MatcherAssert.assertThat(first, Matchers.equalTo(actual.next()));
         MatcherAssert.assertThat(actual.hasNext(), Matchers.equalTo(true));
-        MatcherAssert.assertThat(secondItem, Matchers.equalTo(actual.next()));
+        MatcherAssert.assertThat(second, Matchers.equalTo(actual.next()));
         MatcherAssert.assertThat(actual.hasNext(), Matchers.equalTo(false));
     }
 
@@ -198,34 +198,59 @@ public final class AwsBucketTest {
         public void apply(final String bucket, final String prefix) {
             Mockito.when(
                 this.aws.listObjects(Mockito.any(ListObjectsRequest.class))
-            ).thenAnswer(
-                //@checkstyle IndentationCheck (2 lines)
-                //@checkstyle AnonInnerLengthCheck (23 lines)
-                new Answer<ObjectListing>() {
-                    private int counter;
-                    @Override
-                    public ObjectListing answer(
-                        final InvocationOnMock invocation) {
-                        final ListObjectsRequest request =
-                            (ListObjectsRequest) invocation
-                                .getArguments()[0];
-                        Assert.assertEquals(
-                            bucket, request.getBucketName()
-                        );
-                        Assert.assertEquals(prefix, request.getPrefix());
-                        final ObjectListing result;
-                        Assert.assertEquals(
-                            RegionExpectations.this.markers.get(counter),
-                            request.getMarker()
-                        );
-                        result = RegionExpectations.this.responses
-                            .get(counter);
-                        counter = counter + 1;
-                        return result;
-                    }
-                }
-            //@checkstyle IndentationCheck (1 line)
-            );
+            ).thenAnswer(new ListObjectsAnswer(bucket, prefix, 0))
+                .thenAnswer(new ListObjectsAnswer(bucket, prefix, 1));
+        }
+
+        private class ListObjectsAnswer implements Answer<ObjectListing> {
+
+            /**
+             * Expected bucket name.
+             */
+            private final transient String bucket;
+
+            /**
+             * Expected prefix.
+             */
+            private final transient String prefix;
+
+            /**
+             * Request index.
+             */
+            private final transient int index;
+
+            /**
+             * Constructs the answer.
+             * @param bkt Expected bucket name
+             * @param pfx Expected prefix
+             * @param idx Request index
+             */
+            public ListObjectsAnswer(final String bkt, final String pfx,
+                final int idx) {
+                this.bucket = bkt;
+                this.prefix = pfx;
+                this.index = idx;
+            }
+
+            @Override
+            public ObjectListing answer(
+            final InvocationOnMock invocation) {
+                final ListObjectsRequest request =
+                    (ListObjectsRequest) invocation
+                        .getArguments()[0];
+                Assert.assertEquals(
+                    this.bucket, request.getBucketName()
+                );
+                Assert.assertEquals(this.prefix, request.getPrefix());
+                final ObjectListing result;
+                Assert.assertEquals(
+                    RegionExpectations.this.markers.get(this.index),
+                    request.getMarker()
+                );
+                result = RegionExpectations.this.responses
+                    .get(this.index);
+                return result;
+            }
         }
 
     }
