@@ -35,9 +35,9 @@ import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.jcabi.log.Logger;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -66,7 +66,7 @@ class AwsListIterator implements Iterator<String> {
     /**
      * Partial S3 response iterator.
      */
-    private transient Iterator<String> partial;
+    private transient List<String> partial;
 
     /**
      * Next marker for partial response or null if response contains no more
@@ -92,11 +92,11 @@ class AwsListIterator implements Iterator<String> {
      */
     @Override
     public final boolean hasNext() {
-        if (this.partial == null || (!this.partial.hasNext()
+        if (this.partial == null || (this.partial.isEmpty()
             && this.marker != null)) {
-            this.load();
+            this.partial = this.load();
         }
-        return this.partial.hasNext();
+        return !this.partial.isEmpty();
     }
 
     /**
@@ -109,7 +109,7 @@ class AwsListIterator implements Iterator<String> {
                 "There are no more elements in this iterator"
             );
         }
-        return this.partial.next();
+        return this.partial.remove(0);
     }
 
     /**
@@ -122,8 +122,9 @@ class AwsListIterator implements Iterator<String> {
 
     /**
      * Loads next portion of data from S3.
+     * @return A list with next portion of data from S3
      */
-    private void load() {
+    private List<String> load() {
         try {
             final AmazonS3 aws = this.region.aws();
             final long start = System.currentTimeMillis();
@@ -134,18 +135,18 @@ class AwsListIterator implements Iterator<String> {
                     .withMarker(this.marker)
             );
             this.marker = listing.getNextMarker();
-            final Collection<String> list = new LinkedList<String>();
+            final List<String> list = new LinkedList<String>();
             for (final S3ObjectSummary sum
                 : listing.getObjectSummaries()) {
                 list.add(sum.getKey());
             }
-            this.partial = list.iterator();
             Logger.info(
                 this,
                 "listed %d ocket(s) with prefix '%s' in bucket '%s' in %[ms]s",
                 listing.getObjectSummaries().size(), this.prefix,
                 this.bucket, System.currentTimeMillis() - start
             );
+            return list;
         } catch (final AmazonServiceException ex) {
             throw new IllegalStateException(ex);
         }
