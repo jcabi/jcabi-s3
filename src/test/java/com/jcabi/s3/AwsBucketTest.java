@@ -31,11 +31,18 @@ package com.jcabi.s3;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 
 /**
@@ -45,6 +52,7 @@ import org.mockito.Mockito;
  * @version $Id$
  * @since 0.1
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class AwsBucketTest {
 
     /**
@@ -106,4 +114,187 @@ public final class AwsBucketTest {
         bucket.exists();
     }
 
+    /**
+     * AwsBucket supports listing large buckets.
+     * @throws Exception if test fails
+     */
+    @Test
+    public void supportsListingLargeBuckets() throws Exception {
+        final String name = "large.bucket";
+        final String prefix = "prefix";
+        final String first = "first";
+        final String second = "second";
+        final Region region = Mockito.mock(Region.class);
+        final RegionExpectations expectations = new RegionExpectations(region);
+        expectations
+            .expectResponse(first, null, second)
+            .expectResponse(second, second, null)
+            .apply(name, prefix);
+        final Bucket bucket = new AwsBucket(region, name);
+        final Iterator<String> actual = bucket.list(prefix).iterator();
+        MatcherAssert.assertThat(actual.hasNext(), Matchers.equalTo(true));
+        MatcherAssert.assertThat(first, Matchers.equalTo(actual.next()));
+        MatcherAssert.assertThat(actual.hasNext(), Matchers.equalTo(true));
+        MatcherAssert.assertThat(second, Matchers.equalTo(actual.next()));
+        MatcherAssert.assertThat(actual.hasNext(), Matchers.equalTo(false));
+        expectations.verify(name, prefix);
+    }
+
+    private static class RegionExpectations {
+
+        /**
+         * Mocked s3 service.
+         */
+        private final transient AmazonS3 aws;
+
+        /**
+         * Responses.
+         */
+        private final transient List<ObjectListing> responses =
+            new ArrayList<ObjectListing>(0);
+
+        /**
+         * Expected markers.
+         */
+        private final transient List<String> markers = new ArrayList<String>(0);
+
+        /**
+         * Constructs region expectations.
+         * @param region Mocked region
+         */
+        public RegionExpectations(final Region region) {
+            super();
+            this.aws = Mockito.mock(AmazonS3.class);
+            Mockito.when(region.aws()).thenReturn(this.aws);
+        }
+
+        /**
+         * Expect request with start marker and provide in response single item,
+         * notify that marker is a next marker to request.
+         * @param item Item to respond with
+         * @param start Start marker to expect
+         * @param marker Next marker
+         * @return This instance
+         */
+        public RegionExpectations expectResponse(final String item,
+            final String start, final String marker) {
+            final ObjectListing response = new ObjectListing();
+            response.setNextMarker(marker);
+            final S3ObjectSummary summary = new S3ObjectSummary();
+            summary.setKey(item);
+            response.getObjectSummaries().add(summary);
+            this.responses.add(response);
+            this.markers.add(start);
+            return this;
+        }
+
+        /**
+         * Apply expectations.
+         * @param bucket Bucket name
+         * @param prefix Request prefix
+         */
+        public void apply(final String bucket, final String prefix) {
+            for (int idx = 0; idx < this.markers.size(); idx = idx + 1) {
+                Mockito.when(
+                    this.aws.listObjects(
+                        Mockito.argThat(
+                            ListObjectsRequestArgumentMatcher.instance(
+                                bucket, prefix, this.markers.get(idx)
+                            )
+                        )
+                    )
+                ).thenReturn(this.responses.get(idx));
+            }
+        }
+
+        /**
+         * Verify expectated invocations.
+         * @param bucket Bucket name
+         * @param prefix Request prefix
+         * @checkstyle JavadocLocationCheck (25 lines)
+         */
+        private void verify(final String bucket, final String prefix) {
+            for (int idx = 0; idx < this.markers.size(); idx = idx + 1) {
+                Mockito.verify(this.aws).listObjects(
+                    Mockito.argThat(
+                        ListObjectsRequestArgumentMatcher.instance(
+                            bucket, prefix, this.markers.get(idx)
+                        )
+                    )
+                );
+            }
+        }
+
+    }
+
+    private static class ListObjectsRequestArgumentMatcher extends
+        ArgumentMatcher<ListObjectsRequest> {
+
+        /**
+         * Bucket name.
+         */
+        private final transient String bucket;
+
+        /**
+         * Prefix.
+         */
+        private final transient String prefix;
+
+        /**
+         * Marker.
+         */
+        private final transient String marker;
+
+        /**
+         * Constructs argument matcher.
+         * @param bkt Expected bucket
+         * @param pfx Expected prefix
+         * @param mrk Expected marker
+         */
+        public ListObjectsRequestArgumentMatcher(final String bkt,
+            final String pfx, final String mrk) {
+            super();
+            this.bucket = bkt;
+            this.prefix = pfx;
+            this.marker = mrk;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean matches(final Object arg) {
+            boolean result = false;
+            if (arg instanceof ListObjectsRequest) {
+                final ListObjectsRequest obj = (ListObjectsRequest) arg;
+                result = true;
+                if (!this.bucket.equals(obj.getBucketName())) {
+                    result = false;
+                }
+                if (!this.prefix.equals(obj.getPrefix())) {
+                    result = false;
+                }
+                if (this.marker == null && obj.getMarker() != null) {
+                    result = false;
+                }
+                if (this.marker != null
+                    && !this.marker.equals(obj.getMarker())) {
+                    result = false;
+                }
+            }
+            return result;
+        }
+
+        /**
+         * Constructs argument matcher instance.
+         * @param bkt Expected bucket
+         * @param pfx Expected prefix
+         * @param mrk Expected marker
+         * @return Matcher instance
+         */
+        public static ListObjectsRequestArgumentMatcher instance(
+            final String bkt, final String pfx, final String mrk) {
+            return new ListObjectsRequestArgumentMatcher(bkt, pfx, mrk);
+        }
+    }
 }

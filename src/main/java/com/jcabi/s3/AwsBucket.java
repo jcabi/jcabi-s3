@@ -32,15 +32,11 @@ package com.jcabi.s3;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ListObjectsRequest;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.Iterator;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 
@@ -54,6 +50,7 @@ import lombok.EqualsAndHashCode;
 @Immutable
 @EqualsAndHashCode(of = { "regn", "bkt" })
 @Loggable(Loggable.DEBUG)
+@SuppressWarnings("PMD.TooManyMethods")
 final class AwsBucket implements Bucket {
 
     /**
@@ -129,41 +126,24 @@ final class AwsBucket implements Bucket {
 
     /**
      * {@inheritDoc}
-     * @todo #2 Large lists are not supported. The method doesn't
-     *  support marker functionality, provided by ObjectListing. We should
-     *  create a test that reproduces the problem and fix the method. The
-     *  method should return an iterable, which should fetch portions
-     *  of objects from S3 on demand.
      */
     @Override
     public Iterable<String> list(@NotNull(message = "prefix can't be NULL")
-        final String pfx) throws IOException {
-        try {
-            final AmazonS3 aws = this.regn.aws();
-            final long start = System.currentTimeMillis();
-            final ObjectListing listing = aws.listObjects(
-                new ListObjectsRequest()
-                    .withBucketName(this.bkt)
-                    .withPrefix(pfx)
-            );
-            final Collection<String> list = new LinkedList<String>();
-            for (final S3ObjectSummary sum : listing.getObjectSummaries()) {
-                list.add(sum.getKey());
+        final String pfx) {
+        return new Iterable<String>() {
+            @Override
+            public Iterator<String> iterator() {
+                return new AwsListIterator(
+                    AwsBucket.this.regn, AwsBucket.this.bkt, pfx
+                );
             }
-            Logger.info(
-                this,
-                "listed %d ocket(s) with prefix '%s' in bucket '%s' in %[ms]s",
-                listing.getObjectSummaries().size(), pfx, this.bkt,
-                System.currentTimeMillis() - start
-            );
-            return list;
-        } catch (final AmazonServiceException ex) {
-            throw new IOException(ex);
-        }
+        };
     }
 
     @Override
     public int compareTo(final Bucket bucket) {
         return this.name().compareTo(bucket.name());
     }
+
 }
+
