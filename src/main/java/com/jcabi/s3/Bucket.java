@@ -108,28 +108,25 @@ public interface Bucket extends Comparable<Bucket> {
         String pfx) throws IOException;
 
     /**
-     * Creates bucket with specified origin bucket and prefix.
-     *
-     *
-     * <p>Basically this class is involved to cut off ocket keys of underlying
+     * <p>Basically this class is used to cut off ocket keys of underlying
      * bucket by some string known as prefix. If key is not started
      * with prefix, it will be omitted
      *
      * <p>Example of usage:
      * <pre>
-     * final Region region = new MkRegion(
-     * new TemporaryFolder().newFolder()
-     * );
-     * final Bucket bucket = region.bucket("test");
-     * new Ocket.Text(bucket.ocket("a/first.txt")).write("");
-     * new Ocket.Text(bucket.ocket("a/b/hello.txt")).write("");
-     * new Ocket.Text(bucket.ocket("a/b/f/2.txt")).write("");
-     * Bucket.Prefixed prefixed = new Bucket.Prefixed(
-     * bucket, "a/b/"
-     * );
-     * Iterable<String> list = prefixed.list(
-     * ""
-     * ); // contains "hello.txt" and "f/2.txt"
+     *     final Region region = new MkRegion(
+     *         new TemporaryFolder().newFolder()
+     *     );
+     *     final Bucket bucket = region.bucket("test");
+     *     new Ocket.Text(bucket.ocket("a/first.txt")).write("");
+     *     new Ocket.Text(bucket.ocket("a/b/hello.txt")).write("");
+     *     new Ocket.Text(bucket.ocket("a/b/f/2.txt")).write("");
+     *     Bucket.Prefixed prefixed = new Bucket.Prefixed(
+     *         bucket, "a/b/"
+     *     );
+     *     Iterable<String> list = prefixed.list(
+     *         ""
+     *     ); // contains "hello.txt" and "f/2.txt"
      * </pre>
      */
     @Immutable
