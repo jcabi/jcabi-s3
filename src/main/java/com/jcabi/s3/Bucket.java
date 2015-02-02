@@ -108,6 +108,8 @@ public interface Bucket extends Comparable<Bucket> {
         String pfx) throws IOException;
 
     /**
+     * Creates bucket with specified origin bucket and prefix.
+     *
      * <p>Basically this class is used to cut off ocket keys of underlying
      * bucket by some string known as prefix. If key is not started
      * with prefix, it will be omitted
