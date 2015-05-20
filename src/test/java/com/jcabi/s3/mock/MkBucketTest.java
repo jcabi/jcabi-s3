@@ -59,18 +59,25 @@ public final class MkBucketTest {
      * @throws Exception If fails
      */
     @Test
+    @SuppressWarnings("unchecked")
     public void listsOckets() throws Exception {
         final Region region = new MkRegion(this.temp.newFolder());
         final Bucket bucket = region.bucket("test");
         new Ocket.Text(bucket.ocket("a/first.txt")).write("");
         new Ocket.Text(bucket.ocket("a/b/hello.txt")).write("");
         new Ocket.Text(bucket.ocket("a/b/f/2.txt")).write("");
+        new Ocket.Text(bucket.ocket("a/b/c/d/3.txt")).write("");
         MatcherAssert.assertThat(
             new Bucket.Prefixed(bucket, "a/b/").list(""),
             Matchers.allOf(
-                Matchers.<String>iterableWithSize(2),
+                // @checkstyle MagicNumberCheck (1 line)
+                Matchers.<String>iterableWithSize(6),
                 Matchers.hasItem("hello.txt"),
-                Matchers.hasItem("f/2.txt")
+                Matchers.hasItem("f"),
+                Matchers.hasItem("f/2.txt"),
+                Matchers.hasItem("c"),
+                Matchers.hasItem("c/d"),
+                Matchers.hasItem("c/d/3.txt")
             )
         );
     }
