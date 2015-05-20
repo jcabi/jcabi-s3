@@ -71,7 +71,8 @@ public final class MkBucketTest {
             new Bucket.Prefixed(bucket, "a/b/").list(""),
             Matchers.allOf(
                 // @checkstyle MagicNumberCheck (1 line)
-                Matchers.<String>iterableWithSize(6),
+                Matchers.<String>iterableWithSize(7),
+                Matchers.hasItem("/"),
                 Matchers.hasItem("hello.txt"),
                 Matchers.hasItem("f"),
                 Matchers.hasItem("f/2.txt"),

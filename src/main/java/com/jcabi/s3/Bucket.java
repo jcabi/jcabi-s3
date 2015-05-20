@@ -188,7 +188,7 @@ public interface Bucket extends Comparable<Bucket> {
                                 < Bucket.Prefixed.this.prefix.length())
                                 && (Bucket.Prefixed.this.prefix.contains(input))
                             ) {
-                                result = "";
+                                result = "/";
                             } else {
                                 result = input.substring(
                                     Bucket.Prefixed.this.prefix.length()
