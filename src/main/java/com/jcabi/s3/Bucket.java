@@ -184,15 +184,13 @@ public interface Bucket extends Comparable<Bucket> {
                         @Override
                         public String apply(final String input) {
                             final String result;
-                            if ((input.length()
-                                < Bucket.Prefixed.this.prefix.length())
-                                && (Bucket.Prefixed.this.prefix.contains(input))
+                            final String head = Bucket.Prefixed.this.prefix;
+                            if ((input.length() < head.length())
+                                && (head.contains(input))
                             ) {
                                 result = "/";
                             } else {
-                                result = input.substring(
-                                    Bucket.Prefixed.this.prefix.length()
-                                );
+                                result = input.substring(head.length());
                             }
                             return result;
                         }
