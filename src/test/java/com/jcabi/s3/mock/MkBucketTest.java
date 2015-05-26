@@ -68,17 +68,16 @@ public final class MkBucketTest {
         new Ocket.Text(bucket.ocket("a/b/f/2.txt")).write("");
         new Ocket.Text(bucket.ocket("a/b/c/d/3.txt")).write("");
         MatcherAssert.assertThat(
-            new Bucket.Prefixed(bucket, "a/b/").list(""),
+            new Bucket.Prefixed(bucket, "a/b").list(""),
             Matchers.allOf(
                 // @checkstyle MagicNumberCheck (1 line)
-                Matchers.<String>iterableWithSize(7),
-                Matchers.hasItem("/"),
-                Matchers.hasItem("hello.txt"),
-                Matchers.hasItem("f"),
-                Matchers.hasItem("f/2.txt"),
-                Matchers.hasItem("c"),
-                Matchers.hasItem("c/d"),
-                Matchers.hasItem("c/d/3.txt")
+                Matchers.<String>iterableWithSize(6),
+                Matchers.hasItem("/hello.txt"),
+                Matchers.hasItem("/f"),
+                Matchers.hasItem("/f/2.txt"),
+                Matchers.hasItem("/c"),
+                Matchers.hasItem("/c/d"),
+                Matchers.hasItem("/c/d/3.txt")
             )
         );
     }
