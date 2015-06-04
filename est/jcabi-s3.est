@@ -11,3 +11,7 @@ champions:
         worst-case: 12
         best-case: 4
         most-likely: 6
+    3:
+        worst-case: 3
+        best-case: 1
+        most-likely: 2
