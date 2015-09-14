@@ -111,7 +111,7 @@ public interface Ocket extends Comparable<Ocket> {
      * Write new content to the object.
      * @param input Where to get content
      * @param meta Metadata to save. Should contains input length for large
-     * object, it will make multi part upload possible.
+     *  object, it will make multi part upload possible.
      * @throws IOException If fails
      */
     void write(
