@@ -37,9 +37,10 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.transfer.TransferManager;
+import com.amazonaws.services.s3.transfer.Upload;
+import com.amazonaws.services.s3.transfer.model.UploadResult;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
@@ -185,9 +186,10 @@ final class AwsOcket implements Ocket {
         try {
             final AmazonS3 aws = this.bkt.region().aws();
             final long start = System.currentTimeMillis();
-            final PutObjectResult result = aws.putObject(
-                new PutObjectRequest(this.bkt.name(), this.name, cnt, meta)
+            final Upload upload = new TransferManager(aws).upload(
+                this.bkt.name(), this.name, cnt, meta
             );
+            final UploadResult result = upload.waitForUploadResult();
             Logger.info(
                 this,
                 // @checkstyle LineLength (1 line)
@@ -197,6 +199,8 @@ final class AwsOcket implements Ocket {
                 result.getETag()
             );
         } catch (final AmazonServiceException ex) {
+            throw new IOException(ex);
+        } catch (final InterruptedException ex) {
             throw new IOException(ex);
         } finally {
             cnt.close();
