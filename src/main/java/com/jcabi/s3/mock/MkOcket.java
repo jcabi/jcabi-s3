@@ -29,6 +29,7 @@
  */
 package com.jcabi.s3.mock;
 
+import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
@@ -40,6 +41,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Date;
+import javax.activation.MimetypesFileTypeMap;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -93,7 +96,12 @@ public final class MkOcket implements Ocket {
 
     @Override
     public ObjectMetadata meta() {
-        return new ObjectMetadata();
+        final ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(this.file().length());
+        final MimetypesFileTypeMap types = new MimetypesFileTypeMap();
+        metadata.setContentType(types.getContentType(this.file()));
+        metadata.setHeader(Headers.DATE, new Date());
+        return metadata;
     }
 
     @Override
