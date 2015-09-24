@@ -43,7 +43,7 @@ import org.junit.rules.TemporaryFolder;
  *
  * @author Piotr Pradzynski (prondzyn@gmail.com)
  * @version $Id$
- * @since 0.9.1
+ * @since 0.10.1
  */
 public final class MkOcketTest {
 
@@ -66,9 +66,9 @@ public final class MkOcketTest {
         final String text = "hello, world!";
         new Ocket.Text(ocket).write(text);
         final Ocket readOcket = new Ocket.Text(bucket.ocket(ocket.key()));
-        final ObjectMetadata medadata = readOcket.meta();
-        Assert.assertEquals("text/plain", medadata.getContentType());
-        Assert.assertEquals(text.length(), medadata.getContentLength());
+        final ObjectMetadata metadata = readOcket.meta();
+        Assert.assertEquals("text/plain", metadata.getContentType());
+        Assert.assertEquals(text.length(), metadata.getContentLength());
     }
 
 }
