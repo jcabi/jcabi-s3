@@ -29,11 +29,13 @@
  */
 package com.jcabi.s3.mock;
 
+import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
 import com.jcabi.s3.Region;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -55,20 +57,49 @@ public final class MkOcketTest {
     public final transient TemporaryFolder temp = new TemporaryFolder();
 
     /**
+     * Commonly used bucket.
+     */
+    private transient Bucket bucket;
+
+    /**
+     * Ocket to write in it.
+     */
+    private transient Ocket write;
+
+    /**
+     * Sets up common part of tests.
+     * @throws Exception If fails
+     */
+    @Before
+    public void setUp() throws Exception {
+        final Region region = new MkRegion(this.temp.newFolder());
+        this.bucket = region.bucket("test");
+        this.write = this.bucket.ocket("hello.txt");
+    }
+
+    /**
      * Content Type and Length can be read from MkOcket metadata.
      * @throws Exception If fails
      */
     @Test
     public void readContentTypeAndLengthFromMetadata() throws Exception {
-        final Region region = new MkRegion(this.temp.newFolder());
-        final Bucket bucket = region.bucket("test");
-        final Ocket write = bucket.ocket("hello.txt");
         final String text = "hello, world!";
-        new Ocket.Text(write).write(text);
-        final Ocket read = new Ocket.Text(bucket.ocket(write.key()));
+        new Ocket.Text(this.write).write(text);
+        final Ocket read = new Ocket.Text(this.bucket.ocket(this.write.key()));
         final ObjectMetadata metadata = read.meta();
         Assert.assertEquals("text/plain", metadata.getContentType());
         Assert.assertEquals(text.length(), metadata.getContentLength());
+    }
+
+    /**
+     * Date can be read from MkOcket metadata.
+     * @throws Exception If fails
+     */
+    @Test
+    public void readDateFromMetadata() throws Exception {
+        final Ocket read = new Ocket.Text(this.bucket.ocket(this.write.key()));
+        final ObjectMetadata metadata = read.meta();
+        Assert.assertNotNull(metadata.getRawMetadataValue(Headers.DATE));
     }
 
 }
