@@ -62,11 +62,11 @@ public final class MkOcketTest {
     public void readContentTypeAndLengthFromMetadata() throws Exception {
         final Region region = new MkRegion(this.temp.newFolder());
         final Bucket bucket = region.bucket("test");
-        final Ocket ocket = bucket.ocket("hello.txt");
+        final Ocket write = bucket.ocket("hello.txt");
         final String text = "hello, world!";
-        new Ocket.Text(ocket).write(text);
-        final Ocket readOcket = new Ocket.Text(bucket.ocket(ocket.key()));
-        final ObjectMetadata metadata = readOcket.meta();
+        new Ocket.Text(write).write(text);
+        final Ocket read = new Ocket.Text(bucket.ocket(write.key()));
+        final ObjectMetadata metadata = read.meta();
         Assert.assertEquals("text/plain", metadata.getContentType());
         Assert.assertEquals(text.length(), metadata.getContentLength());
     }
