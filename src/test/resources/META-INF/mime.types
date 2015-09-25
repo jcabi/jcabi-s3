@@ -1,5 +1,6 @@
 #
 # A simple, old format, mime.types file
+# used by MimetypesFileTypeMap in MkOcket when no mime types found in standard system directories.
 #
 text/html		html htm HTML HTM
 text/plain		txt text TXT TEXT
