@@ -33,7 +33,6 @@ import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
-import com.jcabi.s3.Region;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -72,33 +71,34 @@ public final class MkOcketTest {
      */
     @Before
     public void setUp() throws Exception {
-        final Region region = new MkRegion(this.temp.newFolder());
-        this.bucket = region.bucket("test");
+        this.bucket = new MkRegion(this.temp.newFolder()).bucket("test");
         this.write = this.bucket.ocket("hello.txt");
     }
 
     /**
-     * Content Type and Length can be read from MkOcket metadata.
+     * MkOcket can read Content Type and Length from metadata.
      * @throws Exception If fails
      */
     @Test
-    public void readContentTypeAndLengthFromMetadata() throws Exception {
+    public void readsContentTypeAndLengthFromMetadata() throws Exception {
         final String text = "hello, world!";
         new Ocket.Text(this.write).write(text);
-        final Ocket read = new Ocket.Text(this.bucket.ocket(this.write.key()));
-        final ObjectMetadata metadata = read.meta();
+        final ObjectMetadata metadata = new Ocket.Text(
+            this.bucket.ocket(this.write.key())
+        ).meta();
         Assert.assertEquals("text/plain", metadata.getContentType());
         Assert.assertEquals(text.length(), metadata.getContentLength());
     }
 
     /**
-     * Date can be read from MkOcket metadata.
+     * MkOcket can read date from metadata.
      * @throws Exception If fails
      */
     @Test
-    public void readDateFromMetadata() throws Exception {
-        final Ocket read = new Ocket.Text(this.bucket.ocket(this.write.key()));
-        final ObjectMetadata metadata = read.meta();
+    public void readsDateFromMetadata() throws Exception {
+        final ObjectMetadata metadata = new Ocket.Text(
+            this.bucket.ocket(this.write.key())
+        ).meta();
         Assert.assertNotNull(metadata.getRawMetadataValue(Headers.DATE));
     }
 
