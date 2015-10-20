@@ -30,7 +30,9 @@
 package com.jcabi.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.GetObjectRequest;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
@@ -101,6 +103,24 @@ public final class AwsOcketTest {
             new ObjectMetadata()
         );
         Mockito.verify(aws).putObject(Mockito.any(PutObjectRequest.class));
+    }
+
+    /**
+     * AwsOcket can throw if object not found.
+     * @throws Exception If fails
+     */
+    @Test
+    public void throwsWhenObjectNotFound() throws Exception {
+        final AmazonS3 aws = Mockito.mock(AmazonS3.class);
+        Mockito.doThrow(new AmazonS3Exception("")).when(aws).listObjects(
+            Mockito.any(ListObjectsRequest.class)
+        );
+        final Region region = Mockito.mock(Region.class);
+        Mockito.doReturn(aws).when(region).aws();
+        final Bucket bucket = Mockito.mock(Bucket.class);
+        Mockito.doReturn(region).when(bucket).region();
+        final Ocket ocket = new AwsOcket(bucket, "test-99.txt");
+        ocket.exists();
     }
 
 }
