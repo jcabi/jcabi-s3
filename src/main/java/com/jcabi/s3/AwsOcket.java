@@ -116,7 +116,13 @@ final class AwsOcket implements Ocket {
             );
             return meta;
         } catch (final AmazonServiceException ex) {
-            throw new IOException(ex);
+            throw new IOException(
+                String.format(
+                    "failed to fetch meta of '%s' in '%s'",
+                    this.name, this.bkt
+                    ),
+                ex
+            );
         }
     }
 
@@ -141,7 +147,13 @@ final class AwsOcket implements Ocket {
             );
             return exists;
         } catch (final AmazonServiceException ex) {
-            throw new IOException(ex);
+            throw new IOException(
+                String.format(
+                    "failed to check existence of '%s' in '%s'",
+                    this.name, this.bkt
+                ),
+                ex
+            );
         }
     }
 
@@ -168,12 +180,19 @@ final class AwsOcket implements Ocket {
         } catch (final AmazonS3Exception ex) {
             throw new OcketNotFoundException(
                 String.format(
-                    "ocket '%s' not found in '%s'", this.name, this.bkt.name()
+                    "ocket '%s' not found in '%s'",
+                    this.name, this.bkt.name()
                 ),
                 ex
             );
         } catch (final AmazonServiceException ex) {
-            throw new IOException(ex);
+            throw new IOException(
+                String.format(
+                    "failed to read the content of '%s' in '%s'",
+                    this.name, this.bkt
+                ),
+                ex
+            );
         }
     }
 
@@ -199,9 +218,22 @@ final class AwsOcket implements Ocket {
                 result.getETag()
             );
         } catch (final AmazonServiceException ex) {
-            throw new IOException(ex);
+            throw new IOException(
+                String.format(
+                    "failed to write content to '%s' in '%s'",
+                    this.name, this.bkt
+                ),
+                ex
+            );
         } catch (final InterruptedException ex) {
-            throw new IOException(ex);
+            Thread.currentThread().interrupt();
+            throw new IOException(
+                String.format(
+                    "writing to '%s' in '%s' interrupted",
+                    this.name, this.bkt
+                ),
+                ex
+            );
         } finally {
             cnt.close();
         }

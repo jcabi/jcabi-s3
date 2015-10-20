@@ -80,28 +80,22 @@ class AwsListIterator implements Iterator<String> {
      * @param rgn Region we're in
      * @param bkt Bucket name
      */
-    public AwsListIterator(final Region rgn, final String bkt,
+    AwsListIterator(final Region rgn, final String bkt,
         final String pfx) {
         this.prefix = pfx;
         this.region = rgn;
         this.bucket = bkt;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public final boolean hasNext() {
-        if (this.partial == null || (this.partial.isEmpty()
-            && this.marker != null)) {
+        if (this.partial == null || this.partial.isEmpty()
+            && this.marker != null) {
             this.partial = this.load();
         }
         return !this.partial.isEmpty();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public final String next() {
         if (!this.hasNext()) {
@@ -112,9 +106,6 @@ class AwsListIterator implements Iterator<String> {
         return this.partial.remove(0);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public final void remove() {
         throw new UnsupportedOperationException("Remove is not supported");
@@ -148,7 +139,13 @@ class AwsListIterator implements Iterator<String> {
             );
             return list;
         } catch (final AmazonServiceException ex) {
-            throw new IllegalStateException(ex);
+            throw new IllegalStateException(
+                String.format(
+                    "failed to load a list of objects in '%s', prefix=%s",
+                    this.bucket, this.prefix
+                ),
+                ex
+            );
         }
     }
 

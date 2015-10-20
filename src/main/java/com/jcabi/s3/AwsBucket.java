@@ -97,11 +97,17 @@ final class AwsBucket implements Bucket {
     @Override
     public boolean exists() throws IOException {
         final AmazonS3 aws = this.regn.aws();
-        boolean result = false;
+        final boolean result;
         try {
             result = aws.doesBucketExist(this.bkt);
         } catch (final AmazonServiceException ex) {
-            throw new IOException(ex);
+            throw new IOException(
+                String.format(
+                    "failed to check existence of '%s' bucket",
+                    this.bkt
+                ),
+                ex
+            );
         }
         Logger.debug(this, "Does bucket '%s' exist? %b", this.bkt, result);
         return result;
@@ -120,13 +126,16 @@ final class AwsBucket implements Bucket {
                 key, this.bkt, System.currentTimeMillis() - start
             );
         } catch (final AmazonServiceException ex) {
-            throw new IOException(ex);
+            throw new IOException(
+                String.format(
+                    "failed to remove '%s' bucket",
+                    this.bkt
+                ),
+                ex
+            );
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Iterable<String> list(@NotNull(message = "prefix can't be NULL")
         final String pfx) {
