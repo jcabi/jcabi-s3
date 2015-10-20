@@ -103,7 +103,7 @@ public final class MkBucket implements Bucket {
     public Iterable<String> list(final String pfx) {
         final File home = this.home();
         return Iterables.transform(
-            FileUtils.listFilesAndDirs(
+            FileUtils.listFiles(
                 new File(home, pfx),
                 TrueFileFilter.INSTANCE,
                 TrueFileFilter.INSTANCE

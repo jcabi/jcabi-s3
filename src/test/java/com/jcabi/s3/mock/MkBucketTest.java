@@ -71,14 +71,29 @@ public final class MkBucketTest {
             new Bucket.Prefixed(bucket, "a/b").list(""),
             Matchers.allOf(
                 // @checkstyle MagicNumberCheck (1 line)
-                Matchers.<String>iterableWithSize(6),
+                Matchers.<String>iterableWithSize(3),
                 Matchers.hasItem("/hello.txt"),
-                Matchers.hasItem("/f"),
                 Matchers.hasItem("/f/2.txt"),
-                Matchers.hasItem("/c"),
-                Matchers.hasItem("/c/d"),
                 Matchers.hasItem("/c/d/3.txt")
             )
+        );
+    }
+
+    /**
+     * MkBucket can list ockets.
+     * @throws Exception If fails
+     */
+    @Test
+    public void listsOcketsWithDifferentPrefixes() throws Exception {
+        final Region region = new MkRegion(this.temp.newFolder());
+        final Bucket bucket = region.bucket("foo");
+        new Ocket.Text(bucket.ocket("1/foo.txt")).write("");
+        new Ocket.Text(bucket.ocket("1/2/foo.txt")).write("");
+        new Ocket.Text(bucket.ocket("1/2/3/foo.txt")).write("");
+        MatcherAssert.assertThat(
+            new Bucket.Prefixed(bucket, "1/").list(""),
+            // @checkstyle MagicNumberCheck (1 line)
+            Matchers.<String>iterableWithSize(3)
         );
     }
 
