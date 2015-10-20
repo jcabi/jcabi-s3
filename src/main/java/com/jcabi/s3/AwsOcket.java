@@ -115,6 +115,14 @@ final class AwsOcket implements Ocket {
                 meta.getETag()
             );
             return meta;
+        } catch (final AmazonS3Exception ex) {
+            throw new OcketNotFoundException(
+                String.format(
+                    "ocket '%s' not found in '%s', can't fetch meta()",
+                    this.name, this.bkt.name()
+                ),
+                ex
+            );
         } catch (final AmazonServiceException ex) {
             throw new IOException(
                 String.format(

@@ -85,6 +85,10 @@ public interface Ocket extends Comparable<Ocket> {
 
     /**
      * Object metadata.
+     *
+     * <p>Throws {@link OcketNotFoundException} if this object
+     * doesn't exist in S3 bucket.</p>
+     *
      * @return Metadata
      * @throws IOException If fails
      */
@@ -101,6 +105,10 @@ public interface Ocket extends Comparable<Ocket> {
 
     /**
      * Read content.
+     *
+     * <p>Throws {@link OcketNotFoundException} if this object
+     * doesn't exist in S3 bucket.</p>
+     *
      * @param output Where to write
      * @throws IOException If fails
      */
