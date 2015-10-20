@@ -227,41 +227,33 @@ public final class AwsBucketTest {
 
     }
 
-    private static class ListObjectsRequestArgumentMatcher extends
+    private static class ListObjectsRequestArgumentMatcher implements
         ArgumentMatcher<ListObjectsRequest> {
-
         /**
          * Bucket name.
          */
         private final transient String bucket;
-
         /**
          * Prefix.
          */
         private final transient String prefix;
-
         /**
          * Marker.
          */
         private final transient String marker;
-
         /**
          * Constructs argument matcher.
          * @param bkt Expected bucket
          * @param pfx Expected prefix
          * @param mrk Expected marker
          */
-        public ListObjectsRequestArgumentMatcher(final String bkt,
+        ListObjectsRequestArgumentMatcher(final String bkt,
             final String pfx, final String mrk) {
             super();
             this.bucket = bkt;
             this.prefix = pfx;
             this.marker = mrk;
         }
-
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public boolean matches(final Object arg) {
             boolean result = false;
@@ -284,7 +276,6 @@ public final class AwsBucketTest {
             }
             return result;
         }
-
         /**
          * Constructs argument matcher instance.
          * @param bkt Expected bucket
