@@ -213,9 +213,11 @@ final class AwsOcket implements Ocket {
         try {
             final AmazonS3 aws = this.bkt.region().aws();
             final long start = System.currentTimeMillis();
-            final Upload upload = new TransferManager(aws).upload(
+            final TransferManager tmgr = new TransferManager(aws);
+            final Upload upload = tmgr.upload(
                 this.bkt.name(), this.name, cnt, meta
             );
+            tmgr.shutdownNow(false);
             final UploadResult result = upload.waitForUploadResult();
             Logger.info(
                 this,
