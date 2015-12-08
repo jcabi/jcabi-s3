@@ -146,6 +146,9 @@
         </profile>
         <profile>
             <id>coveralls</id>
+            <activation>
+                <file><exists>pom.xml</exists></file>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
