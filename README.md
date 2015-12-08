@@ -7,6 +7,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.jcabi/jcabi-s3/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.jcabi/jcabi-s3)
 [![JavaDoc](https://img.shields.io/badge/javadoc-html-blue.svg)](http://www.javadoc.io/doc/com.jcabi/jcabi-s2)
 [![Dependencies](https://www.versioneye.com/user/projects/561aa1eca193340f32000fd3/badge.svg?style=flat)](https://www.versioneye.com/user/projects/561aa1eca193340f32000fd3)
+[![Coverage Status](https://coveralls.io/repos/jcabi/jcabi-s3/badge.svg?branch=master&service=github)](https://coveralls.io/github/jcabi/jcabi-s3?branch=master)
 
 More details are here: [s3.jcabi.com](http://s3.jcabi.com/index.html).
 Also, read this blog post: [Object-Oriented Java Adapter of Amazon S3 SDK](http://www.yegor256.com/2014/05/26/amazon-s3-java-oop-adapter.html).
