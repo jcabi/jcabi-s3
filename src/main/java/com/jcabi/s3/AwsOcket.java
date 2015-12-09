@@ -217,7 +217,6 @@ final class AwsOcket implements Ocket {
             final Upload upload = tmgr.upload(
                 this.bkt.name(), this.name, cnt, meta
             );
-//            tmgr.shutdownNow(false);
             final UploadResult result = upload.waitForUploadResult();
             Logger.info(
                 this,
@@ -227,6 +226,7 @@ final class AwsOcket implements Ocket {
                 System.currentTimeMillis() - start,
                 result.getETag()
             );
+            tmgr.shutdownNow(false);
         } catch (final AmazonServiceException ex) {
             throw new IOException(
                 String.format(
