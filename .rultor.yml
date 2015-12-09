@@ -10,7 +10,7 @@ assets:
   s3cfg: yegor256/home#assets/s3cfg
 merge:
   script: |-
-    mvn clean install -Pqulice --errors --settings ../settings.xml
+    mvn clean install -Pqulice -Pjcabi-s3 --errors --settings ../settings.xml
     mvn clean
     pdd --source=$(pwd) --verbose --file=/dev/null
   commanders:
@@ -34,7 +34,7 @@ release:
   script: |-
     mvn versions:set "-DnewVersion=${tag}"
     git commit -am "${tag}"
-    mvn clean deploy -Pqulice -Psonatype -Pjcabi --errors --settings ../settings.xml
-    # mvn clean site-deploy -Psite --errors --settings ../settings.xml
+    mvn clean deploy -Pqulice -Psonatype -Pjcabi -Pjcabi-s3 --errors --settings ../settings.xml
+    mvn clean site-deploy -Psite --errors --settings ../settings.xml
   commanders:
   - yegor256

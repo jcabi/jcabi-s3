@@ -63,6 +63,7 @@ public final class AwsOcketITCase {
         final Ocket.Text ocket = new Ocket.Text(bucket.ocket(name));
         final String content = "text \u20ac\n\t\rtest";
         ocket.write(content);
+        ocket.write(content);
         try {
             MatcherAssert.assertThat(ocket.read(), Matchers.equalTo(content));
         } finally {

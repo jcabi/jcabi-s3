@@ -217,7 +217,7 @@ final class AwsOcket implements Ocket {
             final Upload upload = tmgr.upload(
                 this.bkt.name(), this.name, cnt, meta
             );
-            tmgr.shutdownNow(false);
+//            tmgr.shutdownNow(false);
             final UploadResult result = upload.waitForUploadResult();
             Logger.info(
                 this,
