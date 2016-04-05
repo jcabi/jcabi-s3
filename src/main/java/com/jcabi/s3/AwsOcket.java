@@ -47,7 +47,6 @@ import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.CountingInputStream;
@@ -166,8 +165,7 @@ final class AwsOcket implements Ocket {
     }
 
     @Override
-    public void read(@NotNull(message = "output stream can't be NULL")
-        final OutputStream output) throws IOException {
+    public void read(final OutputStream output) throws IOException {
         final AmazonS3 aws = this.bkt.region().aws();
         try {
             final long start = System.currentTimeMillis();
@@ -205,9 +203,7 @@ final class AwsOcket implements Ocket {
     }
 
     @Override
-    public void write(
-        @NotNull(message = "input can't be NULL") final InputStream input,
-        @NotNull(message = "metadata can't be NULL") final ObjectMetadata meta)
+    public void write(final InputStream input, final ObjectMetadata meta)
         throws IOException {
         final CountingInputStream cnt = new CountingInputStream(input);
         try {

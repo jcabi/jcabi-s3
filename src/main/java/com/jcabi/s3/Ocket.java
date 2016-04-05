@@ -37,7 +37,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.io.Charsets;
@@ -73,14 +72,12 @@ public interface Ocket extends Comparable<Ocket> {
      * Get bucket we're in.
      * @return Bucket
      */
-    @NotNull(message = "bucket is never NULL")
     Bucket bucket();
 
     /**
      * Get object key.
      * @return Key
      */
-    @NotNull(message = "ocket key is never NULL")
     String key();
 
     /**
@@ -92,7 +89,6 @@ public interface Ocket extends Comparable<Ocket> {
      * @return Metadata
      * @throws IOException If fails
      */
-    @NotNull(message = "ocket meta is never NULL")
     ObjectMetadata meta() throws IOException;
 
     /**
@@ -112,8 +108,7 @@ public interface Ocket extends Comparable<Ocket> {
      * @param output Where to write
      * @throws IOException If fails
      */
-    void read(@NotNull(message = "output stream can't be NULL")
-        OutputStream output) throws IOException;
+    void read(OutputStream output) throws IOException;
 
     /**
      * Write new content to the object.
@@ -122,9 +117,7 @@ public interface Ocket extends Comparable<Ocket> {
      *  object, otherwise multi-part uploads won't be possible.
      * @throws IOException If fails
      */
-    void write(
-        @NotNull(message = "input stream can't NULL") InputStream input,
-        @NotNull(message = "object meta can't be NULL") ObjectMetadata meta)
+    void write(InputStream input, ObjectMetadata meta)
         throws IOException;
 
     /**
@@ -143,7 +136,7 @@ public interface Ocket extends Comparable<Ocket> {
          * Public ctor.
          * @param ocket Original ocket
          */
-        public Text(@NotNull final Ocket ocket) {
+        public Text(final Ocket ocket) {
             this.origin = ocket;
         }
         /**
@@ -151,7 +144,6 @@ public interface Ocket extends Comparable<Ocket> {
          * @return Content
          * @throws IOException If fails
          */
-        @NotNull
         public String read() throws IOException {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             this.origin.read(baos);
@@ -162,7 +154,7 @@ public interface Ocket extends Comparable<Ocket> {
          * @param text Text to write
          * @throws IOException If fails
          */
-        public void write(@NotNull final String text) throws IOException {
+        public void write(final String text) throws IOException {
             this.write(text, "text/plain");
         }
         /**
@@ -171,8 +163,8 @@ public interface Ocket extends Comparable<Ocket> {
          * @param type Content type
          * @throws IOException If fails
          */
-        public void write(@NotNull final String text,
-            @NotNull final String type) throws IOException {
+        public void write(final String text, final String type)
+            throws IOException {
             final ObjectMetadata meta = new ObjectMetadata();
             meta.setContentType(type);
             meta.setContentLength((long) text.getBytes(Charsets.UTF_8).length);

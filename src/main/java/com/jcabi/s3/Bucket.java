@@ -35,7 +35,6 @@ import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import java.io.IOException;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -64,14 +63,12 @@ public interface Bucket extends Comparable<Bucket> {
      * Get region we're in.
      * @return Region
      */
-    @NotNull(message = "region is never NULL")
     Region region();
 
     /**
      * Get bucket name.
      * @return Bucket name
      */
-    @NotNull(message = "bucket name is never NULL")
     String name();
 
     /**
@@ -79,8 +76,7 @@ public interface Bucket extends Comparable<Bucket> {
      * @param key Name of it in the bucket
      * @return Ocket
      */
-    @NotNull(message = "ocket is never NULL")
-    Ocket ocket(@NotNull(message = "S3 key can't be NULL") String key);
+    Ocket ocket(String key);
 
     /**
      * Checks if the bucket exists.
@@ -94,7 +90,7 @@ public interface Bucket extends Comparable<Bucket> {
      * @param key Name of it in the bucket
      * @throws IOException If not found or any other failure
      */
-    void remove(@NotNull(message = "S3 key can't be NULL") String key)
+    void remove(String key)
         throws IOException;
 
     /**
@@ -104,8 +100,7 @@ public interface Bucket extends Comparable<Bucket> {
      * @throws IOException If fails
      * @since 0.3
      */
-    Iterable<String> list(@NotNull(message = "prefix can't be NULL")
-        String pfx) throws IOException;
+    Iterable<String> list(String pfx) throws IOException;
 
     /**
      * Creates bucket with specified origin bucket and prefix.
@@ -149,9 +144,7 @@ public interface Bucket extends Comparable<Bucket> {
          * @param bucket Original bucket
          * @param pfx Prefix
          */
-        public Prefixed(
-            @NotNull(message = "bucket can't be NULL") final Bucket bucket,
-            @NotNull(message = "prefix can't be NULL") final String pfx) {
+        public Prefixed(final Bucket bucket, final String pfx) {
             this.origin = bucket;
             this.prefix = pfx;
         }

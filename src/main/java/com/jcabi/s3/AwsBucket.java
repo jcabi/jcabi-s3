@@ -37,7 +37,6 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.util.Iterator;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -89,8 +88,7 @@ final class AwsBucket implements Bucket {
     }
 
     @Override
-    public Ocket ocket(@NotNull(message = "key can't be NULL")
-        final String key) {
+    public Ocket ocket(final String key) {
         return new AwsOcket(this, key);
     }
 
@@ -114,8 +112,7 @@ final class AwsBucket implements Bucket {
     }
 
     @Override
-    public void remove(@NotNull(message = "key can't be NULL")
-        final String key) throws IOException {
+    public void remove(final String key) throws IOException {
         try {
             final AmazonS3 aws = this.regn.aws();
             final long start = System.currentTimeMillis();
@@ -137,8 +134,7 @@ final class AwsBucket implements Bucket {
     }
 
     @Override
-    public Iterable<String> list(@NotNull(message = "prefix can't be NULL")
-        final String pfx) {
+    public Iterable<String> list(final String pfx) {
         return new Iterable<String>() {
             @Override
             public Iterator<String> iterator() {

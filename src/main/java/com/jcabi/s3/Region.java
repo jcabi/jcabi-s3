@@ -34,7 +34,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
-import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -60,14 +59,12 @@ public interface Region {
      * @param name Name of the bucket to get
      * @return Bucket
      */
-    @NotNull(message = "bucket is never NULL")
-    Bucket bucket(@NotNull(message = "bucket name can't be NULL") String name);
+    Bucket bucket(String name);
 
     /**
      * Get a client.
      * @return Amazon S3
      */
-    @NotNull(message = "AWS client is never NULL")
     AmazonS3 aws();
 
     /**
@@ -91,20 +88,15 @@ public interface Region {
          * @param akey Amazon key
          * @param scrt Amazon secret
          */
-        public Simple(
-            @NotNull(message = "key can't be NULL") final String akey,
-            @NotNull(message = "secret can't be NULL") final String scrt) {
+        public Simple(final String akey, final String scrt) {
             this.key = akey;
             this.secret = scrt;
         }
         @Override
-        @NotNull(message = "bucket is never NULL")
-        public Bucket bucket(@NotNull(message = "bucket name can't be NULL")
-            final String name) {
+        public Bucket bucket(final String name) {
             return new AwsBucket(this, name);
         }
         @Override
-        @NotNull(message = "AWS S3 client is never NULL")
         public AmazonS3 aws() {
             return new AmazonS3Client(
                 new BasicAWSCredentials(this.key, this.secret)
