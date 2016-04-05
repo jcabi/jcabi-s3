@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * Rule that creates and drops an AWS subj.</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * @author Yegor Bugayenko (yegor@tpc2.com)</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * @version $Id: 0543fcc9b616a1c61033d97b7ecd0757031fb559 $</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * @version $Id: c49deb5890bc18822570802d99061c33ee1ec8eb $</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * @since 0.3</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../com/jcabi/s3/BucketRule.html">BucketRule</a> <strong class="jxr_keyword">implements</strong> TestRule {
@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Statement() {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>              @Override
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>              <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> evaluate() <strong class="jxr_keyword">throws</strong> Throwable {
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>                  <strong class="jxr_keyword">if</strong> (BucketRule.KEY == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>                  <strong class="jxr_keyword">if</strong> (BucketRule.KEY == <strong class="jxr_keyword">null</strong> || BucketRule.KEY.isEmpty()) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>                      Logger.warn(
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>                          <strong class="jxr_keyword">this</strong>,
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>                          <span class="jxr_string">"system property failsafe.s3.key is not set, skipping"</span>
@@ -141,6 +141,6 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2012&#x2013;2015 <a href="http://www.jcabi.com">jcabi.com</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2012&#x2013;2016 <a href="http://www.jcabi.com">jcabi.com</a>. All rights reserved.</div>
 </body>
 </html>
