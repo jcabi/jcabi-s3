@@ -73,12 +73,12 @@ public final class AwsBucketTest {
      */
     @Test
     public void existsExistingBucket() throws IOException {
-        final String bucketName = "existing.bucket.com";
         final Region region = Mockito.mock(Region.class);
         final AmazonS3 aws = Mockito.mock(AmazonS3.class);
         Mockito.when(region.aws()).thenReturn(aws);
-        Mockito.when(aws.doesBucketExist(bucketName)).thenReturn(true);
-        final Bucket bucket = new AwsBucket(region, bucketName);
+        final String name = "existing.bucket.com";
+        Mockito.when(aws.doesBucketExist(name)).thenReturn(true);
+        final Bucket bucket = new AwsBucket(region, name);
         Assert.assertTrue(bucket.exists());
     }
 
@@ -88,12 +88,12 @@ public final class AwsBucketTest {
      */
     @Test
     public void existsNonExistingBucket() throws IOException {
-        final String bucketName = "non.existing.bucket.com";
         final Region region = Mockito.mock(Region.class);
         final AmazonS3 aws = Mockito.mock(AmazonS3.class);
         Mockito.when(region.aws()).thenReturn(aws);
-        Mockito.when(aws.doesBucketExist(bucketName)).thenReturn(false);
-        final Bucket bucket = new AwsBucket(region, bucketName);
+        final String name = "non.existing.bucket.com";
+        Mockito.when(aws.doesBucketExist(name)).thenReturn(false);
+        final Bucket bucket = new AwsBucket(region, name);
         Assert.assertFalse(bucket.exists());
     }
 
@@ -103,14 +103,14 @@ public final class AwsBucketTest {
      */
     @Test(expected = IOException.class)
     public void existsThrowsIOException() throws IOException {
-        final String bucketName = "throwing.bucket.com";
         final Region region = Mockito.mock(Region.class);
         final AmazonS3 aws = Mockito.mock(AmazonS3.class);
         Mockito.when(region.aws()).thenReturn(aws);
-        Mockito.when(aws.doesBucketExist(bucketName)).thenThrow(
+        final String name = "throwing.bucket.com";
+        Mockito.when(aws.doesBucketExist(name)).thenThrow(
             new AmazonServiceException("Test exception")
         );
-        final Bucket bucket = new AwsBucket(region, bucketName);
+        final Bucket bucket = new AwsBucket(region, name);
         bucket.exists();
     }
 
@@ -140,34 +140,32 @@ public final class AwsBucketTest {
         expectations.verify(name, prefix);
     }
 
+    /**
+     * Expectations.
+     */
     private static class RegionExpectations {
-
         /**
          * Mocked s3 service.
          */
         private final transient AmazonS3 aws;
-
         /**
          * Responses.
          */
-        private final transient List<ObjectListing> responses =
-            new ArrayList<ObjectListing>(0);
-
+        private final transient List<ObjectListing> responses;
         /**
          * Expected markers.
          */
-        private final transient List<String> markers = new ArrayList<String>(0);
-
+        private final transient List<String> markers;
         /**
          * Constructs region expectations.
          * @param region Mocked region
          */
-        public RegionExpectations(final Region region) {
+        RegionExpectations(final Region region) {
             super();
-            this.aws = Mockito.mock(AmazonS3.class);
-            Mockito.when(region.aws()).thenReturn(this.aws);
+            this.aws = AwsBucketTest.RegionExpectations.mockAws(region);
+            this.responses = new ArrayList<ObjectListing>(0);
+            this.markers = new ArrayList<String>(0);
         }
-
         /**
          * Expect request with start marker and provide in response single item,
          * notify that marker is a next marker to request.
@@ -187,14 +185,13 @@ public final class AwsBucketTest {
             this.markers.add(start);
             return this;
         }
-
         /**
          * Apply expectations.
          * @param bucket Bucket name
          * @param prefix Request prefix
          */
         public void apply(final String bucket, final String prefix) {
-            for (int idx = 0; idx < this.markers.size(); idx = idx + 1) {
+            for (int idx = 0; idx < this.markers.size(); ++idx) {
                 Mockito.when(
                     this.aws.listObjects(
                         Mockito.argThat(
@@ -206,15 +203,14 @@ public final class AwsBucketTest {
                 ).thenReturn(this.responses.get(idx));
             }
         }
-
         /**
-         * Verify expectated invocations.
+         * Verify expected invocations.
          * @param bucket Bucket name
          * @param prefix Request prefix
          * @checkstyle JavadocLocationCheck (25 lines)
          */
         private void verify(final String bucket, final String prefix) {
-            for (int idx = 0; idx < this.markers.size(); idx = idx + 1) {
+            for (int idx = 0; idx < this.markers.size(); ++idx) {
                 Mockito.verify(this.aws).listObjects(
                     Mockito.argThat(
                         ListObjectsRequestArgumentMatcher.instance(
@@ -224,9 +220,21 @@ public final class AwsBucketTest {
                 );
             }
         }
-
+        /**
+         * Make AWS.
+         * @param region Region
+         * @return AWS
+         */
+        private static AmazonS3 mockAws(final Region region) {
+            final AmazonS3 aws = Mockito.mock(AmazonS3.class);
+            Mockito.when(region.aws()).thenReturn(aws);
+            return aws;
+        }
     }
 
+    /**
+     * Matcher.
+     */
     private static class ListObjectsRequestArgumentMatcher implements
         ArgumentMatcher<ListObjectsRequest> {
         /**

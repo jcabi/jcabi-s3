@@ -72,7 +72,7 @@ final class BucketRule implements TestRule {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
-                if (BucketRule.KEY == null) {
+                if (BucketRule.KEY == null || BucketRule.KEY.isEmpty()) {
                     Logger.warn(
                         this,
                         "system property failsafe.s3.key is not set, skipping"

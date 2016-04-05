@@ -60,12 +60,7 @@ public final class MkRegion implements Region {
      * @since 0.8.1
      */
     public MkRegion(final File file) {
-        if (!file.isDirectory()) {
-            throw new IllegalArgumentException(
-                String.format("%s is not a directory", file)
-            );
-        }
-        this.dir = file.getAbsolutePath();
+        this.dir = MkRegion.path(file);
     }
 
     @Override
@@ -76,5 +71,19 @@ public final class MkRegion implements Region {
     @Override
     public AmazonS3 aws() {
         throw new UnsupportedOperationException("#aws()");
+    }
+
+    /**
+     * Convert it to a dir.
+     * @param file The file
+     * @return Absolute path
+     */
+    private static String path(final File file) {
+        if (!file.isDirectory()) {
+            throw new IllegalArgumentException(
+                String.format("%s is not a directory", file)
+            );
+        }
+        return file.getAbsolutePath();
     }
 }
