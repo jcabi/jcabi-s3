@@ -4,6 +4,7 @@
 [![DevOps By Rultor.com](http://www.rultor.com/b/jcabi/jcabi-s3)](http://www.rultor.com/p/jcabi/jcabi-s3)
 
 [![Build Status](https://travis-ci.org/jcabi/jcabi-s3.svg?branch=master)](https://travis-ci.org/jcabi/jcabi-s3)
+[![PDD status](http://www.0pdd.com/svg?name=jcabi/jcabi-s3)](http://www.0pdd.com/p?name=teamed/jcabi/jcabi-s3)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.jcabi/jcabi-s3/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.jcabi/jcabi-s3)
 [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.jcabi/jcabi-s3/badge.svg)](http://www.javadoc.io/doc/com.jcabi/jcabi-s3)
 [![Dependencies](https://www.versioneye.com/user/projects/561aa1eca193340f32000fd3/badge.svg?style=flat)](https://www.versioneye.com/user/projects/561aa1eca193340f32000fd3)
