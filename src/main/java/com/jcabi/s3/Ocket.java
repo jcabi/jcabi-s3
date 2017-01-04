@@ -205,4 +205,42 @@ public interface Ocket extends Comparable<Ocket> {
         }
     }
 
+    /**
+     * Ocket with no content at all.
+     */
+    @Immutable
+    @ToString
+    @EqualsAndHashCode
+    @Loggable(Loggable.DEBUG)
+    final class Empty implements Ocket {
+        @Override
+        public Bucket bucket() {
+            throw new UnsupportedOperationException("#bucket()");
+        }
+        @Override
+        public String key() {
+            return "empty";
+        }
+        @Override
+        public ObjectMetadata meta() {
+            return new ObjectMetadata();
+        }
+        @Override
+        public boolean exists() {
+            return true;
+        }
+        @Override
+        public void read(final OutputStream output) {
+            // nothing
+        }
+        @Override
+        public void write(final InputStream input, final ObjectMetadata meta) {
+            // nothing
+        }
+        @Override
+        public int compareTo(final Ocket ocket) {
+            return 0;
+        }
+    }
+
 }
