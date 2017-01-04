@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
 
-<coverage line-rate="0.4052757793764988" branch-rate="0.09375" lines-covered="169" lines-valid="417" branches-covered="21" branches-valid="224" complexity="1.2769230769230768" version="2.1.1" timestamp="1459819020484">
+<coverage line-rate="0.3876146788990826" branch-rate="0.09210526315789473" lines-covered="169" lines-valid="436" branches-covered="21" branches-valid="228" complexity="1.27007299270073" version="2.1.1" timestamp="1483531818231">
 	<sources>
 		<source>/home/r/repo/src/main/java</source>
 		<source>--source</source>
 		<source>/home/r/repo/target/generated-sources/annotations</source>
 	</sources>
 	<packages>
-		<package name="com.jcabi.s3" line-rate="0.5358851674641149" branch-rate="0.11818181818181818" complexity="1.484375">
+		<package name="com.jcabi.s3" line-rate="0.49122807017543857" branch-rate="0.11403508771929824" complexity="1.4507042253521127">
 			<classes>
 				<class name="com.jcabi.s3.AwsBucket" filename="com/jcabi/s3/AwsBucket.java" line-rate="0.5172413793103449" branch-rate="0.0" complexity="1.4">
 					<methods>
@@ -1132,13 +1132,249 @@
 						<line number="1" hits="0" branch="false"/>
 					</lines>
 				</class>
-				<class name="com.jcabi.s3.Ocket" filename="com/jcabi/s3/Ocket.java" line-rate="1.0" branch-rate="1.0" complexity="1.0">
+				<class name="com.jcabi.s3.Ocket" filename="com/jcabi/s3/Ocket.java" line-rate="1.0" branch-rate="1.0" complexity="1.0416666666666667">
 					<methods>
 					</methods>
 					<lines>
 					</lines>
 				</class>
-				<class name="com.jcabi.s3.Ocket$Text" filename="com/jcabi/s3/Ocket.java" line-rate="0.5925925925925926" branch-rate="0.0" complexity="1.0">
+				<class name="com.jcabi.s3.Ocket$Empty" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="0.0" complexity="1.0416666666666667">
+					<methods>
+						<method name="&lt;clinit&gt;" signature="()V" line-rate="1.0" branch-rate="1.0" complexity="0">
+							<lines>
+							</lines>
+						</method>
+						<method name="&lt;init&gt;" signature="()V" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="215" hits="0" branch="false"/>
+							</lines>
+						</method>
+						<method name="ajc$preClinit" signature="()V" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="1" hits="0" branch="false"/>
+							</lines>
+						</method>
+						<method name="bucket" signature="()Lcom/jcabi/s3/Bucket;" line-rate="1.0" branch-rate="1.0" complexity="0">
+							<lines>
+							</lines>
+						</method>
+						<method name="bucket_aroundBody0" signature="(Lcom/jcabi/s3/Ocket$Empty;Lorg/aspectj/lang/JoinPoint;)Lcom/jcabi/s3/Bucket;" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="218" hits="0" branch="false"/>
+							</lines>
+						</method>
+						<method name="compareTo" signature="(Lcom/jcabi/s3/Ocket;)I" line-rate="1.0" branch-rate="1.0" complexity="0">
+							<lines>
+							</lines>
+						</method>
+						<method name="compareTo" signature="(Ljava/lang/Object;)I" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="211" hits="0" branch="false"/>
+							</lines>
+						</method>
+						<method name="compareTo_aroundBody12" signature="(Lcom/jcabi/s3/Ocket$Empty;Lcom/jcabi/s3/Ocket;Lorg/aspectj/lang/JoinPoint;)I" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="242" hits="0" branch="false"/>
+							</lines>
+						</method>
+						<method name="equals" signature="(Ljava/lang/Object;)Z" line-rate="1.0" branch-rate="1.0" complexity="0">
+							<lines>
+							</lines>
+						</method>
+						<method name="exists" signature="()Z" line-rate="1.0" branch-rate="1.0" complexity="0">
+							<lines>
+							</lines>
+						</method>
+						<method name="exists_aroundBody6" signature="(Lcom/jcabi/s3/Ocket$Empty;Lorg/aspectj/lang/JoinPoint;)Z" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="230" hits="0" branch="false"/>
+							</lines>
+						</method>
+						<method name="hashCode" signature="()I" line-rate="0.0" branch-rate="0.0" complexity="0">
+							<lines>
+								<line number="213" hits="0" branch="true" condition-coverage="0% (0/4)">
+									<conditions>
+										<condition number="0" type="jump" coverage="0%"/>
+										<condition number="1" type="jump" coverage="0%"/>
+									</conditions>
+								</line>
+							</lines>
+						</method>
+						<method name="key" signature="()Ljava/lang/String;" line-rate="1.0" branch-rate="1.0" complexity="0">
+							<lines>
+							</lines>
+						</method>
+						<method name="key_aroundBody2" signature="(Lcom/jcabi/s3/Ocket$Empty;Lorg/aspectj/lang/JoinPoint;)Ljava/lang/String;" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="222" hits="0" branch="false"/>
+							</lines>
+						</method>
+						<method name="meta" signature="()Lcom/amazonaws/services/s3/model/ObjectMetadata;" line-rate="1.0" branch-rate="1.0" complexity="0">
+							<lines>
+							</lines>
+						</method>
+						<method name="meta_aroundBody4" signature="(Lcom/jcabi/s3/Ocket$Empty;Lorg/aspectj/lang/JoinPoint;)Lcom/amazonaws/services/s3/model/ObjectMetadata;" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="226" hits="0" branch="false"/>
+							</lines>
+						</method>
+						<method name="read" signature="(Ljava/io/OutputStream;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
+							<lines>
+							</lines>
+						</method>
+						<method name="read_aroundBody8" signature="(Lcom/jcabi/s3/Ocket$Empty;Ljava/io/OutputStream;Lorg/aspectj/lang/JoinPoint;)V" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="235" hits="0" branch="false"/>
+							</lines>
+						</method>
+						<method name="toString" signature="()Ljava/lang/String;" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="212" hits="0" branch="false"/>
+							</lines>
+						</method>
+						<method name="write" signature="(Ljava/io/InputStream;Lcom/amazonaws/services/s3/model/ObjectMetadata;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
+							<lines>
+							</lines>
+						</method>
+						<method name="write_aroundBody10" signature="(Lcom/jcabi/s3/Ocket$Empty;Ljava/io/InputStream;Lcom/amazonaws/services/s3/model/ObjectMetadata;Lorg/aspectj/lang/JoinPoint;)V" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="239" hits="0" branch="false"/>
+							</lines>
+						</method>
+					</methods>
+					<lines>
+						<line number="1" hits="0" branch="false"/>
+						<line number="211" hits="0" branch="false"/>
+						<line number="212" hits="0" branch="false"/>
+						<line number="213" hits="0" branch="true" condition-coverage="0% (0/4)">
+							<conditions>
+								<condition number="0" type="jump" coverage="0%"/>
+								<condition number="1" type="jump" coverage="0%"/>
+							</conditions>
+						</line>
+						<line number="215" hits="0" branch="false"/>
+						<line number="218" hits="0" branch="false"/>
+						<line number="222" hits="0" branch="false"/>
+						<line number="226" hits="0" branch="false"/>
+						<line number="230" hits="0" branch="false"/>
+						<line number="235" hits="0" branch="false"/>
+						<line number="239" hits="0" branch="false"/>
+						<line number="242" hits="0" branch="false"/>
+					</lines>
+				</class>
+				<class name="com.jcabi.s3.Ocket$Empty$AjcClosure1" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0416666666666667">
+					<methods>
+						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
+							<lines>
+							</lines>
+						</method>
+						<method name="run" signature="([Ljava/lang/Object;)Ljava/lang/Object;" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="1" hits="0" branch="false"/>
+							</lines>
+						</method>
+					</methods>
+					<lines>
+						<line number="1" hits="0" branch="false"/>
+					</lines>
+				</class>
+				<class name="com.jcabi.s3.Ocket$Empty$AjcClosure11" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0416666666666667">
+					<methods>
+						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
+							<lines>
+							</lines>
+						</method>
+						<method name="run" signature="([Ljava/lang/Object;)Ljava/lang/Object;" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="1" hits="0" branch="false"/>
+							</lines>
+						</method>
+					</methods>
+					<lines>
+						<line number="1" hits="0" branch="false"/>
+					</lines>
+				</class>
+				<class name="com.jcabi.s3.Ocket$Empty$AjcClosure13" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0416666666666667">
+					<methods>
+						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
+							<lines>
+							</lines>
+						</method>
+						<method name="run" signature="([Ljava/lang/Object;)Ljava/lang/Object;" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="1" hits="0" branch="false"/>
+							</lines>
+						</method>
+					</methods>
+					<lines>
+						<line number="1" hits="0" branch="false"/>
+					</lines>
+				</class>
+				<class name="com.jcabi.s3.Ocket$Empty$AjcClosure3" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0416666666666667">
+					<methods>
+						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
+							<lines>
+							</lines>
+						</method>
+						<method name="run" signature="([Ljava/lang/Object;)Ljava/lang/Object;" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="1" hits="0" branch="false"/>
+							</lines>
+						</method>
+					</methods>
+					<lines>
+						<line number="1" hits="0" branch="false"/>
+					</lines>
+				</class>
+				<class name="com.jcabi.s3.Ocket$Empty$AjcClosure5" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0416666666666667">
+					<methods>
+						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
+							<lines>
+							</lines>
+						</method>
+						<method name="run" signature="([Ljava/lang/Object;)Ljava/lang/Object;" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="1" hits="0" branch="false"/>
+							</lines>
+						</method>
+					</methods>
+					<lines>
+						<line number="1" hits="0" branch="false"/>
+					</lines>
+				</class>
+				<class name="com.jcabi.s3.Ocket$Empty$AjcClosure7" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0416666666666667">
+					<methods>
+						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
+							<lines>
+							</lines>
+						</method>
+						<method name="run" signature="([Ljava/lang/Object;)Ljava/lang/Object;" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="1" hits="0" branch="false"/>
+							</lines>
+						</method>
+					</methods>
+					<lines>
+						<line number="1" hits="0" branch="false"/>
+					</lines>
+				</class>
+				<class name="com.jcabi.s3.Ocket$Empty$AjcClosure9" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0416666666666667">
+					<methods>
+						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
+							<lines>
+							</lines>
+						</method>
+						<method name="run" signature="([Ljava/lang/Object;)Ljava/lang/Object;" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="1" hits="0" branch="false"/>
+							</lines>
+						</method>
+					</methods>
+					<lines>
+						<line number="1" hits="0" branch="false"/>
+					</lines>
+				</class>
+				<class name="com.jcabi.s3.Ocket$Text" filename="com/jcabi/s3/Ocket.java" line-rate="0.5925925925925926" branch-rate="0.0" complexity="1.0416666666666667">
 					<methods>
 						<method name="&lt;clinit&gt;" signature="()V" line-rate="1.0" branch-rate="1.0" complexity="0">
 							<lines>
@@ -1324,7 +1560,7 @@
 						<line number="204" hits="0" branch="false"/>
 					</lines>
 				</class>
-				<class name="com.jcabi.s3.Ocket$Text$AjcClosure1" filename="com/jcabi/s3/Ocket.java" line-rate="1.0" branch-rate="1.0" complexity="1.0">
+				<class name="com.jcabi.s3.Ocket$Text$AjcClosure1" filename="com/jcabi/s3/Ocket.java" line-rate="1.0" branch-rate="1.0" complexity="1.0416666666666667">
 					<methods>
 						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
 							<lines>
@@ -1340,7 +1576,7 @@
 						<line number="1" hits="2" branch="false"/>
 					</lines>
 				</class>
-				<class name="com.jcabi.s3.Ocket$Text$AjcClosure11" filename="com/jcabi/s3/Ocket.java" line-rate="1.0" branch-rate="1.0" complexity="1.0">
+				<class name="com.jcabi.s3.Ocket$Text$AjcClosure11" filename="com/jcabi/s3/Ocket.java" line-rate="1.0" branch-rate="1.0" complexity="1.0416666666666667">
 					<methods>
 						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
 							<lines>
@@ -1356,7 +1592,7 @@
 						<line number="1" hits="4" branch="false"/>
 					</lines>
 				</class>
-				<class name="com.jcabi.s3.Ocket$Text$AjcClosure13" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0">
+				<class name="com.jcabi.s3.Ocket$Text$AjcClosure13" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0416666666666667">
 					<methods>
 						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
 							<lines>
@@ -1372,7 +1608,7 @@
 						<line number="1" hits="0" branch="false"/>
 					</lines>
 				</class>
-				<class name="com.jcabi.s3.Ocket$Text$AjcClosure15" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0">
+				<class name="com.jcabi.s3.Ocket$Text$AjcClosure15" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0416666666666667">
 					<methods>
 						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
 							<lines>
@@ -1388,7 +1624,7 @@
 						<line number="1" hits="0" branch="false"/>
 					</lines>
 				</class>
-				<class name="com.jcabi.s3.Ocket$Text$AjcClosure17" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0">
+				<class name="com.jcabi.s3.Ocket$Text$AjcClosure17" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0416666666666667">
 					<methods>
 						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
 							<lines>
@@ -1404,7 +1640,7 @@
 						<line number="1" hits="0" branch="false"/>
 					</lines>
 				</class>
-				<class name="com.jcabi.s3.Ocket$Text$AjcClosure19" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0">
+				<class name="com.jcabi.s3.Ocket$Text$AjcClosure19" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0416666666666667">
 					<methods>
 						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
 							<lines>
@@ -1420,7 +1656,7 @@
 						<line number="1" hits="0" branch="false"/>
 					</lines>
 				</class>
-				<class name="com.jcabi.s3.Ocket$Text$AjcClosure3" filename="com/jcabi/s3/Ocket.java" line-rate="1.0" branch-rate="1.0" complexity="1.0">
+				<class name="com.jcabi.s3.Ocket$Text$AjcClosure3" filename="com/jcabi/s3/Ocket.java" line-rate="1.0" branch-rate="1.0" complexity="1.0416666666666667">
 					<methods>
 						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
 							<lines>
@@ -1436,7 +1672,7 @@
 						<line number="1" hits="18" branch="false"/>
 					</lines>
 				</class>
-				<class name="com.jcabi.s3.Ocket$Text$AjcClosure5" filename="com/jcabi/s3/Ocket.java" line-rate="1.0" branch-rate="1.0" complexity="1.0">
+				<class name="com.jcabi.s3.Ocket$Text$AjcClosure5" filename="com/jcabi/s3/Ocket.java" line-rate="1.0" branch-rate="1.0" complexity="1.0416666666666667">
 					<methods>
 						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
 							<lines>
@@ -1452,7 +1688,7 @@
 						<line number="1" hits="18" branch="false"/>
 					</lines>
 				</class>
-				<class name="com.jcabi.s3.Ocket$Text$AjcClosure7" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0">
+				<class name="com.jcabi.s3.Ocket$Text$AjcClosure7" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0416666666666667">
 					<methods>
 						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
 							<lines>
@@ -1468,7 +1704,7 @@
 						<line number="1" hits="0" branch="false"/>
 					</lines>
 				</class>
-				<class name="com.jcabi.s3.Ocket$Text$AjcClosure9" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0">
+				<class name="com.jcabi.s3.Ocket$Text$AjcClosure9" filename="com/jcabi/s3/Ocket.java" line-rate="0.0" branch-rate="1.0" complexity="1.0416666666666667">
 					<methods>
 						<method name="&lt;init&gt;" signature="([Ljava/lang/Object;)V" line-rate="1.0" branch-rate="1.0" complexity="0">
 							<lines>
@@ -2686,13 +2922,13 @@
 								<line number="128" hits="18" branch="false"/>
 								<line number="129" hits="9" branch="false"/>
 								<line number="130" hits="9" branch="false"/>
-								<line number="132" hits="35" branch="true" condition-coverage="100% (2/2)">
+								<line number="132" hits="34" branch="true" condition-coverage="100% (2/2)">
 									<conditions>
 										<condition number="0" type="jump" coverage="100%"/>
 									</conditions>
 								</line>
 								<line number="133" hits="26" branch="false"/>
-								<line number="136" hits="9" branch="false"/>
+								<line number="136" hits="8" branch="false"/>
 								<line number="137" hits="9" branch="false"/>
 								<line number="138" hits="9" branch="false"/>
 								<line number="139" hits="9" branch="false"/>
@@ -2744,13 +2980,13 @@
 						<line number="128" hits="18" branch="false"/>
 						<line number="129" hits="9" branch="false"/>
 						<line number="130" hits="9" branch="false"/>
-						<line number="132" hits="35" branch="true" condition-coverage="100% (2/2)">
+						<line number="132" hits="34" branch="true" condition-coverage="100% (2/2)">
 							<conditions>
 								<condition number="0" type="jump" coverage="100%"/>
 							</conditions>
 						</line>
 						<line number="133" hits="26" branch="false"/>
-						<line number="136" hits="9" branch="false"/>
+						<line number="136" hits="8" branch="false"/>
 						<line number="137" hits="9" branch="false"/>
 						<line number="138" hits="9" branch="false"/>
 						<line number="139" hits="9" branch="false"/>
