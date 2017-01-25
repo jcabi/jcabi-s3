@@ -96,12 +96,17 @@ public final class MkOcket implements Ocket {
 
     @Override
     public ObjectMetadata meta() {
-        final ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(this.file().length());
+        final ObjectMetadata meta = new ObjectMetadata();
+        meta.setContentLength(this.file().length());
         final MimetypesFileTypeMap types = new MimetypesFileTypeMap();
-        metadata.setContentType(types.getContentType(this.file()));
-        metadata.setHeader(Headers.DATE, new Date());
-        return metadata;
+        meta.setContentType(types.getContentType(this.file()));
+        meta.setHeader(Headers.DATE, new Date());
+        meta.setLastModified(new Date());
+        meta.setCacheControl("");
+        meta.setContentEncoding("UTF-8");
+        meta.setContentMD5("abcdef");
+        meta.setExpirationTime(new Date());
+        return meta;
     }
 
     @Override
