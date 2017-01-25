@@ -156,6 +156,10 @@
                 </plugins>
             </build>
         </profile>
+        <!--
+        @todo #47:30min For some reason this profile doesn't work any more.
+         Most probably because of the absence of Cobertura. Let's configure
+         it properly, so that it works with Jacocco.
         <profile>
             <id>coveralls</id>
             <activation>
@@ -182,5 +186,6 @@
                 </plugins>
             </build>
         </profile>
+        -->
     </profiles>
 </project>
