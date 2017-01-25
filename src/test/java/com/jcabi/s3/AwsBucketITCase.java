@@ -172,7 +172,7 @@ public final class AwsBucketITCase {
         aws.deleteBucket(bucket.name());
         MatcherAssert.assertThat(
             bucket.exists(),
-            Matchers.is(true)
+            Matchers.is(false)
         );
     }
 
