@@ -33,7 +33,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import java.io.IOException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -97,19 +96,19 @@ public final class AwsBucketITCase {
         new Ocket.Text(bucket.ocket(name)).write("hey");
         final Bucket bkt = new Bucket.Prefixed(bucket, "foo/");
         try {
+            final String item = "bar/file.txt";
             MatcherAssert.assertThat(
                 bkt.list(""),
                 Matchers.allOf(
                     Matchers.<String>iterableWithSize(1),
-                    // @checkstyle MultipleStringLiterals (1 line)
-                    Matchers.hasItem("bar/file.txt")
+                    Matchers.hasItem(item)
                 )
             );
             MatcherAssert.assertThat(
                 bkt.list("bar/"),
                 Matchers.allOf(
                     Matchers.<String>iterableWithSize(1),
-                    Matchers.hasItem("bar/file.txt")
+                    Matchers.hasItem(item)
                 )
             );
             MatcherAssert.assertThat(
@@ -129,12 +128,11 @@ public final class AwsBucketITCase {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public void listsInPrefixedBucketWithouCollisions() throws Exception {
         final Bucket bucket = this.rule.bucket();
-        // @checkstyle MultipleStringLiterals (1 line)
         final String[] names = {"alpha/", "alpha/beta.xml"};
         for (final String name : names) {
             new Ocket.Text(bucket.ocket(name)).write("");
         }
-        final Bucket bkt = new Bucket.Prefixed(bucket, "alpha/");
+        final Bucket bkt = new Bucket.Prefixed(bucket, names[0]);
         try {
             MatcherAssert.assertThat(
                 bkt.list(""),
@@ -157,7 +155,10 @@ public final class AwsBucketITCase {
     @Test
     public void existsExistingBucket() throws IOException {
         final Bucket bucket = this.rule.bucket();
-        Assert.assertTrue(bucket.exists());
+        MatcherAssert.assertThat(
+            bucket.exists(),
+            Matchers.is(true)
+        );
     }
 
     /**
@@ -169,7 +170,10 @@ public final class AwsBucketITCase {
         final Bucket bucket = this.rule.bucket();
         final AmazonS3 aws = bucket.region().aws();
         aws.deleteBucket(bucket.name());
-        Assert.assertFalse(bucket.exists());
+        MatcherAssert.assertThat(
+            bucket.exists(),
+            Matchers.is(true)
+        );
     }
 
 }

@@ -37,10 +37,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.commons.io.Charsets;
-import org.apache.commons.lang3.CharEncoding;
 
 /**
  * Amazon S3 object abstraction.
@@ -147,7 +146,7 @@ public interface Ocket extends Comparable<Ocket> {
         public String read() throws IOException {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             this.origin.read(baos);
-            return baos.toString(CharEncoding.UTF_8);
+            return baos.toString(StandardCharsets.UTF_8.name());
         }
         /**
          * Write content as string.
@@ -167,10 +166,12 @@ public interface Ocket extends Comparable<Ocket> {
             throws IOException {
             final ObjectMetadata meta = new ObjectMetadata();
             meta.setContentType(type);
-            meta.setContentLength((long) text.getBytes(Charsets.UTF_8).length);
-            meta.setContentEncoding(CharEncoding.UTF_8);
+            meta.setContentLength(
+                (long) text.getBytes(StandardCharsets.UTF_8).length
+            );
+            meta.setContentEncoding(StandardCharsets.UTF_8.displayName());
             this.origin.write(
-                new ByteArrayInputStream(text.getBytes(CharEncoding.UTF_8)),
+                new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)),
                 meta
             );
         }

@@ -126,7 +126,7 @@ class AwsListIterator implements Iterator<String> {
                     .withMarker(this.marker)
             );
             this.marker = listing.getNextMarker();
-            final List<String> list = new LinkedList<String>();
+            final List<String> list = new LinkedList<>();
             for (final S3ObjectSummary sum
                 : listing.getObjectSummaries()) {
                 list.add(sum.getKey());

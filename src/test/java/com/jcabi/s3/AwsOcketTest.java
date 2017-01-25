@@ -39,8 +39,8 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.CharEncoding;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -64,7 +64,7 @@ public final class AwsOcketTest {
         final String content = "some text \u20ac\n\t\rtest";
         final S3Object object = new S3Object();
         object.setObjectContent(
-            IOUtils.toInputStream(content, CharEncoding.UTF_8)
+            IOUtils.toInputStream(content, StandardCharsets.UTF_8)
         );
         final AmazonS3 aws = Mockito.mock(AmazonS3.class);
         Mockito.doReturn(object).when(aws)
@@ -77,7 +77,7 @@ public final class AwsOcketTest {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ocket.read(baos);
         MatcherAssert.assertThat(
-            baos.toString(CharEncoding.UTF_8),
+            baos.toString(StandardCharsets.UTF_8.name()),
             Matchers.equalTo(content)
         );
     }
@@ -99,7 +99,7 @@ public final class AwsOcketTest {
         final Ocket ocket = new AwsOcket(bucket, "test-3.txt");
         final String content = "text \u20ac\n\t\rtest";
         ocket.write(
-            new ByteArrayInputStream(content.getBytes(CharEncoding.UTF_8)),
+            new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)),
             new ObjectMetadata()
         );
         Mockito.verify(aws).putObject(Mockito.any(PutObjectRequest.class));

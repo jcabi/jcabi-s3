@@ -33,7 +33,8 @@ import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
-import org.junit.Assert;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -86,8 +87,14 @@ public final class MkOcketTest {
         final ObjectMetadata metadata = new Ocket.Text(
             this.bucket.ocket(this.write.key())
         ).meta();
-        Assert.assertEquals("text/plain", metadata.getContentType());
-        Assert.assertEquals(text.length(), metadata.getContentLength());
+        MatcherAssert.assertThat(
+            metadata.getContentType(),
+            Matchers.is("text/plain")
+        );
+        MatcherAssert.assertThat(
+            metadata.getContentLength(),
+            Matchers.equalTo((long) text.length())
+        );
     }
 
     /**
@@ -99,7 +106,10 @@ public final class MkOcketTest {
         final ObjectMetadata metadata = new Ocket.Text(
             this.bucket.ocket(this.write.key())
         ).meta();
-        Assert.assertNotNull(metadata.getRawMetadataValue(Headers.DATE));
+        MatcherAssert.assertThat(
+            metadata.getRawMetadataValue(Headers.DATE),
+            Matchers.notNullValue()
+        );
     }
 
 }

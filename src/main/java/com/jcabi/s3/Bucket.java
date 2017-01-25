@@ -122,7 +122,7 @@ public interface Bucket extends Comparable<Bucket> {
      * Bucket.Prefixed prefixed = new Bucket.Prefixed(
      *   bucket, "a/b/"
      * );
-     * Iterable<String> list = prefixed.list(
+     * Iterable&lt;String&gt; list = prefixed.list(
      *   ""
      * ); // contains "hello.txt" and "f/2.txt"
      * </pre>
