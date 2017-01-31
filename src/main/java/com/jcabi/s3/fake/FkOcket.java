@@ -101,7 +101,7 @@ public final class FkOcket implements Ocket {
         final MimetypesFileTypeMap types = new MimetypesFileTypeMap();
         meta.setContentType(types.getContentType(this.file()));
         meta.setHeader(Headers.DATE, new Date());
-        meta.setLastModified(new Date());
+        meta.setLastModified(new Date(this.file().lastModified()));
         meta.setCacheControl("");
         meta.setContentEncoding("UTF-8");
         meta.setContentMD5("abcdef");
