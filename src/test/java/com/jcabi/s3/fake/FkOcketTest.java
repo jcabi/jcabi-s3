@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jcabi.s3.mock;
+package com.jcabi.s3.fake;
 
 import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -41,13 +41,13 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 /**
- * Test case for {@link MkOcket}.
+ * Test case for {@link FkOcket}.
  *
  * @author Piotr Pradzynski (prondzyn@gmail.com)
  * @version $Id$
  * @since 0.10.1
  */
-public final class MkOcketTest {
+public final class FkOcketTest {
 
     /**
      * Temp directory.
@@ -72,7 +72,7 @@ public final class MkOcketTest {
      */
     @Before
     public void setUp() throws Exception {
-        this.bucket = new MkRegion(this.temp.newFolder()).bucket("test");
+        this.bucket = new FkRegion(this.temp.newFolder()).bucket("test");
         this.write = this.bucket.ocket("hello.txt");
     }
 

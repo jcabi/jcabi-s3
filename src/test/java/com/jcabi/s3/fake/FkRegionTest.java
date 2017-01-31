@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jcabi.s3.mock;
+package com.jcabi.s3.fake;
 
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
@@ -39,13 +39,13 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 /**
- * Test case for {@link MkBucket}.
+ * Test case for {@link FkRegion}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.8.1
  */
-public final class MkBucketTest {
+public final class FkRegionTest {
 
     /**
      * Temp directory.
@@ -55,45 +55,18 @@ public final class MkBucketTest {
     public final transient TemporaryFolder temp = new TemporaryFolder();
 
     /**
-     * MkBucket can list ockets.
+     * MkRegion can read/write ocket content.
      * @throws Exception If fails
      */
     @Test
-    @SuppressWarnings("unchecked")
-    public void listsOckets() throws Exception {
-        final Region region = new MkRegion(this.temp.newFolder());
+    public void readsWritesContentFromFiles() throws Exception {
+        final Region region = new FkRegion(this.temp.newFolder());
         final Bucket bucket = region.bucket("test");
-        new Ocket.Text(bucket.ocket("a/first.txt")).write("");
-        new Ocket.Text(bucket.ocket("a/b/hello.txt")).write("");
-        new Ocket.Text(bucket.ocket("a/b/f/2.txt")).write("");
-        new Ocket.Text(bucket.ocket("a/b/c/d/3.txt")).write("");
+        final Ocket ocket = bucket.ocket("hello.txt");
+        new Ocket.Text(ocket).write("hello, world!");
         MatcherAssert.assertThat(
-            new Bucket.Prefixed(bucket, "a/b").list(""),
-            Matchers.allOf(
-                // @checkstyle MagicNumberCheck (1 line)
-                Matchers.<String>iterableWithSize(3),
-                Matchers.hasItem("/hello.txt"),
-                Matchers.hasItem("/f/2.txt"),
-                Matchers.hasItem("/c/d/3.txt")
-            )
-        );
-    }
-
-    /**
-     * MkBucket can list ockets.
-     * @throws Exception If fails
-     */
-    @Test
-    public void listsOcketsWithDifferentPrefixes() throws Exception {
-        final Region region = new MkRegion(this.temp.newFolder());
-        final Bucket bucket = region.bucket("foo");
-        new Ocket.Text(bucket.ocket("1/foo.txt")).write("");
-        new Ocket.Text(bucket.ocket("1/2/foo.txt")).write("");
-        new Ocket.Text(bucket.ocket("1/2/3/foo.txt")).write("");
-        MatcherAssert.assertThat(
-            new Bucket.Prefixed(bucket, "1/").list(""),
-            // @checkstyle MagicNumberCheck (1 line)
-            Matchers.<String>iterableWithSize(3)
+            new Ocket.Text(bucket.ocket(ocket.key())).read(),
+            Matchers.containsString("world!")
         );
     }
 

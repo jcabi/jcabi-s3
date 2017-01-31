@@ -27,27 +27,37 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jcabi.s3.mock;
+package com.jcabi.s3.fake;
 
-import com.amazonaws.services.s3.AmazonS3;
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.s3.Bucket;
+import com.jcabi.s3.Ocket;
 import com.jcabi.s3.Region;
 import java.io.File;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
- * Mock/fake region.
+ * Mock/fake bucket.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.6
  */
 @Immutable
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "bkt")
 @Loggable(Loggable.DEBUG)
-public final class MkRegion implements Region {
+public final class FkBucket implements Bucket {
+
+    /**
+     * My name.
+     */
+    private final transient String bkt;
 
     /**
      * Directory we're working in.
@@ -57,33 +67,71 @@ public final class MkRegion implements Region {
     /**
      * Ctor.
      * @param file Directory to keep files in
-     * @since 0.8.1
+     * @param name Name of the bucket
      */
-    public MkRegion(final File file) {
-        this.dir = MkRegion.path(file);
+    public FkBucket(final File file, final String name) {
+        this.dir = file.getAbsolutePath();
+        this.bkt = name;
     }
 
     @Override
-    public Bucket bucket(final String name) {
-        return new MkBucket(new File(this.dir), name);
+    public Region region() {
+        return new FkRegion(new File(this.dir));
     }
 
     @Override
-    public AmazonS3 aws() {
-        throw new UnsupportedOperationException("#aws()");
+    public String name() {
+        return this.bkt;
+    }
+
+    @Override
+    public Ocket ocket(final String key) {
+        return new FkOcket(new File(this.dir), this.bkt, key);
+    }
+
+    @Override
+    public boolean exists() {
+        return true;
+    }
+
+    @Override
+    public void remove(final String key) {
+        new File(this.home(), key).delete();
+    }
+
+    @Override
+    public Iterable<String> list(final String pfx) {
+        final File home = this.home();
+        return Iterables.transform(
+            FileUtils.listFiles(
+                new File(home, pfx),
+                TrueFileFilter.INSTANCE,
+                TrueFileFilter.INSTANCE
+            ),
+            new Function<File, String>() {
+                @Override
+                public String apply(final File file) {
+                    return FilenameUtils.separatorsToUnix(
+                        file.getAbsolutePath().substring(
+                            home.getAbsolutePath().length() + 1
+                        )
+                    );
+                }
+            }
+        );
+    }
+
+    @Override
+    public int compareTo(final Bucket bucket) {
+        return this.bkt.compareTo(bucket.name());
     }
 
     /**
-     * Convert it to a dir.
-     * @param file The file
-     * @return Absolute path
+     * Get my file.
+     * @return File
      */
-    private static String path(final File file) {
-        if (!file.isDirectory()) {
-            throw new IllegalArgumentException(
-                String.format("%s is not a directory", file)
-            );
-        }
-        return file.getAbsolutePath();
+    private File home() {
+        return new File(new File(this.dir), this.bkt);
     }
+
 }

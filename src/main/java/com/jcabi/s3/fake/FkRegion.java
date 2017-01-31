@@ -27,12 +27,63 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.jcabi.s3.fake;
+
+import com.amazonaws.services.s3.AmazonS3;
+import com.jcabi.aspects.Immutable;
+import com.jcabi.aspects.Loggable;
+import com.jcabi.s3.Bucket;
+import com.jcabi.s3.Region;
+import java.io.File;
+import lombok.EqualsAndHashCode;
 
 /**
- * Mock/fake classes, tests.
+ * Mock/fake region.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.8.1
+ * @since 0.6
  */
-package com.jcabi.s3.mock;
+@Immutable
+@EqualsAndHashCode
+@Loggable(Loggable.DEBUG)
+public final class FkRegion implements Region {
+
+    /**
+     * Directory we're working in.
+     */
+    private final transient String dir;
+
+    /**
+     * Ctor.
+     * @param file Directory to keep files in
+     * @since 0.8.1
+     */
+    public FkRegion(final File file) {
+        this.dir = FkRegion.path(file);
+    }
+
+    @Override
+    public Bucket bucket(final String name) {
+        return new FkBucket(new File(this.dir), name);
+    }
+
+    @Override
+    public AmazonS3 aws() {
+        throw new UnsupportedOperationException("#aws()");
+    }
+
+    /**
+     * Convert it to a dir.
+     * @param file The file
+     * @return Absolute path
+     */
+    private static String path(final File file) {
+        if (!file.isDirectory()) {
+            throw new IllegalArgumentException(
+                String.format("%s is not a directory", file)
+            );
+        }
+        return file.getAbsolutePath();
+    }
+}

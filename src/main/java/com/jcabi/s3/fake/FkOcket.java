@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jcabi.s3.mock;
+package com.jcabi.s3.fake;
 
 import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -55,7 +55,7 @@ import lombok.EqualsAndHashCode;
 @Immutable
 @EqualsAndHashCode(of = { "bkt", "name" })
 @Loggable(Loggable.DEBUG)
-public final class MkOcket implements Ocket {
+public final class FkOcket implements Ocket {
 
     /**
      * Directory we're working in.
@@ -78,7 +78,7 @@ public final class MkOcket implements Ocket {
      * @param bucket Bucket
      * @param key Key
      */
-    public MkOcket(final File file, final String bucket, final String key) {
+    public FkOcket(final File file, final String bucket, final String key) {
         this.dir = file.getAbsolutePath();
         this.bkt = bucket;
         this.name = key;
@@ -86,7 +86,7 @@ public final class MkOcket implements Ocket {
 
     @Override
     public Bucket bucket() {
-        return new MkBucket(new File(this.dir), this.bkt);
+        return new FkBucket(new File(this.dir), this.bkt);
     }
 
     @Override

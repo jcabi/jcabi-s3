@@ -29,10 +29,10 @@
  */
 
 /**
- * Mock/fake classes.
+ * Fake classes, tests.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.6
+ * @since 0.8.1
  */
-package com.jcabi.s3.mock;
+package com.jcabi.s3.fake;
