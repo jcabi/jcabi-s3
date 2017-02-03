@@ -152,7 +152,7 @@ public final class FkOcket implements Ocket {
      * Get my file.
      * @return File
      */
-    private File file() {
+    public File file() {
         return new File(
             new File(
                 new File(this.dir),
