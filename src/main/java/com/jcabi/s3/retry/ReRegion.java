@@ -62,6 +62,11 @@ public final class ReRegion implements Region {
     }
 
     @Override
+    public String toString() {
+        return this.origin.toString();
+    }
+
+    @Override
     public Bucket bucket(final String name) {
         return new ReBucket(this.origin.bucket(name));
     }

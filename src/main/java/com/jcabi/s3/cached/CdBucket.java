@@ -63,6 +63,11 @@ public final class CdBucket implements Bucket {
     }
 
     @Override
+    public String toString() {
+        return this.origin.toString();
+    }
+
+    @Override
     public Region region() {
         return new CdRegion(this.origin.region());
     }

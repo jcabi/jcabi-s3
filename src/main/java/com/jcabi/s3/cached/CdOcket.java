@@ -67,6 +67,11 @@ public final class CdOcket implements Ocket {
     }
 
     @Override
+    public String toString() {
+        return this.origin.toString();
+    }
+
+    @Override
     public Bucket bucket() {
         return new CdBucket(this.origin.bucket());
     }
