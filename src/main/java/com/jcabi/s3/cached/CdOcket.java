@@ -82,6 +82,7 @@ public final class CdOcket implements Ocket {
     }
 
     @Override
+    @Cacheable
     public ObjectMetadata meta() throws IOException {
         return this.origin.meta();
     }
