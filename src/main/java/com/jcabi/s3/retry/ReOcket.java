@@ -43,7 +43,7 @@ import lombok.EqualsAndHashCode;
 /**
  * Ocket that retries a few times before giving up.
  *
- * @author Yegor Bugayenko (yegor@tpc2.com)
+ * @author Yegor Bugayenko (yegor256@gmail.com)
  * @version $Id$
  * @since 0.5
  */

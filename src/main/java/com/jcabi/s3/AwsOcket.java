@@ -54,7 +54,7 @@ import org.apache.commons.io.input.CountingInputStream;
 /**
  * Amazon S3 bucket.
  *
- * @author Yegor Bugayenko (yegor@tpc2.com)
+ * @author Yegor Bugayenko (yegor256@gmail.com)
  * @version $Id$
  * @since 0.1
  */
