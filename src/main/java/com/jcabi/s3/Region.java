@@ -73,7 +73,7 @@ public interface Region {
      */
     @Immutable
     @ToString
-    @EqualsAndHashCode(of = { "key", "secret" })
+    @EqualsAndHashCode(of = { "key", "secret", "region" })
     @Loggable(Loggable.DEBUG)
     final class Simple implements Region {
         /**
@@ -85,13 +85,27 @@ public interface Region {
          */
         private final transient String secret;
         /**
+         * Region.
+         */
+        private final transient String region;
+        /**
          * Public ctor.
          * @param akey Amazon key
          * @param scrt Amazon secret
          */
         public Simple(final String akey, final String scrt) {
+            this(akey, scrt, "us-east-1");
+        }
+        /**
+         * Public ctor.
+         * @param akey Amazon key
+         * @param scrt Amazon secret
+         * @param rgn Region
+         */
+        public Simple(final String akey, final String scrt, final String rgn) {
             this.key = akey;
             this.secret = scrt;
+            this.region = rgn;
         }
         @Override
         public Bucket bucket(final String name) {
@@ -99,11 +113,14 @@ public interface Region {
         }
         @Override
         public AmazonS3 aws() {
-            return AmazonS3ClientBuilder.standard().withCredentials(
-                new AWSStaticCredentialsProvider(
-                    new BasicAWSCredentials(this.key, this.secret)
+            return AmazonS3ClientBuilder.standard()
+                .withRegion(this.region)
+                .withCredentials(
+                    new AWSStaticCredentialsProvider(
+                        new BasicAWSCredentials(this.key, this.secret)
+                    )
                 )
-            ).build();
+                .build();
         }
     }
 }
