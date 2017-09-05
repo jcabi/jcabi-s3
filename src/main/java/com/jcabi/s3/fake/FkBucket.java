@@ -37,6 +37,9 @@ import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
 import com.jcabi.s3.Region;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -66,11 +69,50 @@ public final class FkBucket implements Bucket {
 
     /**
      * Ctor.
+     * @throws IOException If fails
+     * @since 0.17
+     */
+    public FkBucket() throws IOException {
+        this("default");
+    }
+
+    /**
+     * Ctor.
+     * @param name Name of the bucket
+     * @throws IOException If fails
+     * @since 0.17
+     */
+    public FkBucket(final String name) throws IOException {
+        this(Files.createTempDirectory("jcabi-s3"), name);
+    }
+
+    /**
+     * Ctor.
      * @param file Directory to keep files in
      * @param name Name of the bucket
      */
     public FkBucket(final File file, final String name) {
-        this.dir = file.getAbsolutePath();
+        this(file.getAbsolutePath(), name);
+    }
+
+    /**
+     * Ctor.
+     * @param file Directory to keep files in
+     * @param name Name of the bucket
+     * @since 0.17
+     */
+    public FkBucket(final Path file, final String name) {
+        this(file.toFile(), name);
+    }
+
+    /**
+     * Ctor.
+     * @param file Directory to keep files in
+     * @param name Name of the bucket
+     * @since 0.17
+     */
+    public FkBucket(final String file, final String name) {
+        this.dir = file;
         this.bkt = name;
     }
 

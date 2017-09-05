@@ -41,6 +41,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Date;
 import javax.activation.MimetypesFileTypeMap;
 import lombok.EqualsAndHashCode;
@@ -74,12 +76,54 @@ public final class FkOcket implements Ocket {
 
     /**
      * Ctor.
+     * @throws IOException If fails
+     * @since 0.17
+     */
+    public FkOcket() throws IOException {
+        this("default", "default-key");
+    }
+
+    /**
+     * Ctor.
+     * @param bucket Bucket
+     * @param key Key
+     * @throws IOException If fails
+     * @since 0.17
+     */
+    public FkOcket(final String bucket, final String key) throws IOException {
+        this(Files.createTempDirectory("jcabi-s3"), bucket, key);
+    }
+
+    /**
+     * Ctor.
+     * @param file Dir we're in
+     * @param bucket Bucket
+     * @param key Key
+     * @since 0.17
+     */
+    public FkOcket(final Path file, final String bucket, final String key) {
+        this(file.toFile(), bucket, key);
+    }
+
+    /**
+     * Ctor.
      * @param file Dir we're in
      * @param bucket Bucket
      * @param key Key
      */
     public FkOcket(final File file, final String bucket, final String key) {
-        this.dir = file.getAbsolutePath();
+        this(file.getAbsolutePath(), bucket, key);
+    }
+
+    /**
+     * Ctor.
+     * @param file Dir we're in
+     * @param bucket Bucket
+     * @param key Key
+     * @since 0.17
+     */
+    public FkOcket(final String file, final String bucket, final String key) {
+        this.dir = file;
         this.bkt = bucket;
         this.name = key;
     }

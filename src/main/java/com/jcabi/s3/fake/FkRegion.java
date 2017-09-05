@@ -35,6 +35,9 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Region;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -53,6 +56,33 @@ public final class FkRegion implements Region {
      * Directory we're working in.
      */
     private final transient String dir;
+
+    /**
+     * Ctor.
+     * @throws IOException If fails
+     * @since 0.17
+     */
+    public FkRegion() throws IOException {
+        this(Files.createTempDirectory("jcabi-s3"));
+    }
+
+    /**
+     * Ctor.
+     * @param file Directory to keep files in
+     * @since 0.17
+     */
+    public FkRegion(final Path file) {
+        this(file.toFile());
+    }
+
+    /**
+     * Ctor.
+     * @param file Directory to keep files in
+     * @since 0.17
+     */
+    public FkRegion(final String file) {
+        this(new File(file));
+    }
 
     /**
      * Ctor.
