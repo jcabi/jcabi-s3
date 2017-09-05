@@ -173,6 +173,9 @@ public final class FkBucket implements Bucket {
      * @return File
      */
     private File home() {
+        if (this.bkt.isEmpty()) {
+            throw new IllegalStateException("Ocket name can't be empty");
+        }
         return new File(new File(this.dir), this.bkt);
     }
 

@@ -197,6 +197,12 @@ public final class FkOcket implements Ocket {
      * @return File
      */
     public File file() {
+        if (this.bkt.isEmpty()) {
+            throw new IllegalStateException("Bucket name can't be empty");
+        }
+        if (this.name.isEmpty()) {
+            throw new IllegalStateException("Ocket name can't be empty");
+        }
         return new File(
             new File(
                 new File(this.dir),
