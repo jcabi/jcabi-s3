@@ -39,6 +39,7 @@ import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.transfer.TransferManager;
+import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import com.amazonaws.services.s3.transfer.Upload;
 import com.amazonaws.services.s3.transfer.model.UploadResult;
 import com.jcabi.aspects.Immutable;
@@ -210,7 +211,8 @@ final class AwsOcket implements Ocket {
         try {
             final AmazonS3 aws = this.bkt.region().aws();
             final long start = System.currentTimeMillis();
-            final TransferManager tmgr = new TransferManager(aws);
+            final TransferManager tmgr = TransferManagerBuilder.standard()
+                .withS3Client(aws).build();
             final Upload upload = tmgr.upload(
                 this.bkt.name(), this.name, cnt, meta
             );

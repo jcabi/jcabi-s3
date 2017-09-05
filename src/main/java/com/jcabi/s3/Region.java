@@ -29,9 +29,10 @@
  */
 package com.jcabi.s3;
 
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import lombok.EqualsAndHashCode;
@@ -98,9 +99,11 @@ public interface Region {
         }
         @Override
         public AmazonS3 aws() {
-            return new AmazonS3Client(
-                new BasicAWSCredentials(this.key, this.secret)
-            );
+            return AmazonS3ClientBuilder.standard().withCredentials(
+                new AWSStaticCredentialsProvider(
+                    new BasicAWSCredentials(this.key, this.secret)
+                )
+            ).build();
         }
     }
 }
