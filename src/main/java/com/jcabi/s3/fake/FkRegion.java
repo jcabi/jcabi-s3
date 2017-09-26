@@ -94,6 +94,11 @@ public final class FkRegion implements Region {
     }
 
     @Override
+    public String toString() {
+        return this.dir;
+    }
+
+    @Override
     public Bucket bucket(final String name) {
         return new FkBucket(new File(this.dir), name);
     }

@@ -129,6 +129,11 @@ public final class FkOcket implements Ocket {
     }
 
     @Override
+    public String toString() {
+        return this.name;
+    }
+
+    @Override
     public Bucket bucket() {
         return new FkBucket(new File(this.dir), this.bkt);
     }

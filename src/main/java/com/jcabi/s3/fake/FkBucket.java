@@ -117,6 +117,11 @@ public final class FkBucket implements Bucket {
     }
 
     @Override
+    public String toString() {
+        return this.bkt;
+    }
+
+    @Override
     public Region region() {
         return new FkRegion(new File(this.dir));
     }
