@@ -124,7 +124,7 @@ final class BucketRule implements TestRule {
      */
     private void drop() throws Exception {
         final AmazonS3 aws = this.subj.region().aws();
-        if (aws.doesBucketExist(this.subj.name())) {
+        if (aws.doesBucketExistV2(this.subj.name())) {
             aws.deleteBucket(this.subj.name());
             Logger.info(this, "S3 bucket %s deleted", this.subj.name());
         }

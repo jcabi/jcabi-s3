@@ -69,7 +69,7 @@ public final class AwsBucketTest {
         final AmazonS3 aws = Mockito.mock(AmazonS3.class);
         Mockito.when(region.aws()).thenReturn(aws);
         final String name = "existing.bucket.com";
-        Mockito.when(aws.doesBucketExist(name)).thenReturn(true);
+        Mockito.when(aws.doesBucketExistV2(name)).thenReturn(true);
         final Bucket bucket = new AwsBucket(region, name);
         MatcherAssert.assertThat(
             bucket.exists(),
@@ -87,7 +87,7 @@ public final class AwsBucketTest {
         final AmazonS3 aws = Mockito.mock(AmazonS3.class);
         Mockito.when(region.aws()).thenReturn(aws);
         final String name = "non.existing.bucket.com";
-        Mockito.when(aws.doesBucketExist(name)).thenReturn(false);
+        Mockito.when(aws.doesBucketExistV2(name)).thenReturn(false);
         final Bucket bucket = new AwsBucket(region, name);
         MatcherAssert.assertThat(
             bucket.exists(),
@@ -105,7 +105,7 @@ public final class AwsBucketTest {
         final AmazonS3 aws = Mockito.mock(AmazonS3.class);
         Mockito.when(region.aws()).thenReturn(aws);
         final String name = "throwing.bucket.com";
-        Mockito.when(aws.doesBucketExist(name)).thenThrow(
+        Mockito.when(aws.doesBucketExistV2(name)).thenThrow(
             new AmazonServiceException("Test exception")
         );
         final Bucket bucket = new AwsBucket(region, name);

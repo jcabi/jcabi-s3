@@ -60,7 +60,7 @@ public final class RegionITCase {
         final Bucket bucket = this.rule.bucket();
         final AmazonS3 aws = bucket.region().aws();
         MatcherAssert.assertThat(
-            aws.doesBucketExist(bucket.name()),
+            aws.doesBucketExistV2(bucket.name()),
             Matchers.is(true)
         );
     }

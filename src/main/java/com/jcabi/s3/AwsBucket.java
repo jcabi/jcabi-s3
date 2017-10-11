@@ -95,7 +95,7 @@ final class AwsBucket implements Bucket {
         final AmazonS3 aws = this.regn.aws();
         final boolean result;
         try {
-            result = aws.doesBucketExist(this.bkt);
+            result = aws.doesBucketExistV2(this.bkt);
         } catch (final AmazonServiceException ex) {
             throw new IOException(
                 String.format(
