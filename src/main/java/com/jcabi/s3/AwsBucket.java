@@ -32,7 +32,6 @@ package com.jcabi.s3;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.IOException;
@@ -46,7 +45,6 @@ import lombok.EqualsAndHashCode;
  * @version $Id$
  * @since 0.1
  */
-@Immutable
 @EqualsAndHashCode(of = { "regn", "bkt" })
 @Loggable(Loggable.DEBUG)
 @SuppressWarnings("PMD.TooManyMethods")

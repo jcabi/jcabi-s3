@@ -32,7 +32,6 @@ package com.jcabi.s3;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import java.io.IOException;
 import lombok.EqualsAndHashCode;
@@ -56,7 +55,6 @@ import lombok.ToString;
  * @version $Id$
  * @since 0.1
  */
-@Immutable
 @SuppressWarnings("PMD.TooManyMethods")
 public interface Bucket extends Comparable<Bucket> {
 
@@ -127,7 +125,6 @@ public interface Bucket extends Comparable<Bucket> {
      * ); // contains "hello.txt" and "f/2.txt"
      * </pre>
      */
-    @Immutable
     @ToString
     @EqualsAndHashCode(of = { "origin", "prefix" })
     @Loggable(Loggable.DEBUG)

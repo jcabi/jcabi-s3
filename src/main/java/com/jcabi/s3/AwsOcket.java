@@ -42,7 +42,6 @@ import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import com.amazonaws.services.s3.transfer.Upload;
 import com.amazonaws.services.s3.transfer.model.UploadResult;
-import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.IOException;
@@ -59,7 +58,6 @@ import org.apache.commons.io.input.CountingInputStream;
  * @version $Id$
  * @since 0.1
  */
-@Immutable
 @EqualsAndHashCode(of = { "bkt", "name" })
 @Loggable(Loggable.DEBUG)
 final class AwsOcket implements Ocket {

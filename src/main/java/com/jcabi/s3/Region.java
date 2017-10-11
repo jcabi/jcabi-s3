@@ -33,7 +33,6 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -52,7 +51,6 @@ import lombok.ToString;
  * @version $Id$
  * @since 0.1
  */
-@Immutable
 public interface Region {
 
     /**
@@ -71,41 +69,47 @@ public interface Region {
     /**
      * Simple implementation.
      */
-    @Immutable
     @ToString
-    @EqualsAndHashCode(of = { "key", "secret", "region" })
+    @EqualsAndHashCode(of = "server")
     @Loggable(Loggable.DEBUG)
     final class Simple implements Region {
         /**
-         * Key.
+         * AWS.
          */
-        private final transient String key;
-        /**
-         * Secret.
-         */
-        private final transient String secret;
-        /**
-         * Region.
-         */
-        private final transient String region;
+        private final transient AmazonS3 server;
         /**
          * Public ctor.
-         * @param akey Amazon key
-         * @param scrt Amazon secret
+         * @param key Amazon key
+         * @param secret Amazon secret
          */
-        public Simple(final String akey, final String scrt) {
-            this(akey, scrt, "us-east-1");
+        public Simple(final String key, final String secret) {
+            this(key, secret, "us-east-1");
         }
         /**
          * Public ctor.
-         * @param akey Amazon key
-         * @param scrt Amazon secret
-         * @param rgn Region
+         * @param key Amazon key
+         * @param secret Amazon secret
+         * @param region Region
          */
-        public Simple(final String akey, final String scrt, final String rgn) {
-            this.key = akey;
-            this.secret = scrt;
-            this.region = rgn;
+        public Simple(final String key, final String secret,
+            final String region) {
+            this(
+                AmazonS3ClientBuilder.standard()
+                    .withRegion(region)
+                    .withCredentials(
+                        new AWSStaticCredentialsProvider(
+                            new BasicAWSCredentials(key, secret)
+                        )
+                    )
+                    .build()
+            );
+        }
+        /**
+         * Public ctor.
+         * @param aws Amazon S3 server
+         */
+        public Simple(final AmazonS3 aws) {
+            this.server = aws;
         }
         @Override
         public Bucket bucket(final String name) {
@@ -113,14 +117,7 @@ public interface Region {
         }
         @Override
         public AmazonS3 aws() {
-            return AmazonS3ClientBuilder.standard()
-                .withRegion(this.region)
-                .withCredentials(
-                    new AWSStaticCredentialsProvider(
-                        new BasicAWSCredentials(this.key, this.secret)
-                    )
-                )
-                .build();
+            return this.server;
         }
     }
 }

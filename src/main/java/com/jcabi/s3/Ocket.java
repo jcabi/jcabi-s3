@@ -30,7 +30,6 @@
 package com.jcabi.s3;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -63,7 +62,6 @@ import lombok.ToString;
  * @version $Id$
  * @since 0.1
  */
-@Immutable
 @SuppressWarnings("PMD.TooManyMethods")
 public interface Ocket extends Comparable<Ocket> {
 
@@ -122,7 +120,6 @@ public interface Ocket extends Comparable<Ocket> {
     /**
      * Unicode text S3 object with supplementary functions.
      */
-    @Immutable
     @ToString
     @EqualsAndHashCode(of = "origin")
     @Loggable(Loggable.DEBUG)
@@ -209,7 +206,6 @@ public interface Ocket extends Comparable<Ocket> {
     /**
      * Ocket with no content at all.
      */
-    @Immutable
     @ToString
     @EqualsAndHashCode
     @Loggable(Loggable.DEBUG)
