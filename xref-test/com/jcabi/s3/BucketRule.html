@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * Rule that creates and drops an AWS subj.</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * @author Yegor Bugayenko (yegor256@gmail.com)</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * @version $Id: ae448946f2d001db87573cbe09a6d6783eb26543 $</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * @version $Id: 9122c104aaf6054869d44c2b037ee54fb51b7a02 $</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * @since 0.3</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../com/jcabi/s3/BucketRule.html">BucketRule</a> <strong class="jxr_keyword">implements</strong> TestRule {
@@ -132,7 +132,7 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> drop() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>         <strong class="jxr_keyword">final</strong> AmazonS3 aws = <strong class="jxr_keyword">this</strong>.subj.region().aws();
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>         <strong class="jxr_keyword">if</strong> (aws.doesBucketExist(<strong class="jxr_keyword">this</strong>.subj.name())) {
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>         <strong class="jxr_keyword">if</strong> (aws.doesBucketExistV2(<strong class="jxr_keyword">this</strong>.subj.name())) {
 <a class="jxr_linenumber" name="L128" href="#L128">128</a>             aws.deleteBucket(<strong class="jxr_keyword">this</strong>.subj.name());
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>             Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"S3 bucket %s deleted"</span>, <strong class="jxr_keyword">this</strong>.subj.name());
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>         }

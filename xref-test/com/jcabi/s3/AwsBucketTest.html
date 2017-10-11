@@ -49,7 +49,7 @@
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * Test case for {@link AwsBucket}.</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * @author Yegor Bugayenko (yegor256@gmail.com)</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * @version $Id: 0c15ca0bf321d7eadd9597ca74676089d6ed14f4 $</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * @version $Id: 8e525fef4bdd50f053c7c24006399f6fee349ed0 $</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * @since 0.1</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  @SuppressWarnings(<span class="jxr_string">"PMD.TooManyMethods"</span>)
@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>          <strong class="jxr_keyword">final</strong> AmazonS3 aws = Mockito.mock(AmazonS3.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>          Mockito.when(region.aws()).thenReturn(aws);
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>          <strong class="jxr_keyword">final</strong> String name = <span class="jxr_string">"existing.bucket.com"</span>;
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>          Mockito.when(aws.doesBucketExist(name)).thenReturn(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>          Mockito.when(aws.doesBucketExistV2(name)).thenReturn(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          <strong class="jxr_keyword">final</strong> Bucket bucket = <strong class="jxr_keyword">new</strong> AwsBucket(region, name);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          MatcherAssert.assertThat(
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>              bucket.exists(),
@@ -95,7 +95,7 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>          <strong class="jxr_keyword">final</strong> AmazonS3 aws = Mockito.mock(AmazonS3.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>          Mockito.when(region.aws()).thenReturn(aws);
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">final</strong> String name = <span class="jxr_string">"non.existing.bucket.com"</span>;
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>          Mockito.when(aws.doesBucketExist(name)).thenReturn(false);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>          Mockito.when(aws.doesBucketExistV2(name)).thenReturn(false);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>          <strong class="jxr_keyword">final</strong> Bucket bucket = <strong class="jxr_keyword">new</strong> AwsBucket(region, name);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>          MatcherAssert.assertThat(
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>              bucket.exists(),
@@ -113,7 +113,7 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>         <strong class="jxr_keyword">final</strong> AmazonS3 aws = Mockito.mock(AmazonS3.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a>         Mockito.when(region.aws()).thenReturn(aws);
 <a class="jxr_linenumber" name="L107" href="#L107">107</a>         <strong class="jxr_keyword">final</strong> String name = <span class="jxr_string">"throwing.bucket.com"</span>;
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>         Mockito.when(aws.doesBucketExist(name)).thenThrow(
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>         Mockito.when(aws.doesBucketExistV2(name)).thenThrow(
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>             <strong class="jxr_keyword">new</strong> AmazonServiceException(<span class="jxr_string">"Test exception"</span>)
 <a class="jxr_linenumber" name="L110" href="#L110">110</a>         );
 <a class="jxr_linenumber" name="L111" href="#L111">111</a>         <strong class="jxr_keyword">final</strong> Bucket bucket = <strong class="jxr_keyword">new</strong> AwsBucket(region, name);
