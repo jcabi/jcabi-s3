@@ -20,7 +20,7 @@ It's an object layer on top of Amazon S3 SDK:
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
 import com.jcabi.s3.Region;
-import com.jcabi.s3.cached.Region;
+import com.jcabi.s3.cached.CdRegion;
 public class Main {
   public static void main(String[] args) {
     Region region = new CdRegion(
