@@ -4,16 +4,14 @@
 [![Managed by Zerocracy](https://www.0crat.com/badge/C3RUBL5H9.svg)](https://www.0crat.com/p/C3RUBL5H9)
 [![DevOps By Rultor.com](http://www.rultor.com/b/jcabi/jcabi-s3)](http://www.rultor.com/p/jcabi/jcabi-s3)
 
-[![Build Status](https://travis-ci.org/jcabi/jcabi-s3.svg?branch=master)](https://travis-ci.org/jcabi/jcabi-s3)
+[![mvn](https://github.com/jcabi/jcabi-s3/actions/workflows/mvn.yml/badge.svg)](https://github.com/jcabi/jcabi-s3/actions/workflows/mvn.yml)
 [![PDD status](http://www.0pdd.com/svg?name=jcabi/jcabi-s3)](http://www.0pdd.com/p?name=jcabi/jcabi-s3)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.jcabi/jcabi-s3/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.jcabi/jcabi-s3)
 [![Javadoc](https://javadoc.io/badge/com.jcabi/jcabi-s3.svg)](http://www.javadoc.io/doc/com.jcabi/jcabi-s3)
-[![Dependencies](https://www.versioneye.com/user/projects/561aa1eca193340f32000fd3/badge.svg?style=flat)](https://www.versioneye.com/user/projects/561aa1eca193340f32000fd3)
-[![Coverage Status](https://coveralls.io/repos/jcabi/jcabi-s3/badge.svg?branch=master&service=github)](https://coveralls.io/github/jcabi/jcabi-s3?branch=master)
-
-[![jpeek report](https://i.jpeek.org/com.jcabi/jcabi-s3/badge.svg)](https://i.jpeek.org/com.jcabi/jcabi-s3/)
+[![codecov](https://codecov.io/gh/jcabi/jcabi-s3/branch/master/graph/badge.svg)](https://codecov.io/gh/jcabi/jcabi-s3)
 
 More details are here: [s3.jcabi.com](http://s3.jcabi.com/index.html).
+
 Also, read this blog post: [Object-Oriented Java Adapter of Amazon S3 SDK](http://www.yegor256.com/2014/05/26/amazon-s3-java-oop-adapter.html).
 
 It's an object layer on top of Amazon S3 SDK:
@@ -38,12 +36,6 @@ public class Main {
 
 It is highly recommended to use `CdRegion` to avoid multiple duplicate
 reads from the same S3 object.
-
-## Questions?
-
-If you have any questions about the framework, or something doesn't work as expected,
-please [submit an issue here](https://github.com/jcabi/jcabi-s3/issues/new).
-If you want to discuss, please use our [Google Group](https://groups.google.com/forum/#!forum/jcabi).
 
 ## How to contribute?
 
