@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2012-2022, jcabi.com
+/*
+ * Copyright (c) 2012-2024, jcabi.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,8 +42,6 @@ import java.util.NoSuchElementException;
 
 /**
  * Iterator for large lists returned by S3.
- * @author Roman Kisilenko (roman.kisilenko@gmail.com)
- * @version $Id$
  * @since 0.10
  */
 class AwsListIterator implements Iterator<String> {
@@ -76,9 +74,9 @@ class AwsListIterator implements Iterator<String> {
 
     /**
      * Constructs AwsListIterator.
-     * @param pfx Key prefix
      * @param rgn Region we're in
      * @param bkt Bucket name
+     * @param pfx Key prefix
      */
     AwsListIterator(final Region rgn, final String bkt,
         final String pfx) {
@@ -115,6 +113,7 @@ class AwsListIterator implements Iterator<String> {
      * Loads next portion of data from S3.
      * @return A list with next portion of data from S3
      */
+    @SuppressWarnings("PMD.GuardLogStatement")
     private List<String> load() {
         try {
             final AmazonS3 aws = this.region.aws();

@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2012-2022, jcabi.com
+/*
+ * Copyright (c) 2012-2024, jcabi.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,8 +48,6 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 /**
  * Mock/fake bucket.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.6
  */
 @Immutable

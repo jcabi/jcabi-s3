@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2012-2022, jcabi.com
+/*
+ * Copyright (c) 2012-2024, jcabi.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,6 @@
  */
 package com.jcabi.s3;
 
-import com.jcabi.aspects.Tv;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -39,10 +38,9 @@ import org.junit.Test;
 /**
  * Integration case for {@link AwsOcket}.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.1
  */
+@SuppressWarnings("PMD.JUnit5TestShouldBePackagePrivate")
 public final class AwsOcketITCase {
 
     /**
@@ -80,7 +78,7 @@ public final class AwsOcketITCase {
         final Bucket bucket = this.rule.bucket();
         final String name = "test-44.txt";
         final Ocket.Text ocket = new Ocket.Text(bucket.ocket(name));
-        final String data = RandomStringUtils.random(Tv.HUNDRED * Tv.THOUSAND);
+        final String data = RandomStringUtils.random(100_000);
         ocket.write(data);
         try {
             MatcherAssert.assertThat(ocket.read(), Matchers.equalTo(data));

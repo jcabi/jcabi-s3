@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2012-2022, jcabi.com
+/*
+ * Copyright (c) 2012-2024, jcabi.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,8 +36,6 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -50,8 +48,6 @@ import lombok.EqualsAndHashCode;
 /**
  * Mock/fake ocket.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.6
  */
 @Immutable
@@ -165,7 +161,7 @@ public final class FkOcket implements Ocket {
 
     @Override
     public void read(final OutputStream output) throws IOException {
-        final InputStream input = new FileInputStream(this.file());
+        final InputStream input = Files.newInputStream(this.file().toPath());
         try {
             while (input.available() > 0) {
                 output.write(input.read());
@@ -181,7 +177,7 @@ public final class FkOcket implements Ocket {
         throws IOException {
         final File file = this.file();
         file.getParentFile().mkdirs();
-        final OutputStream output = new FileOutputStream(file);
+        final OutputStream output = Files.newOutputStream(file.toPath());
         try {
             while (input.available() > 0) {
                 output.write(input.read());

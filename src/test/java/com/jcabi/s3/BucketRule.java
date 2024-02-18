@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2012-2022, jcabi.com
+/*
+ * Copyright (c) 2012-2024, jcabi.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,6 @@
 package com.jcabi.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.jcabi.aspects.Tv;
 import com.jcabi.log.Logger;
 import com.jcabi.s3.cached.CdRegion;
 import com.jcabi.s3.retry.ReRegion;
@@ -43,8 +42,6 @@ import org.junit.runners.model.Statement;
 /**
  * Rule that creates and drops an AWS subj.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.3
  */
 final class BucketRule implements TestRule {
@@ -107,9 +104,10 @@ final class BucketRule implements TestRule {
                 new Region.Simple(BucketRule.KEY, BucketRule.SECRET)
             )
         );
+        // @checkstyle MagicNumberCheck (3 line)
         final String name = String.format(
             "%s.s3.jcabi.com",
-            RandomStringUtils.randomAlphabetic(Tv.FIVE)
+            RandomStringUtils.randomAlphabetic(5)
                 .toLowerCase(Locale.ENGLISH)
         );
         this.subj = region.bucket(name);

@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2012-2022, jcabi.com
+/*
+ * Copyright (c) 2012-2024, jcabi.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,8 +58,6 @@ import lombok.ToString;
  * ocket.write("hello, world!", "text/plain");
  * </pre>
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.1
  */
 @SuppressWarnings("PMD.TooManyMethods")
@@ -119,6 +117,8 @@ public interface Ocket extends Comparable<Ocket> {
 
     /**
      * Unicode text S3 object with supplementary functions.
+     *
+     * @since 0.1
      */
     @ToString
     @EqualsAndHashCode(of = "origin")
@@ -128,6 +128,7 @@ public interface Ocket extends Comparable<Ocket> {
          * Original encapsulated ocket.
          */
         private final transient Ocket origin;
+
         /**
          * Public ctor.
          * @param ocket Original ocket
@@ -135,6 +136,7 @@ public interface Ocket extends Comparable<Ocket> {
         public Text(final Ocket ocket) {
             this.origin = ocket;
         }
+
         /**
          * Read content as string.
          * @return Content
@@ -145,6 +147,7 @@ public interface Ocket extends Comparable<Ocket> {
             this.origin.read(baos);
             return baos.toString(StandardCharsets.UTF_8.name());
         }
+
         /**
          * Write content as string.
          * @param text Text to write
@@ -153,6 +156,7 @@ public interface Ocket extends Comparable<Ocket> {
         public void write(final String text) throws IOException {
             this.write(text, "text/plain");
         }
+
         /**
          * Write content as string, with a specified content type.
          * @param text Text to write
@@ -172,31 +176,38 @@ public interface Ocket extends Comparable<Ocket> {
                 meta
             );
         }
+
         @Override
         public Bucket bucket() {
             return this.origin.bucket();
         }
+
         @Override
         public String key() {
             return this.origin.key();
         }
+
         @Override
         public ObjectMetadata meta() throws IOException {
             return this.origin.meta();
         }
+
         @Override
         public boolean exists() throws IOException {
             return this.origin.exists();
         }
+
         @Override
         public void read(final OutputStream output) throws IOException {
             this.origin.read(output);
         }
+
         @Override
         public void write(final InputStream input, final ObjectMetadata meta)
             throws IOException {
             this.origin.write(input, meta);
         }
+
         @Override
         public int compareTo(final Ocket ocket) {
             return this.origin.compareTo(ocket);
@@ -205,6 +216,8 @@ public interface Ocket extends Comparable<Ocket> {
 
     /**
      * Ocket with no content at all.
+     *
+     * @since 0.1
      */
     @ToString
     @EqualsAndHashCode
@@ -214,30 +227,37 @@ public interface Ocket extends Comparable<Ocket> {
         public Bucket bucket() {
             throw new UnsupportedOperationException("#bucket()");
         }
+
         @Override
         public String key() {
             return "empty";
         }
+
         @Override
         public ObjectMetadata meta() {
             return new ObjectMetadata();
         }
+
         @Override
         public boolean exists() {
             return true;
         }
+
         @Override
         public void read(final OutputStream output) {
             // nothing
         }
+
         @Override
         public void write(final InputStream input, final ObjectMetadata meta) {
             // nothing
         }
+
         @Override
         public int compareTo(final Ocket ocket) {
             return 0;
         }
+
     }
 
 }

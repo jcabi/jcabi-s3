@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2012-2022, jcabi.com
+/*
+ * Copyright (c) 2012-2024, jcabi.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -51,8 +51,6 @@ import lombok.ToString;
  *   );
  * }</pre>
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.1
  */
 @SuppressWarnings("PMD.TooManyMethods")
@@ -124,6 +122,8 @@ public interface Bucket extends Comparable<Bucket> {
      *   ""
      * ); // contains "hello.txt" and "f/2.txt"
      * </pre>
+     *
+     * @since 0.1
      */
     @ToString
     @EqualsAndHashCode(of = { "origin", "prefix" })
@@ -133,10 +133,12 @@ public interface Bucket extends Comparable<Bucket> {
          * Original encapsulated bucket.
          */
         private final transient Bucket origin;
+
         /**
          * Prefix.
          */
         private final transient String prefix;
+
         /**
          * Public ctor.
          * @param bucket Original bucket
@@ -146,26 +148,32 @@ public interface Bucket extends Comparable<Bucket> {
             this.origin = bucket;
             this.prefix = pfx;
         }
+
         @Override
         public Region region() {
             return this.origin.region();
         }
+
         @Override
         public String name() {
             return this.origin.name();
         }
+
         @Override
         public Ocket ocket(final String key) {
             return this.origin.ocket(this.extend(key));
         }
+
         @Override
         public boolean exists() throws IOException {
             return this.origin.exists();
         }
+
         @Override
         public void remove(final String key) throws IOException {
             this.origin.remove(this.extend(key));
         }
+
         @Override
         public Iterable<String> list(final String pfx) throws IOException {
             return Iterables.filter(
@@ -200,6 +208,7 @@ public interface Bucket extends Comparable<Bucket> {
         public int compareTo(final Bucket bucket) {
             return this.origin.compareTo(bucket);
         }
+
         /**
          * Extend name with a prefix.
          * @param name The name to extend

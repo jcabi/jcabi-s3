@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2012-2022, jcabi.com
+/*
+ * Copyright (c) 2012-2024, jcabi.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,12 +54,11 @@ import org.apache.commons.io.input.CountingInputStream;
 /**
  * Amazon S3 bucket.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.1
  */
 @EqualsAndHashCode(of = { "bkt", "name" })
 @Loggable(Loggable.DEBUG)
+@SuppressWarnings("PMD.GuardLogStatement")
 final class AwsOcket implements Ocket {
 
     /**
@@ -134,6 +133,7 @@ final class AwsOcket implements Ocket {
     }
 
     @Override
+    @SuppressWarnings("PMD.GuardLogStatement")
     public boolean exists() throws IOException {
         try {
             final AmazonS3 aws = this.bkt.region().aws();
@@ -165,6 +165,7 @@ final class AwsOcket implements Ocket {
     }
 
     @Override
+    @SuppressWarnings("PMD.GuardLogStatement")
     public void read(final OutputStream output) throws IOException {
         final AmazonS3 aws = this.bkt.region().aws();
         try {
@@ -203,6 +204,7 @@ final class AwsOcket implements Ocket {
     }
 
     @Override
+    @SuppressWarnings("PMD.GuardLogStatement")
     public void write(final InputStream input, final ObjectMetadata meta)
         throws IOException {
         final CountingInputStream cnt = new CountingInputStream(input);

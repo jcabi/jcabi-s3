@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2012-2022, jcabi.com
+/*
+ * Copyright (c) 2012-2024, jcabi.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,8 +41,6 @@ import lombok.EqualsAndHashCode;
 /**
  * Amazon S3 bucket.
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.1
  */
 @EqualsAndHashCode(of = { "regn", "bkt" })
@@ -110,6 +108,7 @@ final class AwsBucket implements Bucket {
     }
 
     @Override
+    @SuppressWarnings("PMD.GuardLogStatement")
     public void remove(final String key) throws IOException {
         try {
             final AmazonS3 aws = this.regn.aws();

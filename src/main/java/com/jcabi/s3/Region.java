@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2012-2022, jcabi.com
+/*
+ * Copyright (c) 2012-2024, jcabi.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,8 +47,6 @@ import lombok.ToString;
  * Bucket bucket = region.bucket("my.example.com");
  * bucket.remove("README.txt");</pre>
  *
- * @author Yegor Bugayenko (yegor256@gmail.com)
- * @version $Id$
  * @since 0.1
  */
 public interface Region {
@@ -68,6 +66,8 @@ public interface Region {
 
     /**
      * Simple implementation.
+     *
+     * @since 0.1
      */
     @ToString
     @EqualsAndHashCode(of = "server")
@@ -77,6 +77,7 @@ public interface Region {
          * AWS.
          */
         private final transient AmazonS3 server;
+
         /**
          * Public ctor.
          * @param key Amazon key
@@ -85,6 +86,7 @@ public interface Region {
         public Simple(final String key, final String secret) {
             this(key, secret, "us-east-1");
         }
+
         /**
          * Public ctor.
          * @param key Amazon key
@@ -104,6 +106,7 @@ public interface Region {
                     .build()
             );
         }
+
         /**
          * Public ctor.
          * @param aws Amazon S3 server
@@ -111,10 +114,12 @@ public interface Region {
         public Simple(final AmazonS3 aws) {
             this.server = aws;
         }
+
         @Override
         public Bucket bucket(final String name) {
             return new AwsBucket(this, name);
         }
+
         @Override
         public AmazonS3 aws() {
             return this.server;
