@@ -1,4 +1,4 @@
-<img src="http://img.jcabi.com/logo-square.png" width="64px" height="64px" />
+# Object-Oriented S3 Adapter for Java
 
 [![EO principles respected here](https://www.elegantobjects.org/badge.svg)](https://www.elegantobjects.org)
 [![Managed by Zerocracy](https://www.0crat.com/badge/C3RUBL5H9.svg)](https://www.0crat.com/p/C3RUBL5H9)
@@ -10,9 +10,11 @@
 [![Javadoc](https://javadoc.io/badge/com.jcabi/jcabi-s3.svg)](http://www.javadoc.io/doc/com.jcabi/jcabi-s3)
 [![codecov](https://codecov.io/gh/jcabi/jcabi-s3/branch/master/graph/badge.svg)](https://codecov.io/gh/jcabi/jcabi-s3)
 
-More details are here: [s3.jcabi.com](http://s3.jcabi.com/index.html).
+More details are here:
+[s3.jcabi.com](http://s3.jcabi.com/index.html).
 
-Also, read this blog post: [Object-Oriented Java Adapter of Amazon S3 SDK](http://www.yegor256.com/2014/05/26/amazon-s3-java-oop-adapter.html).
+Also, read this blog post:
+[Object-Oriented Java Adapter of Amazon S3 SDK][blog].
 
 It's an object layer on top of Amazon S3 SDK:
 
@@ -45,6 +47,8 @@ the `master` branch, if they look correct.
 
 Please run Maven build before submitting a pull request:
 
+```bash
+mvn clean install -Pqulice
 ```
-$ mvn clean install -Pqulice
-```
+
+[blog]: http://www.yegor256.com/2014/05/26/amazon-s3-java-oop-adapter.html
