@@ -9,6 +9,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.jcabi/jcabi-s3/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.jcabi/jcabi-s3)
 [![Javadoc](https://javadoc.io/badge/com.jcabi/jcabi-s3.svg)](http://www.javadoc.io/doc/com.jcabi/jcabi-s3)
 [![codecov](https://codecov.io/gh/jcabi/jcabi-s3/branch/master/graph/badge.svg)](https://codecov.io/gh/jcabi/jcabi-s3)
+[![libs.tech recommends](https://libs.tech/project/14093966/badge.svg)](https://libs.tech/project/14093966/jcabi-s3)
 
 More details are here:
 [s3.jcabi.com](http://s3.jcabi.com/index.html).
