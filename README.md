@@ -2,12 +2,12 @@
 
 [![EO principles respected here](https://www.elegantobjects.org/badge.svg)](https://www.elegantobjects.org)
 [![Managed by Zerocracy](https://www.0crat.com/badge/C3RUBL5H9.svg)](https://www.0crat.com/p/C3RUBL5H9)
-[![DevOps By Rultor.com](http://www.rultor.com/b/jcabi/jcabi-s3)](http://www.rultor.com/p/jcabi/jcabi-s3)
+[![DevOps By Rultor.com](https://www.rultor.com/b/jcabi/jcabi-s3)](https://www.rultor.com/p/jcabi/jcabi-s3)
 
 [![mvn](https://github.com/jcabi/jcabi-s3/actions/workflows/mvn.yml/badge.svg)](https://github.com/jcabi/jcabi-s3/actions/workflows/mvn.yml)
-[![PDD status](http://www.0pdd.com/svg?name=jcabi/jcabi-s3)](http://www.0pdd.com/p?name=jcabi/jcabi-s3)
+[![PDD status](https://www.0pdd.com/svg?name=jcabi/jcabi-s3)](https://www.0pdd.com/p?name=jcabi/jcabi-s3)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.jcabi/jcabi-s3/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.jcabi/jcabi-s3)
-[![Javadoc](https://javadoc.io/badge/com.jcabi/jcabi-s3.svg)](http://www.javadoc.io/doc/com.jcabi/jcabi-s3)
+[![Javadoc](https://javadoc.io/badge/com.jcabi/jcabi-s3.svg)](https://www.javadoc.io/doc/com.jcabi/jcabi-s3)
 [![codecov](https://codecov.io/gh/jcabi/jcabi-s3/branch/master/graph/badge.svg)](https://codecov.io/gh/jcabi/jcabi-s3)
 
 More details are here:
