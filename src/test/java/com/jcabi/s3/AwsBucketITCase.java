@@ -100,7 +100,7 @@ public final class AwsBucketITCase {
      */
     @Test
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public void listsInPrefixedBucketWithouCollisions() throws Exception {
+    public void listsInPrefixedBucketWithoutCollisions() throws Exception {
         final Bucket bucket = this.rule.bucket();
         final String[] names = {"alpha/", "alpha/beta.xml"};
         for (final String name : names) {
