@@ -39,6 +39,7 @@ public final class FkRegionTest {
         final Ocket ocket = bucket.ocket("hello.txt");
         new Ocket.Text(ocket).write("hello, world!");
         MatcherAssert.assertThat(
+            "should contains string",
             new Ocket.Text(bucket.ocket(ocket.key())).read(),
             Matchers.containsString("world!")
         );
