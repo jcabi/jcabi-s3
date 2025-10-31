@@ -143,14 +143,10 @@ final class AwsOcket implements Ocket {
     @SuppressWarnings("PMD.GuardLogStatement")
     public void read(final OutputStream output) throws IOException {
         final AmazonS3 aws = this.bkt.region().aws();
-        try {
+        final S3Object obj = aws.getObject(new GetObjectRequest(this.bkt.name(), this.name));
+        try (InputStream input = obj.getObjectContent()) {
             final long start = System.currentTimeMillis();
-            final S3Object obj = aws.getObject(
-                new GetObjectRequest(this.bkt.name(), this.name)
-            );
-            final InputStream input = obj.getObjectContent();
             final int bytes = IOUtils.copy(input, output);
-            input.close();
             Logger.info(
                 this,
                 // @checkstyle LineLength (1 line)
@@ -182,8 +178,7 @@ final class AwsOcket implements Ocket {
     @SuppressWarnings("PMD.GuardLogStatement")
     public void write(final InputStream input, final ObjectMetadata meta)
         throws IOException {
-        final CountingInputStream cnt = new CountingInputStream(input);
-        try {
+        try (CountingInputStream cnt = new CountingInputStream(input)) {
             final AmazonS3 aws = this.bkt.region().aws();
             final long start = System.currentTimeMillis();
             final TransferManager tmgr = TransferManagerBuilder.standard()
@@ -218,8 +213,6 @@ final class AwsOcket implements Ocket {
                 ),
                 ex
             );
-        } finally {
-            cnt.close();
         }
     }
 
