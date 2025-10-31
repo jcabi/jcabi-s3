@@ -75,7 +75,7 @@ public final class AwsBucketITCase {
         try {
             final String item = "bar/file.txt";
             MatcherAssert.assertThat(
-                "should be in list",
+                "should be exists in list",
                 bkt.list(""),
                 Matchers.allOf(
                     Matchers.<String>iterableWithSize(1),
@@ -83,7 +83,7 @@ public final class AwsBucketITCase {
                 )
             );
             MatcherAssert.assertThat(
-                "should be in list",
+                "should be exists in list",
                 bkt.list("bar/"),
                 Matchers.allOf(
                     Matchers.<String>iterableWithSize(1),
@@ -115,7 +115,7 @@ public final class AwsBucketITCase {
         final Bucket bkt = new Bucket.Prefixed(bucket, names[0]);
         try {
             MatcherAssert.assertThat(
-                "should be in list",
+                "should has item in list",
                 bkt.list(""),
                 Matchers.allOf(
                     Matchers.<String>iterableWithSize(1),
