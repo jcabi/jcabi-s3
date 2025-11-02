@@ -136,14 +136,13 @@ public final class FkOcket implements Ocket {
 
     @Override
     public void read(final OutputStream output) throws IOException {
-        final InputStream input = Files.newInputStream(this.file().toPath());
-        try {
+        try (
+            InputStream input = Files.newInputStream(this.file().toPath());
+            OutputStream ous = output
+        ) {
             while (input.available() > 0) {
-                output.write(input.read());
+                ous.write(input.read());
             }
-        } finally {
-            input.close();
-            output.close();
         }
     }
 
