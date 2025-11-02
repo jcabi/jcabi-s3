@@ -151,14 +151,13 @@ public final class FkOcket implements Ocket {
         throws IOException {
         final File file = this.file();
         file.getParentFile().mkdirs();
-        final OutputStream output = Files.newOutputStream(file.toPath());
-        try {
-            while (input.available() > 0) {
+        try (
+            InputStream ins = input;
+            OutputStream output = Files.newOutputStream(file.toPath())
+        ) {
+            while (ins.available() > 0) {
                 output.write(input.read());
             }
-        } finally {
-            output.close();
-            input.close();
         }
     }
 
