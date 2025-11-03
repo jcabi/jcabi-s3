@@ -37,6 +37,7 @@ public final class AwsBucketITCase {
         new Ocket.Text(bucket.ocket(name)).write("test");
         try {
             MatcherAssert.assertThat(
+                "should be in list",
                 bucket.list(""),
                 Matchers.allOf(
                     Matchers.<String>iterableWithSize(1),
@@ -44,6 +45,7 @@ public final class AwsBucketITCase {
                 )
             );
             MatcherAssert.assertThat(
+                "should be in list",
                 bucket.list("a/"),
                 Matchers.allOf(
                     Matchers.<String>iterableWithSize(1),
@@ -51,6 +53,7 @@ public final class AwsBucketITCase {
                 )
             );
             MatcherAssert.assertThat(
+                "should be empty list",
                 bucket.list("alpha"),
                 Matchers.emptyIterable()
             );
@@ -72,6 +75,7 @@ public final class AwsBucketITCase {
         try {
             final String item = "bar/file.txt";
             MatcherAssert.assertThat(
+                "should be exists in list",
                 bkt.list(""),
                 Matchers.allOf(
                     Matchers.<String>iterableWithSize(1),
@@ -79,6 +83,7 @@ public final class AwsBucketITCase {
                 )
             );
             MatcherAssert.assertThat(
+                "should be exists in list",
                 bkt.list("bar/"),
                 Matchers.allOf(
                     Matchers.<String>iterableWithSize(1),
@@ -86,6 +91,7 @@ public final class AwsBucketITCase {
                 )
             );
             MatcherAssert.assertThat(
+                "should be empty list",
                 bkt.list("foo"),
                 Matchers.emptyIterable()
             );
@@ -100,7 +106,7 @@ public final class AwsBucketITCase {
      */
     @Test
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public void listsInPrefixedBucketWithouCollisions() throws Exception {
+    public void listsInPrefixedBucketWithoutCollisions() throws Exception {
         final Bucket bucket = this.rule.bucket();
         final String[] names = {"alpha/", "alpha/beta.xml"};
         for (final String name : names) {
@@ -109,6 +115,7 @@ public final class AwsBucketITCase {
         final Bucket bkt = new Bucket.Prefixed(bucket, names[0]);
         try {
             MatcherAssert.assertThat(
+                "should has item in list",
                 bkt.list(""),
                 Matchers.allOf(
                     Matchers.<String>iterableWithSize(1),
@@ -130,6 +137,7 @@ public final class AwsBucketITCase {
     public void existsExistingBucket() throws IOException {
         final Bucket bucket = this.rule.bucket();
         MatcherAssert.assertThat(
+            "should be true",
             bucket.exists(),
             Matchers.is(true)
         );
@@ -145,6 +153,7 @@ public final class AwsBucketITCase {
         final AmazonS3 aws = bucket.region().aws();
         aws.deleteBucket(bucket.name());
         MatcherAssert.assertThat(
+            "should be false",
             bucket.exists(),
             Matchers.is(false)
         );

@@ -62,10 +62,12 @@ public final class FkOcketTest {
             this.bucket.ocket(this.write.key())
         ).meta();
         MatcherAssert.assertThat(
+            "should be text/plain content-type",
             metadata.getContentType(),
             Matchers.is("text/plain")
         );
         MatcherAssert.assertThat(
+            "should be equal to content length",
             metadata.getContentLength(),
             Matchers.equalTo((long) text.length())
         );
@@ -81,6 +83,7 @@ public final class FkOcketTest {
             this.bucket.ocket(this.write.key())
         ).meta();
         MatcherAssert.assertThat(
+            "should be not null",
             metadata.getRawMetadataValue(Headers.DATE),
             Matchers.notNullValue()
         );

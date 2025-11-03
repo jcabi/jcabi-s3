@@ -42,6 +42,7 @@ public final class FkBucketTest {
         new Ocket.Text(bucket.ocket("a/b/f/2.txt")).write("");
         new Ocket.Text(bucket.ocket("a/b/c/d/3.txt")).write("");
         MatcherAssert.assertThat(
+            "should has all of items",
             new Bucket.Prefixed(bucket, "a/b").list(""),
             Matchers.allOf(
                 // @checkstyle MagicNumberCheck (1 line)
@@ -65,6 +66,7 @@ public final class FkBucketTest {
         new Ocket.Text(bucket.ocket("1/2/foo.txt")).write("");
         new Ocket.Text(bucket.ocket("1/2/3/foo.txt")).write("");
         MatcherAssert.assertThat(
+            "should be in list",
             new Bucket.Prefixed(bucket, "1/").list(""),
             // @checkstyle MagicNumberCheck (1 line)
             Matchers.<String>iterableWithSize(3)

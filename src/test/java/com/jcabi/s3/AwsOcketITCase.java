@@ -38,7 +38,11 @@ public final class AwsOcketITCase {
         ocket.write(content);
         ocket.write(content);
         try {
-            MatcherAssert.assertThat(ocket.read(), Matchers.equalTo(content));
+            MatcherAssert.assertThat(
+                "should be equal to content",
+                ocket.read(),
+                Matchers.equalTo(content)
+            );
         } finally {
             bucket.remove(name);
         }
@@ -56,7 +60,11 @@ public final class AwsOcketITCase {
         final String data = RandomStringUtils.random(100_000);
         ocket.write(data);
         try {
-            MatcherAssert.assertThat(ocket.read(), Matchers.equalTo(data));
+            MatcherAssert.assertThat(
+                "should be equal to large content",
+                ocket.read(),
+                Matchers.equalTo(data)
+            );
         } finally {
             bucket.remove(name);
         }
@@ -73,10 +81,12 @@ public final class AwsOcketITCase {
         new Ocket.Text(bucket.ocket(name)).write("test me");
         try {
             MatcherAssert.assertThat(
+                "should be true",
                 bucket.ocket(name).exists(),
                 Matchers.is(true)
             );
             MatcherAssert.assertThat(
+                "should be false",
                 bucket.ocket("a/b/ffo/test-2.txt").exists(),
                 Matchers.is(false)
             );

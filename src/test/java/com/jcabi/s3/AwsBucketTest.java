@@ -30,7 +30,7 @@ public final class AwsBucketTest {
         final Region region = Mockito.mock(Region.class);
         final Bucket bucket = new AwsBucket(region, "example.com");
         final Ocket ocket = bucket.ocket("test");
-        MatcherAssert.assertThat(ocket, Matchers.notNullValue());
+        MatcherAssert.assertThat("should be not null", ocket, Matchers.notNullValue());
     }
 
     /**
@@ -46,6 +46,7 @@ public final class AwsBucketTest {
         Mockito.when(aws.doesBucketExistV2(name)).thenReturn(true);
         final Bucket bucket = new AwsBucket(region, name);
         MatcherAssert.assertThat(
+            "should be true",
             bucket.exists(),
             Matchers.is(true)
         );
@@ -64,6 +65,7 @@ public final class AwsBucketTest {
         Mockito.when(aws.doesBucketExistV2(name)).thenReturn(false);
         final Bucket bucket = new AwsBucket(region, name);
         MatcherAssert.assertThat(
+            "should be false",
             bucket.exists(),
             Matchers.is(false)
         );

@@ -51,6 +51,7 @@ public final class AwsOcketTest {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ocket.read(baos);
         MatcherAssert.assertThat(
+            "should be equal to content",
             baos.toString(StandardCharsets.UTF_8.name()),
             Matchers.equalTo(content)
         );
