@@ -11,7 +11,7 @@
     <version>1.41.0</version>
   </parent>
   <artifactId>jcabi-s3</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>jar</packaging>
   <name>jcabi-s3</name>
   <description>Object Layer on top of AWS S3 SDK</description>
