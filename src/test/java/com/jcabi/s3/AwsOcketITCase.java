@@ -7,30 +7,30 @@ package com.jcabi.s3;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 /**
  * Integration case for {@link AwsOcket}.
  *
  * @since 0.1
  */
-@SuppressWarnings("PMD.JUnit5TestShouldBePackagePrivate")
-public final class AwsOcketITCase {
+final class AwsOcketITCase {
 
     /**
      * Bucket we're working with.
      * @checkstyle VisibilityModifier (3 lines)
      */
-    @Rule
-    public final transient BucketRule rule = new BucketRule();
+    @RegisterExtension
+    final transient BucketRule rule = new BucketRule();
 
     /**
      * AwsOcket can read and write S3 content.
      * @throws Exception If fails
      */
     @Test
-    public void readsAndWritesObjectContent() throws Exception {
+    void readsAndWritesObjectContent() throws Exception {
         final Bucket bucket = this.rule.bucket();
         final String name = "a/b/c/test.txt";
         final Ocket.Text ocket = new Ocket.Text(bucket.ocket(name));
@@ -53,7 +53,7 @@ public final class AwsOcketITCase {
      * @throws Exception If fails
      */
     @Test
-    public void readsAndWritesLargeObjectContent() throws Exception {
+    void readsAndWritesLargeObjectContent() throws Exception {
         final Bucket bucket = this.rule.bucket();
         final String name = "test-44.txt";
         final Ocket.Text ocket = new Ocket.Text(bucket.ocket(name));
@@ -75,7 +75,7 @@ public final class AwsOcketITCase {
      * @throws Exception If fails
      */
     @Test
-    public void checksObjectExistenceInBucket() throws Exception {
+    void checksObjectExistenceInBucket() throws Exception {
         final Bucket bucket = this.rule.bucket();
         final String name = "a/b/ffo/test.txt";
         new Ocket.Text(bucket.ocket(name)).write("test me");
@@ -99,10 +99,16 @@ public final class AwsOcketITCase {
      * Region can throw when ocket is absent.
      * @throws Exception If fails
      */
-    @Test(expected = OcketNotFoundException.class)
-    public void throwsWhenObjectIsAbsent() throws Exception {
+    @Test
+    void throwsWhenObjectIsAbsent() throws Exception {
         final Bucket bucket = this.rule.bucket();
-        new Ocket.Text(bucket.ocket("key-is-absent.txt")).read();
+        Assertions.assertThrows(
+            OcketNotFoundException.class,
+            () -> new Ocket.Text(
+                bucket.ocket("key-is-absent.txt")
+            ).read(),
+            "should throw OcketNotFoundException"
+        );
     }
 
 }

@@ -6,12 +6,11 @@ package com.jcabi.s3.fake;
 
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
+import java.io.File;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 /**
@@ -19,46 +18,17 @@ import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
  *
  * @since 0.10.1
  */
-@SuppressWarnings("PMD.JUnit5TestShouldBePackagePrivate")
-public final class FkOcketTest {
+final class FkOcketTest {
 
-    /**
-     * Temp directory.
-     * @checkstyle VisibilityModifierCheck (5 lines)
-     */
-    @Rule
-    public final transient TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * Commonly used bucket.
-     */
-    private transient Bucket bucket;
-
-    /**
-     * Ocket to write in it.
-     */
-    private transient Ocket write;
-
-    /**
-     * Sets up common part of tests.
-     * @throws Exception If fails
-     */
-    @Before
-    public void setUp() throws Exception {
-        this.bucket = new FkRegion(this.temp.newFolder()).bucket("test");
-        this.write = this.bucket.ocket("hello.txt");
-    }
-
-    /**
-     * MkOcket can read Content Type and Length from metadata.
-     * @throws Exception If fails
-     */
     @Test
-    public void readsContentTypeAndLengthFromMetadata() throws Exception {
+    void readsContentTypeAndLengthFromMetadata(@TempDir final File temp)
+        throws Exception {
+        final Bucket bucket = new FkRegion(temp).bucket("test");
+        final Ocket write = bucket.ocket("hello.txt");
         final String text = "hello, world!";
-        new Ocket.Text(this.write).write(text);
+        new Ocket.Text(write).write(text);
         final HeadObjectResponse metadata = new Ocket.Text(
-            this.bucket.ocket(this.write.key())
+            bucket.ocket(write.key())
         ).meta();
         MatcherAssert.assertThat(
             "should be text/plain content-type",
@@ -72,14 +42,12 @@ public final class FkOcketTest {
         );
     }
 
-    /**
-     * MkOcket can read date from metadata.
-     * @throws Exception If fails
-     */
     @Test
-    public void readsDateFromMetadata() throws Exception {
+    void readsDateFromMetadata(@TempDir final File temp) throws Exception {
+        final Bucket bucket = new FkRegion(temp).bucket("test");
+        final Ocket write = bucket.ocket("hello.txt");
         final HeadObjectResponse metadata = new Ocket.Text(
-            this.bucket.ocket(this.write.key())
+            bucket.ocket(write.key())
         ).meta();
         MatcherAssert.assertThat(
             "should be not null",

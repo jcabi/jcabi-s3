@@ -7,8 +7,8 @@ package com.jcabi.s3;
 import java.io.IOException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
 
@@ -17,22 +17,21 @@ import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
  *
  * @since 0.3
  */
-@SuppressWarnings("PMD.JUnit5TestShouldBePackagePrivate")
-public final class AwsBucketITCase {
+final class AwsBucketITCase {
 
     /**
      * Bucket we're working with.
      * @checkstyle VisibilityModifier (3 lines)
      */
-    @Rule
-    public final transient BucketRule rule = new BucketRule();
+    @RegisterExtension
+    final transient BucketRule rule = new BucketRule();
 
     /**
      * AwsBucket can list objects in a bucket.
      * @throws Exception If fails
      */
     @Test
-    public void listsObjectsInBucket() throws Exception {
+    void listsObjectsInBucket() throws Exception {
         final String name = "a/b/test.txt";
         final Bucket bucket = this.rule.bucket();
         new Ocket.Text(bucket.ocket(name)).write("test");
@@ -68,7 +67,7 @@ public final class AwsBucketITCase {
      * @throws Exception If fails
      */
     @Test
-    public void listsObjectsInPrefixedBucket() throws Exception {
+    void listsObjectsInPrefixedBucket() throws Exception {
         final String name = "foo/bar/file.txt";
         final Bucket bucket = this.rule.bucket();
         new Ocket.Text(bucket.ocket(name)).write("hey");
@@ -107,7 +106,7 @@ public final class AwsBucketITCase {
      */
     @Test
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public void listsInPrefixedBucketWithoutCollisions() throws Exception {
+    void listsInPrefixedBucketWithoutCollisions() throws Exception {
         final Bucket bucket = this.rule.bucket();
         final String[] names = {"alpha/", "alpha/beta.xml"};
         for (final String name : names) {
@@ -135,7 +134,7 @@ public final class AwsBucketITCase {
      * @throws IOException If fails
      */
     @Test
-    public void existsExistingBucket() throws IOException {
+    void existsExistingBucket() throws IOException {
         final Bucket bucket = this.rule.bucket();
         MatcherAssert.assertThat(
             "should be true",
@@ -149,7 +148,7 @@ public final class AwsBucketITCase {
      * @throws IOException If fails
      */
     @Test
-    public void existsNonExistingBucket() throws IOException {
+    void existsNonExistingBucket() throws IOException {
         final Bucket bucket = this.rule.bucket();
         final S3Client aws = bucket.region().aws();
         aws.deleteBucket(

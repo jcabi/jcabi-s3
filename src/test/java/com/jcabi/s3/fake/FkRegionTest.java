@@ -7,34 +7,23 @@ package com.jcabi.s3.fake;
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
 import com.jcabi.s3.Region;
+import java.io.File;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test case for {@link FkRegion}.
  *
  * @since 0.8.1
  */
-@SuppressWarnings("PMD.JUnit5TestShouldBePackagePrivate")
-public final class FkRegionTest {
+final class FkRegionTest {
 
-    /**
-     * Temp directory.
-     * @checkstyle VisibilityModifierCheck (5 lines)
-     */
-    @Rule
-    public final transient TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * MkRegion can read/write ocket content.
-     * @throws Exception If fails
-     */
     @Test
-    public void readsWritesContentFromFiles() throws Exception {
-        final Region region = new FkRegion(this.temp.newFolder());
+    void readsWritesContentFromFiles(@TempDir final File temp)
+        throws Exception {
+        final Region region = new FkRegion(temp);
         final Bucket bucket = region.bucket("test");
         final Ocket ocket = bucket.ocket("hello.txt");
         new Ocket.Text(ocket).write("hello, world!");

@@ -9,9 +9,10 @@ import com.jcabi.s3.cached.CdRegion;
 import com.jcabi.s3.retry.ReRegion;
 import java.util.Locale;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
@@ -19,11 +20,11 @@ import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
 import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
 
 /**
- * Rule that creates and drops an AWS subj.
+ * Extension that creates and drops an AWS subj.
  *
  * @since 0.3
  */
-final class BucketRule implements TestRule {
+final class BucketRule implements BeforeEachCallback, AfterEachCallback {
 
     /**
      * AWS key.
@@ -43,26 +44,19 @@ final class BucketRule implements TestRule {
     private transient Bucket subj;
 
     @Override
-    public Statement apply(final Statement stmt, final Description desc) {
-        // @checkstyle IllegalThrows (10 lines)
-        return new Statement() {
-            @Override
-            public void evaluate() throws Throwable {
-                if (BucketRule.KEY == null || BucketRule.KEY.isEmpty()) {
-                    Logger.warn(
-                        this,
-                        "system property failsafe.s3.key is not set, skipping"
-                    );
-                } else {
-                    BucketRule.this.create();
-                    try {
-                        stmt.evaluate();
-                    } finally {
-                        BucketRule.this.drop();
-                    }
-                }
-            }
-        };
+    public void beforeEach(final ExtensionContext ctx) throws Exception {
+        Assumptions.assumeTrue(
+            BucketRule.KEY != null && !BucketRule.KEY.isEmpty(),
+            "system property failsafe.s3.key is not set, skipping"
+        );
+        this.create();
+    }
+
+    @Override
+    public void afterEach(final ExtensionContext ctx) throws Exception {
+        if (this.subj != null) {
+            this.drop();
+        }
     }
 
     /**

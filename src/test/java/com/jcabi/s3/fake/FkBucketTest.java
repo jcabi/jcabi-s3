@@ -7,35 +7,23 @@ package com.jcabi.s3.fake;
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
 import com.jcabi.s3.Region;
+import java.io.File;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test case for {@link FkBucket}.
  *
  * @since 0.8.1
  */
-@SuppressWarnings("PMD.JUnit5TestShouldBePackagePrivate")
-public final class FkBucketTest {
+final class FkBucketTest {
 
-    /**
-     * Temp directory.
-     * @checkstyle VisibilityModifierCheck (5 lines)
-     */
-    @Rule
-    public final transient TemporaryFolder temp = new TemporaryFolder();
-
-    /**
-     * MkBucket can list ockets.
-     * @throws Exception If fails
-     */
     @Test
     @SuppressWarnings("unchecked")
-    public void listsOckets() throws Exception {
-        final Region region = new FkRegion(this.temp.newFolder());
+    void listsOckets(@TempDir final File temp) throws Exception {
+        final Region region = new FkRegion(temp);
         final Bucket bucket = region.bucket("test");
         new Ocket.Text(bucket.ocket("a/first.txt")).write("");
         new Ocket.Text(bucket.ocket("a/b/hello.txt")).write("");
@@ -54,13 +42,10 @@ public final class FkBucketTest {
         );
     }
 
-    /**
-     * MkBucket can list ockets.
-     * @throws Exception If fails
-     */
     @Test
-    public void listsOcketsWithDifferentPrefixes() throws Exception {
-        final Region region = new FkRegion(this.temp.newFolder());
+    void listsOcketsWithDifferentPrefixes(@TempDir final File temp)
+        throws Exception {
+        final Region region = new FkRegion(temp);
         final Bucket bucket = region.bucket("foo");
         new Ocket.Text(bucket.ocket("1/foo.txt")).write("");
         new Ocket.Text(bucket.ocket("1/2/foo.txt")).write("");

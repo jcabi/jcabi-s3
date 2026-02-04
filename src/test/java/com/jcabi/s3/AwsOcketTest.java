@@ -9,7 +9,8 @@ import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -28,15 +29,10 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
  *
  * @since 0.1
  */
-@SuppressWarnings("PMD.JUnit5TestShouldBePackagePrivate")
-public final class AwsOcketTest {
+final class AwsOcketTest {
 
-    /**
-     * AwsOcket can read ocket content.
-     * @throws Exception If fails
-     */
     @Test
-    public void readsContentFromAwsObject() throws Exception {
+    void readsContentFromAwsObject() throws Exception {
         final String content = "some text \u20ac\n\t\rtest";
         final S3Client aws = Mockito.mock(S3Client.class);
         final ResponseInputStream<GetObjectResponse> response =
@@ -64,12 +60,8 @@ public final class AwsOcketTest {
         );
     }
 
-    /**
-     * AwsOcket can write ocket content.
-     * @throws Exception If fails
-     */
     @Test
-    public void writesContentToAwsObject() throws Exception {
+    void writesContentToAwsObject() throws Exception {
         final S3Client aws = Mockito.mock(S3Client.class);
         Mockito.doReturn(
             PutObjectResponse.builder().build()
@@ -93,12 +85,8 @@ public final class AwsOcketTest {
         );
     }
 
-    /**
-     * AwsOcket can throw if object not found.
-     * @throws Exception If fails
-     */
-    @Test(expected = OcketNotFoundException.class)
-    public void throwsWhenObjectNotFound() throws Exception {
+    @Test
+    void throwsWhenObjectNotFound() throws Exception {
         final S3Client aws = Mockito.mock(S3Client.class);
         Mockito.doThrow(
             S3Exception.builder().message("not found").build()
@@ -110,7 +98,11 @@ public final class AwsOcketTest {
         final Bucket bucket = Mockito.mock(Bucket.class);
         Mockito.doReturn(region).when(bucket).region();
         final Ocket ocket = new AwsOcket(bucket, "test-99.txt");
-        ocket.meta();
+        Assertions.assertThrows(
+            OcketNotFoundException.class,
+            ocket::meta,
+            "should throw OcketNotFoundException"
+        );
     }
 
 }
