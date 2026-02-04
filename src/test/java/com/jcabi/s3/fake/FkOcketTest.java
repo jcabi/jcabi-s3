@@ -4,8 +4,6 @@
  */
 package com.jcabi.s3.fake;
 
-import com.amazonaws.services.s3.Headers;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
 import org.hamcrest.MatcherAssert;
@@ -14,6 +12,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 /**
  * Test case for {@link FkOcket}.
@@ -58,17 +57,17 @@ public final class FkOcketTest {
     public void readsContentTypeAndLengthFromMetadata() throws Exception {
         final String text = "hello, world!";
         new Ocket.Text(this.write).write(text);
-        final ObjectMetadata metadata = new Ocket.Text(
+        final HeadObjectResponse metadata = new Ocket.Text(
             this.bucket.ocket(this.write.key())
         ).meta();
         MatcherAssert.assertThat(
             "should be text/plain content-type",
-            metadata.getContentType(),
+            metadata.contentType(),
             Matchers.is("text/plain")
         );
         MatcherAssert.assertThat(
             "should be equal to content length",
-            metadata.getContentLength(),
+            metadata.contentLength(),
             Matchers.equalTo((long) text.length())
         );
     }
@@ -79,12 +78,12 @@ public final class FkOcketTest {
      */
     @Test
     public void readsDateFromMetadata() throws Exception {
-        final ObjectMetadata metadata = new Ocket.Text(
+        final HeadObjectResponse metadata = new Ocket.Text(
             this.bucket.ocket(this.write.key())
         ).meta();
         MatcherAssert.assertThat(
             "should be not null",
-            metadata.getRawMetadataValue(Headers.DATE),
+            metadata.lastModified(),
             Matchers.notNullValue()
         );
     }

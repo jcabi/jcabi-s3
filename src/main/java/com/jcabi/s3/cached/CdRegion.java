@@ -4,12 +4,12 @@
  */
 package com.jcabi.s3.cached;
 
-import com.amazonaws.services.s3.AmazonS3;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Region;
 import lombok.EqualsAndHashCode;
+import software.amazon.awssdk.services.s3.S3Client;
 
 /**
  * Cached region.
@@ -45,7 +45,7 @@ public final class CdRegion implements Region {
     }
 
     @Override
-    public AmazonS3 aws() {
+    public S3Client aws() {
         return this.origin.aws();
     }
 }

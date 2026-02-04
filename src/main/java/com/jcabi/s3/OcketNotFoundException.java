@@ -4,8 +4,8 @@
  */
 package com.jcabi.s3;
 
-import com.amazonaws.services.s3.model.AmazonS3Exception;
 import java.io.IOException;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
 /**
  * When ocket is not found in bucket.
@@ -25,7 +25,7 @@ public class OcketNotFoundException extends IOException {
      * @param cause Cause of it
      */
     public OcketNotFoundException(final String msg,
-        final AmazonS3Exception cause) {
+        final S3Exception cause) {
         super(msg, cause);
     }
 }

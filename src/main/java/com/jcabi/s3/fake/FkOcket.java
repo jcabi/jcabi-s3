@@ -4,8 +4,6 @@
  */
 package com.jcabi.s3.fake;
 
-import com.amazonaws.services.s3.Headers;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.s3.Bucket;
@@ -16,9 +14,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Date;
+import java.time.Instant;
 import javax.activation.MimetypesFileTypeMap;
 import lombok.EqualsAndHashCode;
+import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 /**
  * Mock/fake ocket.
@@ -115,18 +114,14 @@ public final class FkOcket implements Ocket {
     }
 
     @Override
-    public ObjectMetadata meta() {
-        final ObjectMetadata meta = new ObjectMetadata();
-        meta.setContentLength(this.file().length());
+    public HeadObjectResponse meta() {
         final MimetypesFileTypeMap types = new MimetypesFileTypeMap();
-        meta.setContentType(types.getContentType(this.file()));
-        meta.setHeader(Headers.DATE, new Date());
-        meta.setLastModified(new Date(this.file().lastModified()));
-        meta.setCacheControl("");
-        meta.setContentEncoding("UTF-8");
-        meta.setContentMD5("abcdef");
-        meta.setExpirationTime(new Date());
-        return meta;
+        return HeadObjectResponse.builder()
+            .contentLength(this.file().length())
+            .contentType(types.getContentType(this.file()))
+            .lastModified(Instant.ofEpochMilli(this.file().lastModified()))
+            .contentEncoding("UTF-8")
+            .build();
     }
 
     @Override
@@ -147,7 +142,7 @@ public final class FkOcket implements Ocket {
     }
 
     @Override
-    public void write(final InputStream input, final ObjectMetadata meta)
+    public void write(final InputStream input, final HeadObjectResponse meta)
         throws IOException {
         final File file = this.file();
         file.getParentFile().mkdirs();

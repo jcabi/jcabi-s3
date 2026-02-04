@@ -4,13 +4,16 @@
  */
 package com.jcabi.s3;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.services.s3.AmazonS3;
 import java.io.IOException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.mockito.Mockito;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
+import software.amazon.awssdk.services.s3.model.HeadBucketResponse;
+import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
 /**
  * Test case for {@link AwsBucket}.
@@ -40,11 +43,14 @@ public final class AwsBucketTest {
     @Test
     public void existsExistingBucket() throws IOException {
         final Region region = Mockito.mock(Region.class);
-        final AmazonS3 aws = Mockito.mock(AmazonS3.class);
+        final S3Client aws = Mockito.mock(S3Client.class);
         Mockito.when(region.aws()).thenReturn(aws);
-        final String name = "existing.bucket.com";
-        Mockito.when(aws.doesBucketExistV2(name)).thenReturn(true);
-        final Bucket bucket = new AwsBucket(region, name);
+        Mockito.when(
+            aws.headBucket(Mockito.any(HeadBucketRequest.class))
+        ).thenReturn(HeadBucketResponse.builder().build());
+        final Bucket bucket = new AwsBucket(
+            region, "existing.bucket.com"
+        );
         MatcherAssert.assertThat(
             "should be true",
             bucket.exists(),
@@ -59,11 +65,16 @@ public final class AwsBucketTest {
     @Test
     public void existsNonExistingBucket() throws IOException {
         final Region region = Mockito.mock(Region.class);
-        final AmazonS3 aws = Mockito.mock(AmazonS3.class);
+        final S3Client aws = Mockito.mock(S3Client.class);
         Mockito.when(region.aws()).thenReturn(aws);
-        final String name = "non.existing.bucket.com";
-        Mockito.when(aws.doesBucketExistV2(name)).thenReturn(false);
-        final Bucket bucket = new AwsBucket(region, name);
+        Mockito.when(
+            aws.headBucket(Mockito.any(HeadBucketRequest.class))
+        ).thenThrow(
+            NoSuchBucketException.builder().message("no bucket").build()
+        );
+        final Bucket bucket = new AwsBucket(
+            region, "non.existing.bucket.com"
+        );
         MatcherAssert.assertThat(
             "should be false",
             bucket.exists(),
@@ -78,13 +89,16 @@ public final class AwsBucketTest {
     @Test(expected = IOException.class)
     public void existsThrowsIoException() throws IOException {
         final Region region = Mockito.mock(Region.class);
-        final AmazonS3 aws = Mockito.mock(AmazonS3.class);
+        final S3Client aws = Mockito.mock(S3Client.class);
         Mockito.when(region.aws()).thenReturn(aws);
-        final String name = "throwing.bucket.com";
-        Mockito.when(aws.doesBucketExistV2(name)).thenThrow(
-            new AmazonServiceException("Test exception")
+        Mockito.when(
+            aws.headBucket(Mockito.any(HeadBucketRequest.class))
+        ).thenThrow(
+            S3Exception.builder().message("Test exception").build()
         );
-        final Bucket bucket = new AwsBucket(region, name);
+        final Bucket bucket = new AwsBucket(
+            region, "throwing.bucket.com"
+        );
         bucket.exists();
     }
 

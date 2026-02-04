@@ -4,11 +4,12 @@
  */
 package com.jcabi.s3;
 
-import com.amazonaws.services.s3.AmazonS3;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
 
 /**
  * Integration case for {@link Region}.
@@ -32,11 +33,15 @@ public final class RegionITCase {
     @Test
     public void connectsToAmazon() throws Exception {
         final Bucket bucket = this.rule.bucket();
-        final AmazonS3 aws = bucket.region().aws();
+        final S3Client aws = bucket.region().aws();
         MatcherAssert.assertThat(
             "should be true",
-            aws.doesBucketExistV2(bucket.name()),
-            Matchers.is(true)
+            aws.headBucket(
+                HeadBucketRequest.builder()
+                    .bucket(bucket.name())
+                    .build()
+            ),
+            Matchers.notNullValue()
         );
     }
 

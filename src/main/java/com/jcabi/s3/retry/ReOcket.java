@@ -4,7 +4,6 @@
  */
 package com.jcabi.s3.retry;
 
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.aspects.RetryOnFailure;
@@ -14,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import lombok.EqualsAndHashCode;
+import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 /**
  * Ocket that retries a few times before giving up.
@@ -55,7 +55,7 @@ public final class ReOcket implements Ocket {
 
     @Override
     @RetryOnFailure(verbose = false)
-    public ObjectMetadata meta() throws IOException {
+    public HeadObjectResponse meta() throws IOException {
         return this.origin.meta();
     }
 
@@ -73,7 +73,7 @@ public final class ReOcket implements Ocket {
 
     @Override
     @RetryOnFailure(verbose = false)
-    public void write(final InputStream input, final ObjectMetadata meta)
+    public void write(final InputStream input, final HeadObjectResponse meta)
         throws IOException {
         this.origin.write(input, meta);
     }

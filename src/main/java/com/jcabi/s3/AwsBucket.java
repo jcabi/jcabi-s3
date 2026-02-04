@@ -4,14 +4,16 @@
  */
 package com.jcabi.s3;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.util.Iterator;
 import lombok.EqualsAndHashCode;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
+import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
 /**
  * Amazon S3 bucket.
@@ -65,11 +67,15 @@ final class AwsBucket implements Bucket {
 
     @Override
     public boolean exists() throws IOException {
-        final AmazonS3 aws = this.regn.aws();
-        final boolean result;
+        final S3Client aws = this.regn.aws();
+        boolean result = true;
         try {
-            result = aws.doesBucketExistV2(this.bkt);
-        } catch (final AmazonServiceException ex) {
+            aws.headBucket(
+                HeadBucketRequest.builder().bucket(this.bkt).build()
+            );
+        } catch (final NoSuchBucketException ex) {
+            result = false;
+        } catch (final S3Exception ex) {
             throw new IOException(
                 String.format(
                     "failed to check existence of '%s' bucket",
@@ -78,7 +84,9 @@ final class AwsBucket implements Bucket {
                 ex
             );
         }
-        Logger.debug(this, "Does bucket '%s' exist? %b", this.bkt, result);
+        Logger.debug(
+            this, "Does bucket '%s' exist? %b", this.bkt, result
+        );
         return result;
     }
 
@@ -86,15 +94,20 @@ final class AwsBucket implements Bucket {
     @SuppressWarnings("PMD.GuardLogStatement")
     public void remove(final String key) throws IOException {
         try {
-            final AmazonS3 aws = this.regn.aws();
+            final S3Client aws = this.regn.aws();
             final long start = System.currentTimeMillis();
-            aws.deleteObject(new DeleteObjectRequest(this.bkt, key));
+            aws.deleteObject(
+                DeleteObjectRequest.builder()
+                    .bucket(this.bkt)
+                    .key(key)
+                    .build()
+            );
             Logger.info(
                 this,
                 "ocket '%s' removed in bucket '%s' in %[ms]s",
                 key, this.bkt, System.currentTimeMillis() - start
             );
-        } catch (final AmazonServiceException ex) {
+        } catch (final S3Exception ex) {
             throw new IOException(
                 String.format(
                     "failed to remove '%s' bucket",

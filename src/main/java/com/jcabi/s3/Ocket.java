@@ -4,7 +4,6 @@
  */
 package com.jcabi.s3;
 
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.jcabi.aspects.Loggable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,6 +13,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 /**
  * Amazon S3 object abstraction.
@@ -59,7 +59,7 @@ public interface Ocket extends Comparable<Ocket> {
      * @return Metadata
      * @throws IOException If fails
      */
-    ObjectMetadata meta() throws IOException;
+    HeadObjectResponse meta() throws IOException;
 
     /**
      * Check whether this S3 object exists.
@@ -83,11 +83,10 @@ public interface Ocket extends Comparable<Ocket> {
     /**
      * Write new content to the object.
      * @param input Where to get content
-     * @param meta Metadata to save. Should contains input length for large
-     *  object, otherwise multi-part uploads won't be possible.
+     * @param meta Metadata to save
      * @throws IOException If fails
      */
-    void write(InputStream input, ObjectMetadata meta)
+    void write(InputStream input, HeadObjectResponse meta)
         throws IOException;
 
     /**
@@ -140,12 +139,13 @@ public interface Ocket extends Comparable<Ocket> {
          */
         public void write(final String text, final String type)
             throws IOException {
-            final ObjectMetadata meta = new ObjectMetadata();
-            meta.setContentType(type);
-            meta.setContentLength(
-                (long) text.getBytes(StandardCharsets.UTF_8).length
-            );
-            meta.setContentEncoding(StandardCharsets.UTF_8.displayName());
+            final HeadObjectResponse meta = HeadObjectResponse.builder()
+                .contentType(type)
+                .contentLength(
+                    (long) text.getBytes(StandardCharsets.UTF_8).length
+                )
+                .contentEncoding(StandardCharsets.UTF_8.displayName())
+                .build();
             this.origin.write(
                 new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)),
                 meta
@@ -163,7 +163,7 @@ public interface Ocket extends Comparable<Ocket> {
         }
 
         @Override
-        public ObjectMetadata meta() throws IOException {
+        public HeadObjectResponse meta() throws IOException {
             return this.origin.meta();
         }
 
@@ -178,7 +178,8 @@ public interface Ocket extends Comparable<Ocket> {
         }
 
         @Override
-        public void write(final InputStream input, final ObjectMetadata meta)
+        public void write(final InputStream input,
+            final HeadObjectResponse meta)
             throws IOException {
             this.origin.write(input, meta);
         }
@@ -209,8 +210,8 @@ public interface Ocket extends Comparable<Ocket> {
         }
 
         @Override
-        public ObjectMetadata meta() {
-            return new ObjectMetadata();
+        public HeadObjectResponse meta() {
+            return HeadObjectResponse.builder().build();
         }
 
         @Override
@@ -224,7 +225,8 @@ public interface Ocket extends Comparable<Ocket> {
         }
 
         @Override
-        public void write(final InputStream input, final ObjectMetadata meta) {
+        public void write(final InputStream input,
+            final HeadObjectResponse meta) {
             // nothing
         }
 

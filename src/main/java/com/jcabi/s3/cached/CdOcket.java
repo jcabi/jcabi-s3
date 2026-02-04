@@ -4,7 +4,6 @@
  */
 package com.jcabi.s3.cached;
 
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.jcabi.aspects.Cacheable;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
@@ -15,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import lombok.EqualsAndHashCode;
+import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 /**
  * Cached ocket.
@@ -56,7 +56,7 @@ public final class CdOcket implements Ocket {
 
     @Override
     @Cacheable
-    public ObjectMetadata meta() throws IOException {
+    public HeadObjectResponse meta() throws IOException {
         return this.origin.meta();
     }
 
@@ -73,7 +73,7 @@ public final class CdOcket implements Ocket {
 
     @Override
     @Cacheable.FlushAfter
-    public void write(final InputStream input, final ObjectMetadata meta)
+    public void write(final InputStream input, final HeadObjectResponse meta)
         throws IOException {
         this.origin.write(input, meta);
     }

@@ -4,7 +4,6 @@
  */
 package com.jcabi.s3;
 
-import com.amazonaws.services.s3.AmazonS3;
 import com.jcabi.log.Logger;
 import com.jcabi.s3.cached.CdRegion;
 import com.jcabi.s3.retry.ReRegion;
@@ -13,6 +12,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
+import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
+import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
+import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
 
 /**
  * Rule that creates and drops an AWS subj.
@@ -86,8 +90,10 @@ final class BucketRule implements TestRule {
                 .toLowerCase(Locale.ENGLISH)
         );
         this.subj = region.bucket(name);
-        final AmazonS3 aws = this.subj.region().aws();
-        aws.createBucket(name);
+        final S3Client aws = this.subj.region().aws();
+        aws.createBucket(
+            CreateBucketRequest.builder().bucket(name).build()
+        );
         Logger.info(this, "S3 bucket %s created", name);
     }
 
@@ -96,10 +102,23 @@ final class BucketRule implements TestRule {
      * @throws Exception If fails
      */
     private void drop() throws Exception {
-        final AmazonS3 aws = this.subj.region().aws();
-        if (aws.doesBucketExistV2(this.subj.name())) {
-            aws.deleteBucket(this.subj.name());
+        final S3Client aws = this.subj.region().aws();
+        try {
+            aws.headBucket(
+                HeadBucketRequest.builder()
+                    .bucket(this.subj.name())
+                    .build()
+            );
+            aws.deleteBucket(
+                DeleteBucketRequest.builder()
+                    .bucket(this.subj.name())
+                    .build()
+            );
             Logger.info(this, "S3 bucket %s deleted", this.subj.name());
+        } catch (final NoSuchBucketException ex) {
+            Logger.info(
+                this, "S3 bucket %s already gone", this.subj.name()
+            );
         }
     }
 

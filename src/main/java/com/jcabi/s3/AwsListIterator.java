@@ -4,16 +4,16 @@
  */
 package com.jcabi.s3;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ListObjectsRequest;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.jcabi.log.Logger;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
+import software.amazon.awssdk.services.s3.model.S3Exception;
+import software.amazon.awssdk.services.s3.model.S3Object;
 
 /**
  * Iterator for large lists returned by S3.
@@ -42,10 +42,14 @@ class AwsListIterator implements Iterator<String> {
     private transient List<String> partial;
 
     /**
-     * Next marker for partial response or null if response contains no more
-     * data.
+     * Continuation token for next page, or null if no more pages.
      */
-    private transient String marker;
+    private transient String token;
+
+    /**
+     * Whether more pages may be available.
+     */
+    private transient boolean more;
 
     /**
      * Constructs AwsListIterator.
@@ -58,12 +62,13 @@ class AwsListIterator implements Iterator<String> {
         this.prefix = pfx;
         this.region = rgn;
         this.bucket = bkt;
+        this.more = true;
     }
 
     @Override
     public final boolean hasNext() {
         if (this.partial == null || this.partial.isEmpty()
-            && this.marker != null) {
+            && this.more) {
             this.partial = this.load();
         }
         return !this.partial.isEmpty();
@@ -91,28 +96,35 @@ class AwsListIterator implements Iterator<String> {
     @SuppressWarnings("PMD.GuardLogStatement")
     private List<String> load() {
         try {
-            final AmazonS3 aws = this.region.aws();
+            final S3Client aws = this.region.aws();
             final long start = System.currentTimeMillis();
-            final ObjectListing listing = aws.listObjects(
-                new ListObjectsRequest()
-                    .withBucketName(this.bucket)
-                    .withPrefix(this.prefix)
-                    .withMarker(this.marker)
+            final ListObjectsV2Request.Builder req =
+                ListObjectsV2Request.builder()
+                    .bucket(this.bucket)
+                    .prefix(this.prefix);
+            if (this.token != null) {
+                req.continuationToken(this.token);
+            }
+            final ListObjectsV2Response listing = aws.listObjectsV2(
+                req.build()
             );
-            this.marker = listing.getNextMarker();
+            if (listing.isTruncated()) {
+                this.token = listing.nextContinuationToken();
+            } else {
+                this.more = false;
+            }
             final List<String> list = new LinkedList<>();
-            for (final S3ObjectSummary sum
-                : listing.getObjectSummaries()) {
-                list.add(sum.getKey());
+            for (final S3Object sum : listing.contents()) {
+                list.add(sum.key());
             }
             Logger.info(
                 this,
                 "listed %d ocket(s) with prefix '%s' in bucket '%s' in %[ms]s",
-                listing.getObjectSummaries().size(), this.prefix,
+                listing.contents().size(), this.prefix,
                 this.bucket, System.currentTimeMillis() - start
             );
             return list;
-        } catch (final AmazonServiceException ex) {
+        } catch (final S3Exception ex) {
             throw new IllegalStateException(
                 String.format(
                     "failed to load a list of objects in '%s', prefix=%s",

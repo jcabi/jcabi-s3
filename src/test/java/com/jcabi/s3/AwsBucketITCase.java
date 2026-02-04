@@ -4,12 +4,13 @@
  */
 package com.jcabi.s3;
 
-import com.amazonaws.services.s3.AmazonS3;
 import java.io.IOException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
 
 /**
  * Integration case for {@link AwsBucket}.
@@ -150,8 +151,12 @@ public final class AwsBucketITCase {
     @Test
     public void existsNonExistingBucket() throws IOException {
         final Bucket bucket = this.rule.bucket();
-        final AmazonS3 aws = bucket.region().aws();
-        aws.deleteBucket(bucket.name());
+        final S3Client aws = bucket.region().aws();
+        aws.deleteBucket(
+            DeleteBucketRequest.builder()
+                .bucket(bucket.name())
+                .build()
+        );
         MatcherAssert.assertThat(
             "should be false",
             bucket.exists(),

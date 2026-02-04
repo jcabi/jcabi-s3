@@ -4,19 +4,6 @@
  */
 package com.jcabi.s3;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.GetObjectMetadataRequest;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.ListObjectsRequest;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.transfer.TransferManager;
-import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
-import com.amazonaws.services.s3.transfer.Upload;
-import com.amazonaws.services.s3.transfer.model.UploadResult;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.log.Logger;
 import java.io.IOException;
@@ -25,6 +12,18 @@ import java.io.OutputStream;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.CountingInputStream;
+import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
+import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectResponse;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
 /**
  * Amazon S3 bucket.
@@ -72,12 +71,15 @@ final class AwsOcket implements Ocket {
     }
 
     @Override
-    public ObjectMetadata meta() throws IOException {
+    public HeadObjectResponse meta() throws IOException {
         try {
-            final AmazonS3 aws = this.bkt.region().aws();
+            final S3Client aws = this.bkt.region().aws();
             final long start = System.currentTimeMillis();
-            final ObjectMetadata meta = aws.getObjectMetadata(
-                new GetObjectMetadataRequest(this.bkt.name(), this.name)
+            final HeadObjectResponse meta = aws.headObject(
+                HeadObjectRequest.builder()
+                    .bucket(this.bkt.name())
+                    .key(this.name)
+                    .build()
             );
             Logger.info(
                 this,
@@ -85,23 +87,15 @@ final class AwsOcket implements Ocket {
                 "metadata loaded for ocket '%s' in bucket '%s' in %[ms]s (etag=%s)",
                 this.name, this.bkt.name(),
                 System.currentTimeMillis() - start,
-                meta.getETag()
+                meta.eTag()
             );
             return meta;
-        } catch (final AmazonS3Exception ex) {
+        } catch (final S3Exception ex) {
             throw new OcketNotFoundException(
                 String.format(
                     "ocket '%s' not found in '%s', can't fetch meta()",
                     this.name, this.bkt.name()
                 ),
-                ex
-            );
-        } catch (final AmazonServiceException ex) {
-            throw new IOException(
-                String.format(
-                    "failed to fetch meta of '%s' in '%s'",
-                    this.name, this.bkt
-                    ),
                 ex
             );
         }
@@ -111,15 +105,16 @@ final class AwsOcket implements Ocket {
     @SuppressWarnings("PMD.GuardLogStatement")
     public boolean exists() throws IOException {
         try {
-            final AmazonS3 aws = this.bkt.region().aws();
+            final S3Client aws = this.bkt.region().aws();
             final long start = System.currentTimeMillis();
-            final ObjectListing listing = aws.listObjects(
-                new ListObjectsRequest()
-                    .withBucketName(this.bkt.name())
-                    .withPrefix(this.name)
-                    .withMaxKeys(1)
+            final ListObjectsV2Response listing = aws.listObjectsV2(
+                ListObjectsV2Request.builder()
+                    .bucket(this.bkt.name())
+                    .prefix(this.name)
+                    .maxKeys(1)
+                    .build()
             );
-            final boolean exists = !listing.getObjectSummaries().isEmpty();
+            final boolean exists = !listing.contents().isEmpty();
             Logger.info(
                 this,
                 "ocket '%s' existence checked in bucket '%s' in %[ms]s (%b)",
@@ -128,7 +123,7 @@ final class AwsOcket implements Ocket {
                 exists
             );
             return exists;
-        } catch (final AmazonServiceException ex) {
+        } catch (final S3Exception ex) {
             throw new IOException(
                 String.format(
                     "failed to check existence of '%s' in '%s'",
@@ -142,32 +137,31 @@ final class AwsOcket implements Ocket {
     @Override
     @SuppressWarnings("PMD.GuardLogStatement")
     public void read(final OutputStream output) throws IOException {
-        final AmazonS3 aws = this.bkt.region().aws();
-        final S3Object obj = aws.getObject(new GetObjectRequest(this.bkt.name(), this.name));
-        try (InputStream input = obj.getObjectContent()) {
-            final long start = System.currentTimeMillis();
-            final int bytes = IOUtils.copy(input, output);
-            Logger.info(
-                this,
-                // @checkstyle LineLength (1 line)
-                "loaded %d byte(s) from ocket '%s' in bucket '%s' in %[ms]s (etag=%s)",
-                bytes, this.name, this.bkt.name(),
-                System.currentTimeMillis() - start,
-                obj.getObjectMetadata().getETag()
+        try {
+            final S3Client aws = this.bkt.region().aws();
+            final ResponseInputStream<GetObjectResponse> obj = aws.getObject(
+                GetObjectRequest.builder()
+                    .bucket(this.bkt.name())
+                    .key(this.name)
+                    .build()
             );
-        } catch (final AmazonS3Exception ex) {
+            try (InputStream input = obj) {
+                final long start = System.currentTimeMillis();
+                final int bytes = IOUtils.copy(input, output);
+                Logger.info(
+                    this,
+                    // @checkstyle LineLength (1 line)
+                    "loaded %d byte(s) from ocket '%s' in bucket '%s' in %[ms]s (etag=%s)",
+                    bytes, this.name, this.bkt.name(),
+                    System.currentTimeMillis() - start,
+                    obj.response().eTag()
+                );
+            }
+        } catch (final S3Exception ex) {
             throw new OcketNotFoundException(
                 String.format(
                     "ocket '%s' not found in '%s'",
                     this.name, this.bkt.name()
-                ),
-                ex
-            );
-        } catch (final AmazonServiceException ex) {
-            throw new IOException(
-                String.format(
-                    "failed to read the content of '%s' in '%s'",
-                    this.name, this.bkt
                 ),
                 ex
             );
@@ -176,39 +170,45 @@ final class AwsOcket implements Ocket {
 
     @Override
     @SuppressWarnings("PMD.GuardLogStatement")
-    public void write(final InputStream input, final ObjectMetadata meta)
+    public void write(final InputStream input, final HeadObjectResponse meta)
         throws IOException {
         try (CountingInputStream cnt = new CountingInputStream(input)) {
-            final AmazonS3 aws = this.bkt.region().aws();
+            final S3Client aws = this.bkt.region().aws();
             final long start = System.currentTimeMillis();
-            final TransferManager tmgr = TransferManagerBuilder.standard()
-                .withS3Client(aws).build();
-            final Upload upload = tmgr.upload(
-                this.bkt.name(), this.name, cnt, meta
-            );
-            final UploadResult result = upload.waitForUploadResult();
+            final PutObjectRequest.Builder req = PutObjectRequest.builder()
+                .bucket(this.bkt.name())
+                .key(this.name);
+            if (meta.contentType() != null) {
+                req.contentType(meta.contentType());
+            }
+            if (meta.contentEncoding() != null) {
+                req.contentEncoding(meta.contentEncoding());
+            }
+            final PutObjectResponse result;
+            if (meta.contentLength() != null && meta.contentLength() > 0L) {
+                result = aws.putObject(
+                    req.contentLength(meta.contentLength()).build(),
+                    RequestBody.fromInputStream(cnt, meta.contentLength())
+                );
+            } else {
+                final byte[] bytes = IOUtils.toByteArray(cnt);
+                result = aws.putObject(
+                    req.contentLength((long) bytes.length).build(),
+                    RequestBody.fromBytes(bytes)
+                );
+            }
             Logger.info(
                 this,
                 // @checkstyle LineLength (1 line)
                 "saved %d byte(s) to ocket '%s' in bucket '%s' in %[ms]s (etag=%s)",
                 cnt.getByteCount(), this.name, this.bkt.name(),
                 System.currentTimeMillis() - start,
-                result.getETag()
+                result.eTag()
             );
-            tmgr.shutdownNow(false);
-        } catch (final AmazonServiceException ex) {
+        } catch (final S3Exception ex) {
             throw new IOException(
                 String.format(
                     "failed to write content to '%s' in '%s'",
-                    this.name, this.bkt
-                ),
-                ex
-            );
-        } catch (final InterruptedException ex) {
-            Thread.currentThread().interrupt();
-            throw new IOException(
-                String.format(
-                    "writing to '%s' in '%s' interrupted",
                     this.name, this.bkt
                 ),
                 ex

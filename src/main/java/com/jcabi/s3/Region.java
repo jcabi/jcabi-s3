@@ -4,13 +4,12 @@
  */
 package com.jcabi.s3;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.jcabi.aspects.Loggable;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.services.s3.S3Client;
 
 /**
  * Amazon S3 abstraction.
@@ -37,7 +36,7 @@ public interface Region {
      * Get a client.
      * @return Amazon S3
      */
-    AmazonS3 aws();
+    S3Client aws();
 
     /**
      * Simple implementation.
@@ -51,7 +50,7 @@ public interface Region {
         /**
          * AWS.
          */
-        private final transient AmazonS3 server;
+        private final transient S3Client server;
 
         /**
          * Public ctor.
@@ -71,11 +70,13 @@ public interface Region {
         public Simple(final String key, final String secret,
             final String region) {
             this(
-                AmazonS3ClientBuilder.standard()
-                    .withRegion(region)
-                    .withCredentials(
-                        new AWSStaticCredentialsProvider(
-                            new BasicAWSCredentials(key, secret)
+                S3Client.builder()
+                    .region(
+                        software.amazon.awssdk.regions.Region.of(region)
+                    )
+                    .credentialsProvider(
+                        StaticCredentialsProvider.create(
+                            AwsBasicCredentials.create(key, secret)
                         )
                     )
                     .build()
@@ -86,7 +87,7 @@ public interface Region {
          * Public ctor.
          * @param aws Amazon S3 server
          */
-        public Simple(final AmazonS3 aws) {
+        public Simple(final S3Client aws) {
             this.server = aws;
         }
 
@@ -96,7 +97,7 @@ public interface Region {
         }
 
         @Override
-        public AmazonS3 aws() {
+        public S3Client aws() {
             return this.server;
         }
     }

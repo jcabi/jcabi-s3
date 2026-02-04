@@ -4,22 +4,24 @@
  */
 package com.jcabi.s3;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.GetObjectMetadataRequest;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
-import com.amazonaws.services.s3.model.S3Object;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
-import org.apache.commons.io.IOUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.mockito.Mockito;
+import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.http.AbortableInputStream;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
+import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectResponse;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
 /**
  * Test case for {@link AwsOcket}.
@@ -36,12 +38,17 @@ public final class AwsOcketTest {
     @Test
     public void readsContentFromAwsObject() throws Exception {
         final String content = "some text \u20ac\n\t\rtest";
-        final S3Object object = new S3Object();
-        object.setObjectContent(
-            IOUtils.toInputStream(content, StandardCharsets.UTF_8)
-        );
-        final AmazonS3 aws = Mockito.mock(AmazonS3.class);
-        Mockito.doReturn(object).when(aws)
+        final S3Client aws = Mockito.mock(S3Client.class);
+        final ResponseInputStream<GetObjectResponse> response =
+            new ResponseInputStream<>(
+                GetObjectResponse.builder().eTag("test-etag").build(),
+                AbortableInputStream.create(
+                    new ByteArrayInputStream(
+                        content.getBytes(StandardCharsets.UTF_8)
+                    )
+                )
+            );
+        Mockito.doReturn(response).when(aws)
             .getObject(Mockito.any(GetObjectRequest.class));
         final Region region = Mockito.mock(Region.class);
         Mockito.doReturn(aws).when(region).aws();
@@ -63,9 +70,12 @@ public final class AwsOcketTest {
      */
     @Test
     public void writesContentToAwsObject() throws Exception {
-        final AmazonS3 aws = Mockito.mock(AmazonS3.class);
-        Mockito.doReturn(new PutObjectResult()).when(aws).putObject(
-            Mockito.any(PutObjectRequest.class)
+        final S3Client aws = Mockito.mock(S3Client.class);
+        Mockito.doReturn(
+            PutObjectResponse.builder().build()
+        ).when(aws).putObject(
+            Mockito.any(PutObjectRequest.class),
+            Mockito.any(RequestBody.class)
         );
         final Region region = Mockito.mock(Region.class);
         Mockito.doReturn(aws).when(region).aws();
@@ -75,9 +85,12 @@ public final class AwsOcketTest {
         final String content = "text \u20ac\n\t\rtest";
         ocket.write(
             new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)),
-            new ObjectMetadata()
+            HeadObjectResponse.builder().build()
         );
-        Mockito.verify(aws).putObject(Mockito.any(PutObjectRequest.class));
+        Mockito.verify(aws).putObject(
+            Mockito.any(PutObjectRequest.class),
+            Mockito.any(RequestBody.class)
+        );
     }
 
     /**
@@ -86,9 +99,11 @@ public final class AwsOcketTest {
      */
     @Test(expected = OcketNotFoundException.class)
     public void throwsWhenObjectNotFound() throws Exception {
-        final AmazonS3 aws = Mockito.mock(AmazonS3.class);
-        Mockito.doThrow(new AmazonS3Exception("")).when(aws).getObjectMetadata(
-            Mockito.any(GetObjectMetadataRequest.class)
+        final S3Client aws = Mockito.mock(S3Client.class);
+        Mockito.doThrow(
+            S3Exception.builder().message("not found").build()
+        ).when(aws).headObject(
+            Mockito.any(HeadObjectRequest.class)
         );
         final Region region = Mockito.mock(Region.class);
         Mockito.doReturn(aws).when(region).aws();

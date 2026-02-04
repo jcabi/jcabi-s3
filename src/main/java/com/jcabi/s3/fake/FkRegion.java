@@ -4,7 +4,6 @@
  */
 package com.jcabi.s3.fake;
 
-import com.amazonaws.services.s3.AmazonS3;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.s3.Bucket;
@@ -14,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import lombok.EqualsAndHashCode;
+import software.amazon.awssdk.services.s3.S3Client;
 
 /**
  * Mock/fake region.
@@ -77,7 +77,7 @@ public final class FkRegion implements Region {
     }
 
     @Override
-    public AmazonS3 aws() {
+    public S3Client aws() {
         throw new UnsupportedOperationException("#aws()");
     }
 
