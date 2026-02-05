@@ -8,8 +8,10 @@ import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
 import com.jcabi.s3.Region;
 import java.io.File;
+import java.util.UUID;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -31,6 +33,25 @@ final class FkRegionTest {
             "should contains string",
             new Ocket.Text(bucket.ocket(ocket.key())).read(),
             Matchers.containsString("world!")
+        );
+    }
+
+    @Test
+    void throwsOnAwsAccess(@TempDir final File temp) {
+        Assertions.assertThrows(
+            UnsupportedOperationException.class,
+            () -> new FkRegion(temp).aws(),
+            "aws() did not throw"
+        );
+    }
+
+    @Test
+    void returnsBucketByName(@TempDir final File temp) {
+        final String name = UUID.randomUUID().toString();
+        MatcherAssert.assertThat(
+            "bucket was not returned",
+            new FkRegion(temp).bucket(name),
+            Matchers.notNullValue()
         );
     }
 

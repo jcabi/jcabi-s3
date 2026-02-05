@@ -8,6 +8,7 @@ import com.jcabi.s3.Bucket;
 import com.jcabi.s3.Ocket;
 import com.jcabi.s3.Region;
 import java.io.File;
+import java.util.UUID;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -55,6 +56,76 @@ final class FkBucketTest {
             new Bucket.Prefixed(bucket, "1/").list(""),
             // @checkstyle MagicNumberCheck (1 line)
             Matchers.<String>iterableWithSize(3)
+        );
+    }
+
+    @Test
+    void removesExistingOcket(@TempDir final File temp) throws Exception {
+        final String name = UUID.randomUUID().toString();
+        final Bucket bucket = new FkRegion(temp).bucket(name);
+        final String key = String.format("%s.txt", UUID.randomUUID());
+        new Ocket.Text(bucket.ocket(key)).write(
+            UUID.randomUUID().toString()
+        );
+        bucket.remove(key);
+        MatcherAssert.assertThat(
+            "ocket was not removed",
+            bucket.ocket(key).exists(),
+            Matchers.is(false)
+        );
+    }
+
+    @Test
+    void reportsThatBucketExists(@TempDir final File temp) {
+        MatcherAssert.assertThat(
+            "bucket did not report existence",
+            new FkBucket(temp, UUID.randomUUID().toString()).exists(),
+            Matchers.is(true)
+        );
+    }
+
+    @Test
+    void comparesWithAnotherBucket(@TempDir final File temp) {
+        final FkBucket first = new FkBucket(
+            temp, String.format("aaa-%s", UUID.randomUUID())
+        );
+        final FkBucket second = new FkBucket(
+            temp, String.format("zzz-%s", UUID.randomUUID())
+        );
+        MatcherAssert.assertThat(
+            "comparison did not return negative for earlier name",
+            first.compareTo(second),
+            Matchers.lessThan(0)
+        );
+    }
+
+    @Test
+    void returnsRegion(@TempDir final File temp) {
+        MatcherAssert.assertThat(
+            "region was not returned",
+            new FkBucket(temp, UUID.randomUUID().toString()).region(),
+            Matchers.notNullValue()
+        );
+    }
+
+    @Test
+    void returnsName(@TempDir final File temp) {
+        final String name = UUID.randomUUID().toString();
+        MatcherAssert.assertThat(
+            "name was not returned correctly",
+            new FkBucket(temp, name).name(),
+            Matchers.equalTo(name)
+        );
+    }
+
+    @Test
+    void createsOcketByKey(@TempDir final File temp) {
+        MatcherAssert.assertThat(
+            "ocket was not created",
+            new FkBucket(
+                temp, UUID.randomUUID().toString()
+            ).ocket(UUID.randomUUID().toString()),
+            Matchers.notNullValue()
         );
     }
 

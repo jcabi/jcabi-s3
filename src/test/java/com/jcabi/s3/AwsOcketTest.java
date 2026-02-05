@@ -6,7 +6,10 @@ package com.jcabi.s3;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.UUID;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -20,9 +23,12 @@ import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
 import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import software.amazon.awssdk.services.s3.model.S3Exception;
+import software.amazon.awssdk.services.s3.model.S3Object;
 
 /**
  * Test case for {@link AwsOcket}.
@@ -102,6 +108,155 @@ final class AwsOcketTest {
             OcketNotFoundException.class,
             ocket::meta,
             "should throw OcketNotFoundException"
+        );
+    }
+
+    @Test
+    void existsForExistingObject() throws Exception {
+        final S3Client aws = Mockito.mock(S3Client.class);
+        Mockito.when(
+            aws.listObjectsV2(Mockito.any(ListObjectsV2Request.class))
+        ).thenReturn(
+            ListObjectsV2Response.builder()
+                .contents(
+                    S3Object.builder()
+                        .key(UUID.randomUUID().toString())
+                        .build()
+                ).build()
+        );
+        final Region region = Mockito.mock(Region.class);
+        Mockito.doReturn(aws).when(region).aws();
+        final Bucket bucket = Mockito.mock(Bucket.class);
+        Mockito.doReturn(region).when(bucket).region();
+        Mockito.doReturn(UUID.randomUUID().toString()).when(bucket).name();
+        MatcherAssert.assertThat(
+            "existing object was not reported as existing",
+            new AwsOcket(bucket, UUID.randomUUID().toString()).exists(),
+            Matchers.is(true)
+        );
+    }
+
+    @Test
+    void doesntExistForAbsentObject() throws Exception {
+        final S3Client aws = Mockito.mock(S3Client.class);
+        Mockito.when(
+            aws.listObjectsV2(Mockito.any(ListObjectsV2Request.class))
+        ).thenReturn(
+            ListObjectsV2Response.builder()
+                .contents(Collections.emptyList())
+                .build()
+        );
+        final Region region = Mockito.mock(Region.class);
+        Mockito.doReturn(aws).when(region).aws();
+        final Bucket bucket = Mockito.mock(Bucket.class);
+        Mockito.doReturn(region).when(bucket).region();
+        Mockito.doReturn(UUID.randomUUID().toString()).when(bucket).name();
+        MatcherAssert.assertThat(
+            "non-existing object was reported as existing",
+            new AwsOcket(bucket, UUID.randomUUID().toString()).exists(),
+            Matchers.is(false)
+        );
+    }
+
+    @Test
+    void throwsOnExistsWhenAwsFails() {
+        final S3Client aws = Mockito.mock(S3Client.class);
+        Mockito.when(
+            aws.listObjectsV2(Mockito.any(ListObjectsV2Request.class))
+        ).thenThrow(
+            S3Exception.builder().message("access denied").build()
+        );
+        final Region region = Mockito.mock(Region.class);
+        Mockito.doReturn(aws).when(region).aws();
+        final Bucket bucket = Mockito.mock(Bucket.class);
+        Mockito.doReturn(region).when(bucket).region();
+        Mockito.doReturn(UUID.randomUUID().toString()).when(bucket).name();
+        Assertions.assertThrows(
+            IOException.class,
+            () -> new AwsOcket(
+                bucket, UUID.randomUUID().toString()
+            ).exists(),
+            "exists did not throw IOException on S3 failure"
+        );
+    }
+
+    @Test
+    void writesContentWithKnownLength() throws Exception {
+        final S3Client aws = Mockito.mock(S3Client.class);
+        Mockito.doReturn(
+            PutObjectResponse.builder().build()
+        ).when(aws).putObject(
+            Mockito.any(PutObjectRequest.class),
+            Mockito.any(RequestBody.class)
+        );
+        final Region region = Mockito.mock(Region.class);
+        Mockito.doReturn(aws).when(region).aws();
+        final Bucket bucket = Mockito.mock(Bucket.class);
+        Mockito.doReturn(region).when(bucket).region();
+        Mockito.doReturn(UUID.randomUUID().toString()).when(bucket).name();
+        final String content = UUID.randomUUID().toString();
+        final byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
+        new AwsOcket(bucket, UUID.randomUUID().toString()).write(
+            new ByteArrayInputStream(bytes),
+            HeadObjectResponse.builder()
+                .contentType("text/plain")
+                .contentLength((long) bytes.length)
+                .contentEncoding("UTF-8")
+                .build()
+        );
+        Mockito.verify(aws).putObject(
+            Mockito.any(PutObjectRequest.class),
+            Mockito.any(RequestBody.class)
+        );
+    }
+
+    @Test
+    void throwsOnWriteWhenAwsFails() {
+        final S3Client aws = Mockito.mock(S3Client.class);
+        Mockito.doThrow(
+            S3Exception.builder().message("write failed").build()
+        ).when(aws).putObject(
+            Mockito.any(PutObjectRequest.class),
+            Mockito.any(RequestBody.class)
+        );
+        final Region region = Mockito.mock(Region.class);
+        Mockito.doReturn(aws).when(region).aws();
+        final Bucket bucket = Mockito.mock(Bucket.class);
+        Mockito.doReturn(region).when(bucket).region();
+        Mockito.doReturn(UUID.randomUUID().toString()).when(bucket).name();
+        final Ocket ocket = new AwsOcket(
+            bucket, UUID.randomUUID().toString()
+        );
+        Assertions.assertThrows(
+            IOException.class,
+            () -> ocket.write(
+                new ByteArrayInputStream(new byte[0]),
+                HeadObjectResponse.builder().build()
+            ),
+            "write did not throw IOException on S3 failure"
+        );
+    }
+
+    @Test
+    void throwsOnReadWhenAwsFails() {
+        final S3Client aws = Mockito.mock(S3Client.class);
+        Mockito.doThrow(
+            S3Exception.builder().message("read failed").build()
+        ).when(aws).getObject(
+            Mockito.any(GetObjectRequest.class)
+        );
+        final Region region = Mockito.mock(Region.class);
+        Mockito.doReturn(aws).when(region).aws();
+        final Bucket bucket = Mockito.mock(Bucket.class);
+        Mockito.doReturn(region).when(bucket).region();
+        Mockito.doReturn(UUID.randomUUID().toString()).when(bucket).name();
+        final Ocket ocket = new AwsOcket(
+            bucket, UUID.randomUUID().toString()
+        );
+        Assertions.assertThrows(
+            OcketNotFoundException.class,
+            () -> ocket.read(new ByteArrayOutputStream()),
+            "read did not throw when S3 object is missing"
         );
     }
 

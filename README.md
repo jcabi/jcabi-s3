@@ -1,7 +1,6 @@
 # Object-Oriented S3 Adapter for Java
 
 [![EO principles respected here](https://www.elegantobjects.org/badge.svg)](https://www.elegantobjects.org)
-[![Managed by Zerocracy](https://www.0crat.com/badge/C3RUBL5H9.svg)](https://www.0crat.com/p/C3RUBL5H9)
 [![DevOps By Rultor.com](https://www.rultor.com/b/jcabi/jcabi-s3)](https://www.rultor.com/p/jcabi/jcabi-s3)
 
 [![mvn](https://github.com/jcabi/jcabi-s3/actions/workflows/mvn.yml/badge.svg)](https://github.com/jcabi/jcabi-s3/actions/workflows/mvn.yml)
