@@ -80,7 +80,7 @@ final class BucketRule implements BeforeEachCallback, AfterEachCallback {
         // @checkstyle MagicNumberCheck (3 line)
         final String name = String.format(
             "%s.s3.jcabi.com",
-            RandomStringUtils.randomAlphabetic(5)
+            RandomStringUtils.secure().nextAlphabetic(5)
                 .toLowerCase(Locale.ENGLISH)
         );
         this.subj = region.bucket(name);

@@ -57,7 +57,7 @@ final class AwsOcketITCase {
         final Bucket bucket = this.rule.bucket();
         final String name = "test-44.txt";
         final Ocket.Text ocket = new Ocket.Text(bucket.ocket(name));
-        final String data = RandomStringUtils.random(100_000);
+        final String data = RandomStringUtils.secure().next(100_000);
         ocket.write(data);
         try {
             MatcherAssert.assertThat(

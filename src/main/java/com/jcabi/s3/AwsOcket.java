@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.input.CountingInputStream;
+import org.apache.commons.io.input.BoundedInputStream;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -172,7 +172,8 @@ final class AwsOcket implements Ocket {
     @SuppressWarnings("PMD.GuardLogStatement")
     public void write(final InputStream input, final HeadObjectResponse meta)
         throws IOException {
-        try (CountingInputStream cnt = new CountingInputStream(input)) {
+        try (BoundedInputStream cnt = BoundedInputStream.builder()
+            .setInputStream(input).get()) {
             final S3Client aws = this.bkt.region().aws();
             final long start = System.currentTimeMillis();
             final PutObjectRequest.Builder req = PutObjectRequest.builder()
@@ -201,7 +202,7 @@ final class AwsOcket implements Ocket {
                 this,
                 // @checkstyle LineLength (1 line)
                 "saved %d byte(s) to ocket '%s' in bucket '%s' in %[ms]s (etag=%s)",
-                cnt.getByteCount(), this.name, this.bkt.name(),
+                cnt.getCount(), this.name, this.bkt.name(),
                 System.currentTimeMillis() - start,
                 result.eTag()
             );
