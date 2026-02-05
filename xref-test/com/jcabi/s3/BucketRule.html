@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>          <em class="jxr_comment">// @checkstyle MagicNumberCheck (3 line)</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>          <strong class="jxr_keyword">final</strong> String name = String.format(
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>              <span class="jxr_string">"%s.s3.jcabi.com"</span>,
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>              RandomStringUtils.randomAlphabetic(5)
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>              RandomStringUtils.secure().nextAlphabetic(5)
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>                  .toLowerCase(Locale.ENGLISH)
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>          );
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          <strong class="jxr_keyword">this</strong>.subj = region.bucket(name);
