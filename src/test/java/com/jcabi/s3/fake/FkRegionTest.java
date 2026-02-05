@@ -47,10 +47,9 @@ final class FkRegionTest {
 
     @Test
     void returnsBucketByName(@TempDir final File temp) {
-        final String name = UUID.randomUUID().toString();
         MatcherAssert.assertThat(
             "bucket was not returned",
-            new FkRegion(temp).bucket(name),
+            new FkRegion(temp).bucket(UUID.randomUUID().toString()),
             Matchers.notNullValue()
         );
     }

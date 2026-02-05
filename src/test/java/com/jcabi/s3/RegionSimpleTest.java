@@ -20,11 +20,12 @@ final class RegionSimpleTest {
 
     @Test
     void returnsBucketByName() {
-        final S3Client aws = Mockito.mock(S3Client.class);
         final String name = UUID.randomUUID().toString();
         MatcherAssert.assertThat(
             "bucket name did not match the requested name",
-            new Region.Simple(aws).bucket(name).name(),
+            new Region.Simple(
+                Mockito.mock(S3Client.class)
+            ).bucket(name).name(),
             Matchers.equalTo(name)
         );
     }
@@ -41,35 +42,34 @@ final class RegionSimpleTest {
 
     @Test
     void createsRegionWithCredentials() {
-        final Region region = new Region.Simple(
-            UUID.randomUUID().toString(),
-            UUID.randomUUID().toString()
-        );
         MatcherAssert.assertThat(
             "region was not created from credentials",
-            region.aws(),
+            new Region.Simple(
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString()
+            ).aws(),
             Matchers.notNullValue()
         );
     }
 
     @Test
     void createsRegionWithCustomRegion() {
-        final Region region = new Region.Simple(
-            UUID.randomUUID().toString(),
-            UUID.randomUUID().toString(),
-            "eu-west-1"
-        );
         MatcherAssert.assertThat(
             "region was not created with custom AWS region",
-            region.aws(),
+            new Region.Simple(
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                "eu-west-1"
+            ).aws(),
             Matchers.notNullValue()
         );
     }
 
     @Test
     void returnsBucketBoundToItself() {
-        final S3Client aws = Mockito.mock(S3Client.class);
-        final Region region = new Region.Simple(aws);
+        final Region region = new Region.Simple(
+            Mockito.mock(S3Client.class)
+        );
         MatcherAssert.assertThat(
             "bucket region did not match the originating region",
             region.bucket(UUID.randomUUID().toString()).region(),

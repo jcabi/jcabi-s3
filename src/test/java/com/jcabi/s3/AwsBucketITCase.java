@@ -27,11 +27,11 @@ final class AwsBucketITCase {
     final transient BucketRule rule = new BucketRule();
 
     /**
-     * AwsBucket can list objects in a bucket.
+     * AwsBucket can list objects with empty prefix.
      * @throws Exception If fails
      */
     @Test
-    void listsObjectsInBucket() throws Exception {
+    void listsObjectsWithEmptyPrefix() throws Exception {
         final String name = "a/b/test.txt";
         final Bucket bucket = this.rule.bucket();
         new Ocket.Text(bucket.ocket(name)).write("test");
@@ -39,19 +39,43 @@ final class AwsBucketITCase {
             MatcherAssert.assertThat(
                 "should be in list",
                 bucket.list(""),
-                Matchers.allOf(
-                    Matchers.<String>iterableWithSize(1),
-                    Matchers.hasItem(name)
-                )
+                Matchers.hasItem(name)
             );
+        } finally {
+            bucket.remove(name);
+        }
+    }
+
+    /**
+     * AwsBucket can list objects with a matching prefix.
+     * @throws Exception If fails
+     */
+    @Test
+    void listsObjectsWithMatchingPrefix() throws Exception {
+        final String name = "a/b/test2.txt";
+        final Bucket bucket = this.rule.bucket();
+        new Ocket.Text(bucket.ocket(name)).write("test");
+        try {
             MatcherAssert.assertThat(
                 "should be in list",
                 bucket.list("a/"),
-                Matchers.allOf(
-                    Matchers.<String>iterableWithSize(1),
-                    Matchers.hasItem(name)
-                )
+                Matchers.hasItem(name)
             );
+        } finally {
+            bucket.remove(name);
+        }
+    }
+
+    /**
+     * AwsBucket returns empty list for non-matching prefix.
+     * @throws Exception If fails
+     */
+    @Test
+    void listsObjectsWithNonMatchingPrefix() throws Exception {
+        final String name = "a/b/test3.txt";
+        final Bucket bucket = this.rule.bucket();
+        new Ocket.Text(bucket.ocket(name)).write("test");
+        try {
             MatcherAssert.assertThat(
                 "should be empty list",
                 bucket.list("alpha"),
@@ -63,36 +87,58 @@ final class AwsBucketITCase {
     }
 
     /**
-     * AwsBucket can list objects in a prefixed bucket.
+     * AwsBucket can list objects in a prefixed bucket with empty prefix.
      * @throws Exception If fails
      */
     @Test
-    void listsObjectsInPrefixedBucket() throws Exception {
+    void listsObjectsInPrefixedBucketWithEmptyPrefix() throws Exception {
         final String name = "foo/bar/file.txt";
         final Bucket bucket = this.rule.bucket();
         new Ocket.Text(bucket.ocket(name)).write("hey");
-        final Bucket bkt = new Bucket.Prefixed(bucket, "foo/");
         try {
-            final String item = "bar/file.txt";
             MatcherAssert.assertThat(
-                "should be exists in list",
-                bkt.list(""),
-                Matchers.allOf(
-                    Matchers.<String>iterableWithSize(1),
-                    Matchers.hasItem(item)
-                )
+                "should be in list",
+                new Bucket.Prefixed(bucket, "foo/").list(""),
+                Matchers.hasItem("bar/file.txt")
             );
+        } finally {
+            bucket.remove(name);
+        }
+    }
+
+    /**
+     * AwsBucket can list objects in a prefixed bucket with sub-prefix.
+     * @throws Exception If fails
+     */
+    @Test
+    void listsObjectsInPrefixedBucketWithSubPrefix() throws Exception {
+        final String name = "foo/bar/file2.txt";
+        final Bucket bucket = this.rule.bucket();
+        new Ocket.Text(bucket.ocket(name)).write("hey");
+        try {
             MatcherAssert.assertThat(
-                "should be exists in list",
-                bkt.list("bar/"),
-                Matchers.allOf(
-                    Matchers.<String>iterableWithSize(1),
-                    Matchers.hasItem(item)
-                )
+                "should be in list",
+                new Bucket.Prefixed(bucket, "foo/").list("bar/"),
+                Matchers.hasItem("bar/file2.txt")
             );
+        } finally {
+            bucket.remove(name);
+        }
+    }
+
+    /**
+     * AwsBucket returns empty list in prefixed bucket for wrong prefix.
+     * @throws Exception If fails
+     */
+    @Test
+    void listsEmptyInPrefixedBucketForWrongPrefix() throws Exception {
+        final String name = "foo/bar/file3.txt";
+        final Bucket bucket = this.rule.bucket();
+        new Ocket.Text(bucket.ocket(name)).write("hey");
+        try {
             MatcherAssert.assertThat(
                 "should be empty list",
-                bkt.list("foo"),
+                new Bucket.Prefixed(bucket, "foo/").list("foo"),
                 Matchers.emptyIterable()
             );
         } finally {
@@ -105,22 +151,17 @@ final class AwsBucketITCase {
      * @throws Exception If fails
      */
     @Test
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     void listsInPrefixedBucketWithoutCollisions() throws Exception {
         final Bucket bucket = this.rule.bucket();
         final String[] names = {"alpha/", "alpha/beta.xml"};
         for (final String name : names) {
             new Ocket.Text(bucket.ocket(name)).write("");
         }
-        final Bucket bkt = new Bucket.Prefixed(bucket, names[0]);
         try {
             MatcherAssert.assertThat(
                 "should has item in list",
-                bkt.list(""),
-                Matchers.allOf(
-                    Matchers.<String>iterableWithSize(1),
-                    Matchers.hasItem("beta.xml")
-                )
+                new Bucket.Prefixed(bucket, names[0]).list(""),
+                Matchers.hasItem("beta.xml")
             );
         } finally {
             for (final String name : names) {

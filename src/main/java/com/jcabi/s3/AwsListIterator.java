@@ -4,12 +4,10 @@
  */
 package com.jcabi.s3;
 
-import com.jcabi.log.Logger;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.S3Exception;
@@ -93,11 +91,8 @@ class AwsListIterator implements Iterator<String> {
      * Loads next portion of data from S3.
      * @return A list with next portion of data from S3
      */
-    @SuppressWarnings("PMD.GuardLogStatement")
     private List<String> load() {
         try {
-            final S3Client aws = this.region.aws();
-            final long start = System.currentTimeMillis();
             final ListObjectsV2Request.Builder req =
                 ListObjectsV2Request.builder()
                     .bucket(this.bucket)
@@ -105,9 +100,8 @@ class AwsListIterator implements Iterator<String> {
             if (this.token != null) {
                 req.continuationToken(this.token);
             }
-            final ListObjectsV2Response listing = aws.listObjectsV2(
-                req.build()
-            );
+            final ListObjectsV2Response listing =
+                this.region.aws().listObjectsV2(req.build());
             if (listing.isTruncated()) {
                 this.token = listing.nextContinuationToken();
             } else {
@@ -117,12 +111,6 @@ class AwsListIterator implements Iterator<String> {
             for (final S3Object sum : listing.contents()) {
                 list.add(sum.key());
             }
-            Logger.info(
-                this,
-                "listed %d ocket(s) with prefix '%s' in bucket '%s' in %[ms]s",
-                listing.contents().size(), this.prefix,
-                this.bucket, System.currentTimeMillis() - start
-            );
             return list;
         } catch (final S3Exception ex) {
             throw new IllegalStateException(

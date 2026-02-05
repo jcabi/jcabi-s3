@@ -28,7 +28,6 @@ import lombok.ToString;
  *
  * @since 0.1
  */
-@SuppressWarnings("PMD.TooManyMethods")
 public interface Bucket extends Comparable<Bucket> {
 
     /**

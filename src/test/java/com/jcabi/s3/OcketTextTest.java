@@ -57,12 +57,13 @@ final class OcketTextTest {
     @Test
     void delegatesKeyToOrigin(@TempDir final File temp) {
         final String key = String.format("%s.txt", UUID.randomUUID());
-        final FkBucket bucket = new FkBucket(
-            temp, UUID.randomUUID().toString()
-        );
         MatcherAssert.assertThat(
             "key was not delegated to origin",
-            new Ocket.Text(bucket.ocket(key)).key(),
+            new Ocket.Text(
+                new FkBucket(
+                    temp, UUID.randomUUID().toString()
+                ).ocket(key)
+            ).key(),
             Matchers.equalTo(key)
         );
     }
@@ -82,13 +83,12 @@ final class OcketTextTest {
 
     @Test
     void delegatesExistsToOrigin(@TempDir final File temp) throws Exception {
-        final FkBucket bucket = new FkBucket(
-            temp, UUID.randomUUID().toString()
-        );
         MatcherAssert.assertThat(
             "exists was not delegated correctly for non-existing ocket",
             new Ocket.Text(
-                bucket.ocket(UUID.randomUUID().toString())
+                new FkBucket(
+                    temp, UUID.randomUUID().toString()
+                ).ocket(UUID.randomUUID().toString())
             ).exists(),
             Matchers.is(false)
         );
@@ -115,11 +115,11 @@ final class OcketTextTest {
         final FkBucket bucket = new FkBucket(
             temp, UUID.randomUUID().toString()
         );
-        final Ocket first = bucket.ocket("aaa.txt");
-        final Ocket second = bucket.ocket("zzz.txt");
         MatcherAssert.assertThat(
             "comparison was not delegated correctly",
-            new Ocket.Text(first).compareTo(second),
+            new Ocket.Text(bucket.ocket("aaa.txt")).compareTo(
+                bucket.ocket("zzz.txt")
+            ),
             Matchers.lessThan(0)
         );
     }

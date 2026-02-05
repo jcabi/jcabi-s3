@@ -22,7 +22,6 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
  */
 @EqualsAndHashCode(of = { "regn", "bkt" })
 @Loggable(Loggable.DEBUG)
-@SuppressWarnings("PMD.TooManyMethods")
 final class AwsBucket implements Bucket {
 
     /**
@@ -91,12 +90,9 @@ final class AwsBucket implements Bucket {
     }
 
     @Override
-    @SuppressWarnings("PMD.GuardLogStatement")
     public void remove(final String key) throws IOException {
         try {
-            final S3Client aws = this.regn.aws();
-            final long start = System.currentTimeMillis();
-            aws.deleteObject(
+            this.regn.aws().deleteObject(
                 DeleteObjectRequest.builder()
                     .bucket(this.bkt)
                     .key(key)
@@ -104,8 +100,8 @@ final class AwsBucket implements Bucket {
             );
             Logger.info(
                 this,
-                "ocket '%s' removed in bucket '%s' in %[ms]s",
-                key, this.bkt, System.currentTimeMillis() - start
+                "ocket '%s' removed in bucket '%s'",
+                key, this.bkt
             );
         } catch (final S3Exception ex) {
             throw new IOException(

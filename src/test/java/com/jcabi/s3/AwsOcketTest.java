@@ -41,7 +41,7 @@ final class AwsOcketTest {
     void readsContentFromAwsObject() throws Exception {
         final String content = "some text \u20ac\n\t\rtest";
         final S3Client aws = Mockito.mock(S3Client.class);
-        final ResponseInputStream<GetObjectResponse> response =
+        Mockito.doReturn(
             new ResponseInputStream<>(
                 GetObjectResponse.builder().eTag("test-etag").build(),
                 AbortableInputStream.create(
@@ -49,16 +49,14 @@ final class AwsOcketTest {
                         content.getBytes(StandardCharsets.UTF_8)
                     )
                 )
-            );
-        Mockito.doReturn(response).when(aws)
-            .getObject(Mockito.any(GetObjectRequest.class));
+            )
+        ).when(aws).getObject(Mockito.any(GetObjectRequest.class));
         final Region region = Mockito.mock(Region.class);
         Mockito.doReturn(aws).when(region).aws();
         final Bucket bucket = Mockito.mock(Bucket.class);
         Mockito.doReturn(region).when(bucket).region();
-        final Ocket ocket = new AwsOcket(bucket, "test.txt");
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ocket.read(baos);
+        new AwsOcket(bucket, "test.txt").read(baos);
         MatcherAssert.assertThat(
             "should be equal to content",
             baos.toString(StandardCharsets.UTF_8.name()),
@@ -79,10 +77,10 @@ final class AwsOcketTest {
         Mockito.doReturn(aws).when(region).aws();
         final Bucket bucket = Mockito.mock(Bucket.class);
         Mockito.doReturn(region).when(bucket).region();
-        final Ocket ocket = new AwsOcket(bucket, "test-3.txt");
-        final String content = "text \u20ac\n\t\rtest";
-        ocket.write(
-            new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)),
+        new AwsOcket(bucket, "test-3.txt").write(
+            new ByteArrayInputStream(
+                "text \u20ac\n\t\rtest".getBytes(StandardCharsets.UTF_8)
+            ),
             HeadObjectResponse.builder().build()
         );
         Mockito.verify(aws).putObject(
@@ -103,10 +101,9 @@ final class AwsOcketTest {
         Mockito.doReturn(aws).when(region).aws();
         final Bucket bucket = Mockito.mock(Bucket.class);
         Mockito.doReturn(region).when(bucket).region();
-        final Ocket ocket = new AwsOcket(bucket, "test-99.txt");
         Assertions.assertThrows(
             OcketNotFoundException.class,
-            ocket::meta,
+            new AwsOcket(bucket, "test-99.txt")::meta,
             "should throw OcketNotFoundException"
         );
     }

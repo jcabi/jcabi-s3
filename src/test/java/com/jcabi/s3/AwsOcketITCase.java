@@ -71,11 +71,11 @@ final class AwsOcketITCase {
     }
 
     /**
-     * AwsOcket can check S3 object existence.
+     * AwsOcket can find an existing S3 object.
      * @throws Exception If fails
      */
     @Test
-    void checksObjectExistenceInBucket() throws Exception {
+    void findsExistingObjectInBucket() throws Exception {
         final Bucket bucket = this.rule.bucket();
         final String name = "a/b/ffo/test.txt";
         new Ocket.Text(bucket.ocket(name)).write("test me");
@@ -85,14 +85,23 @@ final class AwsOcketITCase {
                 bucket.ocket(name).exists(),
                 Matchers.is(true)
             );
-            MatcherAssert.assertThat(
-                "should be false",
-                bucket.ocket("a/b/ffo/test-2.txt").exists(),
-                Matchers.is(false)
-            );
         } finally {
             bucket.remove(name);
         }
+    }
+
+    /**
+     * AwsOcket cannot find a non-existing S3 object.
+     * @throws Exception If fails
+     */
+    @Test
+    void doesntFindNonExistingObjectInBucket() throws Exception {
+        final Bucket bucket = this.rule.bucket();
+        MatcherAssert.assertThat(
+            "should be false",
+            bucket.ocket("a/b/ffo/test-2.txt").exists(),
+            Matchers.is(false)
+        );
     }
 
     /**

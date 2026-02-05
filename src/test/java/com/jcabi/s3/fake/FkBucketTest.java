@@ -19,7 +19,6 @@ import org.junit.jupiter.api.io.TempDir;
  *
  * @since 0.8.1
  */
-@SuppressWarnings("PMD.TooManyMethods")
 final class FkBucketTest {
 
     @Test
@@ -62,8 +61,9 @@ final class FkBucketTest {
 
     @Test
     void removesExistingOcket(@TempDir final File temp) throws Exception {
-        final String name = UUID.randomUUID().toString();
-        final Bucket bucket = new FkRegion(temp).bucket(name);
+        final Bucket bucket = new FkRegion(temp).bucket(
+            UUID.randomUUID().toString()
+        );
         final String key = String.format("%s.txt", UUID.randomUUID());
         new Ocket.Text(bucket.ocket(key)).write(
             UUID.randomUUID().toString()
@@ -87,15 +87,15 @@ final class FkBucketTest {
 
     @Test
     void comparesWithAnotherBucket(@TempDir final File temp) {
-        final FkBucket first = new FkBucket(
-            temp, String.format("aaa-%s", UUID.randomUUID())
-        );
-        final FkBucket second = new FkBucket(
-            temp, String.format("zzz-%s", UUID.randomUUID())
-        );
         MatcherAssert.assertThat(
             "comparison did not return negative for earlier name",
-            first.compareTo(second),
+            new FkBucket(
+                temp, String.format("aaa-%s", UUID.randomUUID())
+            ).compareTo(
+                new FkBucket(
+                    temp, String.format("zzz-%s", UUID.randomUUID())
+                )
+            ),
             Matchers.lessThan(0)
         );
     }

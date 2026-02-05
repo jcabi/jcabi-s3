@@ -74,13 +74,16 @@ final class AwsListIteratorTest {
         final Region region = Mockito.mock(Region.class);
         final S3Client aws = Mockito.mock(S3Client.class);
         Mockito.when(region.aws()).thenReturn(aws);
-        final String first = UUID.randomUUID().toString();
         final String second = UUID.randomUUID().toString();
         Mockito.when(
             aws.listObjectsV2(Mockito.any(ListObjectsV2Request.class))
         ).thenReturn(
             ListObjectsV2Response.builder()
-                .contents(S3Object.builder().key(first).build())
+                .contents(
+                    S3Object.builder()
+                        .key(UUID.randomUUID().toString())
+                        .build()
+                )
                 .isTruncated(true)
                 .nextContinuationToken("token-abc")
                 .build()
@@ -103,9 +106,7 @@ final class AwsListIteratorTest {
 
     @Test
     void throwsNoSuchElementWhenExhausted() {
-        final Region region = Mockito.mock(Region.class);
         final S3Client aws = Mockito.mock(S3Client.class);
-        Mockito.when(region.aws()).thenReturn(aws);
         Mockito.when(
             aws.listObjectsV2(Mockito.any(ListObjectsV2Request.class))
         ).thenReturn(
@@ -114,11 +115,13 @@ final class AwsListIteratorTest {
                 .isTruncated(false)
                 .build()
         );
+        final Region region = Mockito.mock(Region.class);
+        Mockito.when(region.aws()).thenReturn(aws);
         Assertions.assertThrows(
             NoSuchElementException.class,
-            () -> new AwsListIterator(
+            new AwsListIterator(
                 region, UUID.randomUUID().toString(), ""
-            ).next(),
+            )::next,
             "next() did not throw on exhausted iterator"
         );
     }

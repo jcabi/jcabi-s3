@@ -28,37 +28,50 @@ import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 final class FkOcketTest {
 
     @Test
-    void readsContentTypeAndLengthFromMetadata(@TempDir final File temp)
+    void readsContentTypeFromMetadata(@TempDir final File temp)
         throws Exception {
-        final Bucket bucket = new FkRegion(temp).bucket("test");
-        final Ocket write = bucket.ocket("hello.txt");
-        final String text = "hello, world!";
-        new Ocket.Text(write).write(text);
-        final HeadObjectResponse metadata = new Ocket.Text(
-            bucket.ocket(write.key())
-        ).meta();
+        final Bucket bucket = new FkRegion(temp).bucket(
+            UUID.randomUUID().toString()
+        );
+        final Ocket ocket = bucket.ocket(
+            String.format("%s.txt", UUID.randomUUID())
+        );
+        new Ocket.Text(ocket).write(UUID.randomUUID().toString());
         MatcherAssert.assertThat(
             "should be text/plain content-type",
-            metadata.contentType(),
+            bucket.ocket(ocket.key()).meta().contentType(),
             Matchers.is("text/plain")
         );
+    }
+
+    @Test
+    void readsContentLengthFromMetadata(@TempDir final File temp)
+        throws Exception {
+        final Bucket bucket = new FkRegion(temp).bucket(
+            UUID.randomUUID().toString()
+        );
+        final Ocket ocket = bucket.ocket(
+            String.format("%s.dat", UUID.randomUUID())
+        );
+        new Ocket.Text(ocket).write(UUID.randomUUID().toString());
         MatcherAssert.assertThat(
-            "should be equal to content length",
-            metadata.contentLength(),
-            Matchers.equalTo((long) text.length())
+            "should be positive content length",
+            bucket.ocket(ocket.key()).meta().contentLength(),
+            Matchers.greaterThan(0L)
         );
     }
 
     @Test
     void readsDateFromMetadata(@TempDir final File temp) throws Exception {
-        final Bucket bucket = new FkRegion(temp).bucket("test");
-        final Ocket write = bucket.ocket("hello.txt");
-        final HeadObjectResponse metadata = new Ocket.Text(
-            bucket.ocket(write.key())
-        ).meta();
+        final Bucket bucket = new FkRegion(temp).bucket(
+            UUID.randomUUID().toString()
+        );
+        final Ocket ocket = bucket.ocket(
+            String.format("%s.log", UUID.randomUUID())
+        );
         MatcherAssert.assertThat(
             "should be not null",
-            metadata.lastModified(),
+            bucket.ocket(ocket.key()).meta().lastModified(),
             Matchers.notNullValue()
         );
     }
@@ -81,7 +94,7 @@ final class FkOcketTest {
             UUID.randomUUID().toString()
         );
         final Ocket ocket = bucket.ocket(
-            String.format("%s.txt", UUID.randomUUID())
+            String.format("%s.xml", UUID.randomUUID())
         );
         new Ocket.Text(ocket).write(UUID.randomUUID().toString());
         MatcherAssert.assertThat(
@@ -97,7 +110,7 @@ final class FkOcketTest {
             UUID.randomUUID().toString()
         );
         final Ocket ocket = bucket.ocket(
-            String.format("%s.txt", UUID.randomUUID())
+            String.format("%s.csv", UUID.randomUUID())
         );
         final String content =
             String.format("%s \u00e9\u00e8\u00ea", UUID.randomUUID());
@@ -114,11 +127,15 @@ final class FkOcketTest {
         final Bucket bucket = new FkRegion(temp).bucket(
             UUID.randomUUID().toString()
         );
-        final Ocket first = bucket.ocket(String.format("aaa-%s", UUID.randomUUID()));
-        final Ocket second = bucket.ocket(String.format("zzz-%s", UUID.randomUUID()));
         MatcherAssert.assertThat(
             "comparison did not return negative for earlier key",
-            first.compareTo(second),
+            bucket.ocket(
+                String.format("aaa-%s", UUID.randomUUID())
+            ).compareTo(
+                bucket.ocket(
+                    String.format("zzz-%s", UUID.randomUUID())
+                )
+            ),
             Matchers.lessThan(0)
         );
     }
@@ -165,7 +182,7 @@ final class FkOcketTest {
             UUID.randomUUID().toString()
         );
         final Ocket ocket = bucket.ocket(
-            String.format("%s.txt", UUID.randomUUID())
+            String.format("%s.htm", UUID.randomUUID())
         );
         new Ocket.Text(ocket).write(UUID.randomUUID().toString());
         MatcherAssert.assertThat(

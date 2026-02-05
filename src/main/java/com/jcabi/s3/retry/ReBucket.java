@@ -22,7 +22,6 @@ import lombok.EqualsAndHashCode;
 @Immutable
 @EqualsAndHashCode(of = "origin")
 @Loggable(Loggable.DEBUG)
-@SuppressWarnings("PMD.TooManyMethods")
 public final class ReBucket implements Bucket {
 
     /**
@@ -77,24 +76,26 @@ public final class ReBucket implements Bucket {
         return new Iterable<String>() {
             @Override
             public Iterator<String> iterator() {
-                final Iterator<String> iterator = list.iterator();
                 return new Iterator<String>() {
+                    private final Iterator<String> iter =
+                        list.iterator();
+
                     @Override
                     @RetryOnFailure(verbose = false)
                     public boolean hasNext() {
-                        return iterator.hasNext();
+                        return this.iter.hasNext();
                     }
 
                     @Override
                     @RetryOnFailure(verbose = false)
                     public String next() {
-                        return iterator.next();
+                        return this.iter.next();
                     }
 
                     @Override
                     @RetryOnFailure(verbose = false)
                     public void remove() {
-                        iterator.remove();
+                        this.iter.remove();
                     }
                 };
             }

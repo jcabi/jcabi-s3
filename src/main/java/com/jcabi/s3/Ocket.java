@@ -35,7 +35,6 @@ import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
  *
  * @since 0.1
  */
-@SuppressWarnings("PMD.TooManyMethods")
 public interface Ocket extends Comparable<Ocket> {
 
     /**
@@ -139,16 +138,15 @@ public interface Ocket extends Comparable<Ocket> {
          */
         public void write(final String text, final String type)
             throws IOException {
-            final HeadObjectResponse meta = HeadObjectResponse.builder()
-                .contentType(type)
-                .contentLength(
-                    (long) text.getBytes(StandardCharsets.UTF_8).length
-                )
-                .contentEncoding(StandardCharsets.UTF_8.displayName())
-                .build();
             this.origin.write(
                 new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)),
-                meta
+                HeadObjectResponse.builder()
+                    .contentType(type)
+                    .contentLength(
+                        (long) text.getBytes(StandardCharsets.UTF_8).length
+                    )
+                    .contentEncoding(StandardCharsets.UTF_8.displayName())
+                    .build()
             );
         }
 

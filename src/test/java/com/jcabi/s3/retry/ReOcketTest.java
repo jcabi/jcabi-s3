@@ -18,18 +18,18 @@ import org.junit.jupiter.api.io.TempDir;
  *
  * @since 0.5
  */
-@SuppressWarnings("PMD.TooManyMethods")
 final class ReOcketTest {
 
     @Test
     void delegatesKeyToOrigin(@TempDir final File temp) {
         final String key = String.format("%s.txt", UUID.randomUUID());
-        final FkBucket bucket = new FkBucket(
-            temp, UUID.randomUUID().toString()
-        );
         MatcherAssert.assertThat(
             "key was not delegated to origin",
-            new ReOcket(bucket.ocket(key)).key(),
+            new ReOcket(
+                new FkBucket(
+                    temp, UUID.randomUUID().toString()
+                ).ocket(key)
+            ).key(),
             Matchers.equalTo(key)
         );
     }
@@ -50,13 +50,12 @@ final class ReOcketTest {
     @Test
     void delegatesExistsForNonExistingOcket(@TempDir final File temp)
         throws Exception {
-        final FkBucket bucket = new FkBucket(
-            temp, UUID.randomUUID().toString()
-        );
         MatcherAssert.assertThat(
             "exists was not delegated for non-existing ocket",
             new ReOcket(
-                bucket.ocket(UUID.randomUUID().toString())
+                new FkBucket(
+                    temp, UUID.randomUUID().toString()
+                ).ocket(UUID.randomUUID().toString())
             ).exists(),
             Matchers.is(false)
         );

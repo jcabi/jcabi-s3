@@ -26,15 +26,17 @@ import software.amazon.awssdk.services.s3.model.S3Object;
  *
  * @since 0.1
  */
-@SuppressWarnings("PMD.TooManyMethods")
 final class AwsBucketTest {
 
     @Test
     void findsAndReturnsOckets() throws Exception {
-        final Region region = Mockito.mock(Region.class);
-        final Bucket bucket = new AwsBucket(region, "example.com");
-        final Ocket ocket = bucket.ocket("test");
-        MatcherAssert.assertThat("should be not null", ocket, Matchers.notNullValue());
+        MatcherAssert.assertThat(
+            "should be not null",
+            new AwsBucket(
+                Mockito.mock(Region.class), "example.com"
+            ).ocket("test"),
+            Matchers.notNullValue()
+        );
     }
 
     @Test
@@ -45,12 +47,9 @@ final class AwsBucketTest {
         Mockito.when(
             aws.headBucket(Mockito.any(HeadBucketRequest.class))
         ).thenReturn(HeadBucketResponse.builder().build());
-        final Bucket bucket = new AwsBucket(
-            region, "existing.bucket.com"
-        );
         MatcherAssert.assertThat(
             "should be true",
-            bucket.exists(),
+            new AwsBucket(region, "existing.bucket.com").exists(),
             Matchers.is(true)
         );
     }
@@ -65,12 +64,9 @@ final class AwsBucketTest {
         ).thenThrow(
             NoSuchBucketException.builder().message("no bucket").build()
         );
-        final Bucket bucket = new AwsBucket(
-            region, "non.existing.bucket.com"
-        );
         MatcherAssert.assertThat(
             "should be false",
-            bucket.exists(),
+            new AwsBucket(region, "non.existing.bucket.com").exists(),
             Matchers.is(false)
         );
     }
@@ -85,12 +81,9 @@ final class AwsBucketTest {
         ).thenThrow(
             S3Exception.builder().message("Test exception").build()
         );
-        final Bucket bucket = new AwsBucket(
-            region, "throwing.bucket.com"
-        );
         Assertions.assertThrows(
             IOException.class,
-            bucket::exists,
+            new AwsBucket(region, "throwing.bucket.com")::exists,
             "should throw IOException"
         );
     }
@@ -155,12 +148,14 @@ final class AwsBucketTest {
     @Test
     void comparesAlphabetically() {
         final Region region = Mockito.mock(Region.class);
-        final String first = String.format("aaa-%s", UUID.randomUUID());
-        final String second = String.format("zzz-%s", UUID.randomUUID());
         MatcherAssert.assertThat(
             "compareTo did not return negative for earlier bucket",
-            new AwsBucket(region, first).compareTo(
-                new AwsBucket(region, second)
+            new AwsBucket(
+                region, String.format("aaa-%s", UUID.randomUUID())
+            ).compareTo(
+                new AwsBucket(
+                    region, String.format("zzz-%s", UUID.randomUUID())
+                )
             ),
             Matchers.lessThan(0)
         );

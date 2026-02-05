@@ -115,10 +115,11 @@ public final class FkOcket implements Ocket {
 
     @Override
     public HeadObjectResponse meta() {
-        final MimetypesFileTypeMap types = new MimetypesFileTypeMap();
         return HeadObjectResponse.builder()
             .contentLength(this.file().length())
-            .contentType(types.getContentType(this.file()))
+            .contentType(
+                new MimetypesFileTypeMap().getContentType(this.file())
+            )
             .lastModified(Instant.ofEpochMilli(this.file().lastModified()))
             .contentEncoding("UTF-8")
             .build();

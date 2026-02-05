@@ -18,7 +18,6 @@ import org.junit.jupiter.api.io.TempDir;
  *
  * @since 0.5
  */
-@SuppressWarnings("PMD.TooManyMethods")
 final class ReBucketTest {
 
     @Test
@@ -67,8 +66,9 @@ final class ReBucketTest {
 
     @Test
     void delegatesRemoveToOrigin(@TempDir final File temp) throws Exception {
-        final String name = UUID.randomUUID().toString();
-        final FkBucket origin = new FkBucket(temp, name);
+        final FkBucket origin = new FkBucket(
+            temp, UUID.randomUUID().toString()
+        );
         final String key = String.format("%s.txt", UUID.randomUUID());
         new Ocket.Text(origin.ocket(key)).write(
             UUID.randomUUID().toString()
@@ -83,8 +83,9 @@ final class ReBucketTest {
 
     @Test
     void delegatesListToOrigin(@TempDir final File temp) throws Exception {
-        final String name = UUID.randomUUID().toString();
-        final FkBucket origin = new FkBucket(temp, name);
+        final FkBucket origin = new FkBucket(
+            temp, UUID.randomUUID().toString()
+        );
         final String key = String.format("%s.txt", UUID.randomUUID());
         new Ocket.Text(origin.ocket(key)).write(
             UUID.randomUUID().toString()
@@ -98,23 +99,29 @@ final class ReBucketTest {
 
     @Test
     void comparesWithAnotherBucket(@TempDir final File temp) {
-        final ReBucket first = new ReBucket(
-            new FkBucket(temp, String.format("aaa-%s", UUID.randomUUID()))
-        );
-        final ReBucket second = new ReBucket(
-            new FkBucket(temp, String.format("zzz-%s", UUID.randomUUID()))
-        );
         MatcherAssert.assertThat(
             "comparison did not return negative for earlier name",
-            first.compareTo(second),
+            new ReBucket(
+                new FkBucket(
+                    temp, String.format("aaa-%s", UUID.randomUUID())
+                )
+            ).compareTo(
+                new ReBucket(
+                    new FkBucket(
+                        temp,
+                        String.format("zzz-%s", UUID.randomUUID())
+                    )
+                )
+            ),
             Matchers.lessThan(0)
         );
     }
 
     @Test
     void delegatesToStringToOrigin(@TempDir final File temp) {
-        final String name = UUID.randomUUID().toString();
-        final FkBucket origin = new FkBucket(temp, name);
+        final FkBucket origin = new FkBucket(
+            temp, UUID.randomUUID().toString()
+        );
         MatcherAssert.assertThat(
             "toString was not delegated to origin",
             new ReBucket(origin).toString(),
