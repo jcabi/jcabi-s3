@@ -19,6 +19,7 @@ import org.junit.jupiter.api.io.TempDir;
  *
  * @since 0.8.1
  */
+@SuppressWarnings("PMD.TooManyMethods")
 final class FkBucketTest {
 
     @Test
@@ -126,6 +127,27 @@ final class FkBucketTest {
                 temp, UUID.randomUUID().toString()
             ).ocket(UUID.randomUUID().toString()),
             Matchers.notNullValue()
+        );
+    }
+
+    @Test
+    void representsItselfAsString(@TempDir final File temp) {
+        final String name = UUID.randomUUID().toString();
+        MatcherAssert.assertThat(
+            "string representation did not match bucket name",
+            new FkBucket(temp, name).toString(),
+            Matchers.equalTo(name)
+        );
+    }
+
+    @Test
+    void listsEmptyDirectory(@TempDir final File temp) {
+        final String name = UUID.randomUUID().toString();
+        new File(temp, name).mkdirs();
+        MatcherAssert.assertThat(
+            "empty bucket did not return empty list",
+            new FkBucket(temp, name).list(""),
+            Matchers.emptyIterable()
         );
     }
 

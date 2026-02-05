@@ -55,4 +55,26 @@ final class FkRegionTest {
         );
     }
 
+    @Test
+    void rejectsNonDirectoryFile(@TempDir final File temp) throws Exception {
+        final File file = new File(
+            temp, UUID.randomUUID().toString()
+        );
+        file.createNewFile();
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> new FkRegion(file),
+            "non-directory file was not rejected"
+        );
+    }
+
+    @Test
+    void representsItselfAsString(@TempDir final File temp) {
+        MatcherAssert.assertThat(
+            "string representation did not contain directory path",
+            new FkRegion(temp).toString(),
+            Matchers.containsString(temp.getName())
+        );
+    }
+
 }
