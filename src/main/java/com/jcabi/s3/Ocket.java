@@ -197,6 +197,13 @@ public interface Ocket extends Comparable<Ocket> {
     @EqualsAndHashCode
     @Loggable(Loggable.DEBUG)
     final class Empty implements Ocket {
+        /**
+         * Public ctor.
+         */
+        public Empty() {
+            // nothing to initialize
+        }
+
         @Override
         public Bucket bucket() {
             throw new UnsupportedOperationException("#bucket()");
