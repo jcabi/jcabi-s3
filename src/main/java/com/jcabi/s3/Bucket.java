@@ -61,8 +61,7 @@ public interface Bucket extends Comparable<Bucket> {
      * @param key Name of it in the bucket
      * @throws IOException If not found or any other failure
      */
-    void remove(String key)
-        throws IOException;
+    void remove(String key) throws IOException;
 
     /**
      * List object names with a given prefix.
@@ -103,6 +102,7 @@ public interface Bucket extends Comparable<Bucket> {
     @EqualsAndHashCode(of = { "origin", "prefix" })
     @Loggable(Loggable.DEBUG)
     final class Prefixed implements Bucket {
+
         /**
          * Original encapsulated bucket.
          */
@@ -192,5 +192,4 @@ public interface Bucket extends Comparable<Bucket> {
             return String.format("%s%s", this.prefix, name);
         }
     }
-
 }

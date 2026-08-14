@@ -22,7 +22,6 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
  * Mock/fake bucket.
- *
  * @since 0.6
  */
 @Immutable
@@ -156,5 +155,4 @@ public final class FkBucket implements Bucket {
         }
         return new File(new File(this.dir), this.bkt);
     }
-
 }

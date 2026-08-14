@@ -16,7 +16,6 @@ import lombok.EqualsAndHashCode;
 
 /**
  * Region that retries a few times before giving up.
- *
  * @since 0.5
  */
 @Immutable

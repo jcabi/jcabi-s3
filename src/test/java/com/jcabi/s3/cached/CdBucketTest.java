@@ -15,7 +15,6 @@ import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test case for {@link CdBucket}.
- *
  * @since 0.8
  */
 final class CdBucketTest {
@@ -128,5 +127,4 @@ final class CdBucketTest {
             Matchers.equalTo(origin.toString())
         );
     }
-
 }

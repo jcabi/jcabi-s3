@@ -5,7 +5,6 @@
 
 /**
  * Fake classes.
- *
  * @since 0.6
  */
 package com.jcabi.s3.fake;

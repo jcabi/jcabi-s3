@@ -8,12 +8,10 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
 
 /**
  * Integration case for {@link Region}.
- *
  * @since 0.1
  */
 final class RegionITCase {
@@ -32,10 +30,9 @@ final class RegionITCase {
     @Test
     void connectsToAmazon() throws Exception {
         final Bucket bucket = this.rule.bucket();
-        final S3Client aws = bucket.region().aws();
         MatcherAssert.assertThat(
             "should be true",
-            aws.headBucket(
+            bucket.region().aws().headBucket(
                 HeadBucketRequest.builder()
                     .bucket(bucket.name())
                     .build()
@@ -43,5 +40,4 @@ final class RegionITCase {
             Matchers.notNullValue()
         );
     }
-
 }

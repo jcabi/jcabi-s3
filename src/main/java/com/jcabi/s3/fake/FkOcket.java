@@ -21,7 +21,6 @@ import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 /**
  * Mock/fake ocket.
- *
  * @since 0.6
  */
 @Immutable
@@ -117,9 +116,7 @@ public final class FkOcket implements Ocket {
     public HeadObjectResponse meta() {
         return HeadObjectResponse.builder()
             .contentLength(this.file().length())
-            .contentType(
-                new MimetypesFileTypeMap().getContentType(this.file())
-            )
+            .contentType(new MimetypesFileTypeMap().getContentType(this.file()))
             .lastModified(Instant.ofEpochMilli(this.file().lastModified()))
             .contentEncoding("UTF-8")
             .build();
@@ -181,5 +178,4 @@ public final class FkOcket implements Ocket {
             this.name
         );
     }
-
 }

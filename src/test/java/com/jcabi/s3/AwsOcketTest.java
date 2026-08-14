@@ -32,14 +32,13 @@ import software.amazon.awssdk.services.s3.model.S3Object;
 
 /**
  * Test case for {@link AwsOcket}.
- *
  * @since 0.1
  */
 final class AwsOcketTest {
 
     @Test
     void readsContentFromAwsObject() throws Exception {
-        final String content = "some text \u20ac\n\t\rtest";
+        final String content = String.format("some text €%n\ttest");
         final S3Client aws = Mockito.mock(S3Client.class);
         Mockito.doReturn(
             new ResponseInputStream<>(
@@ -59,7 +58,7 @@ final class AwsOcketTest {
         new AwsOcket(bucket, "test.txt").read(baos);
         MatcherAssert.assertThat(
             "should be equal to content",
-            baos.toString(StandardCharsets.UTF_8.name()),
+            baos.toString(StandardCharsets.UTF_8),
             Matchers.equalTo(content)
         );
     }
@@ -79,7 +78,8 @@ final class AwsOcketTest {
         Mockito.doReturn(region).when(bucket).region();
         new AwsOcket(bucket, "test-3.txt").write(
             new ByteArrayInputStream(
-                "text \u20ac\n\t\rtest".getBytes(StandardCharsets.UTF_8)
+                String.format("text €%n\ttest")
+                    .getBytes(StandardCharsets.UTF_8)
             ),
             HeadObjectResponse.builder().build()
         );
@@ -114,12 +114,11 @@ final class AwsOcketTest {
         Mockito.when(
             aws.listObjectsV2(Mockito.any(ListObjectsV2Request.class))
         ).thenReturn(
-            ListObjectsV2Response.builder()
-                .contents(
-                    S3Object.builder()
-                        .key(UUID.randomUUID().toString())
-                        .build()
-                ).build()
+            ListObjectsV2Response.builder().contents(
+                S3Object.builder()
+                    .key(UUID.randomUUID().toString())
+                    .build()
+            ).build()
         );
         final Region region = Mockito.mock(Region.class);
         Mockito.doReturn(aws).when(region).aws();
@@ -256,5 +255,4 @@ final class AwsOcketTest {
             "read did not throw when S3 object is missing"
         );
     }
-
 }

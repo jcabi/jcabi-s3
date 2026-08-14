@@ -13,7 +13,6 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 /**
  * Cached region.
- *
  * @since 0.8
  */
 @Immutable

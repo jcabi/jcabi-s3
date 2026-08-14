@@ -85,18 +85,17 @@ public interface Ocket extends Comparable<Ocket> {
      * @param meta Metadata to save
      * @throws IOException If fails
      */
-    void write(InputStream input, HeadObjectResponse meta)
-        throws IOException;
+    void write(InputStream input, HeadObjectResponse meta) throws IOException;
 
     /**
      * Unicode text S3 object with supplementary functions.
-     *
      * @since 0.1
      */
     @ToString
     @EqualsAndHashCode(of = "origin")
     @Loggable(Loggable.DEBUG)
     final class Text implements Ocket {
+
         /**
          * Original encapsulated ocket.
          */
@@ -118,7 +117,7 @@ public interface Ocket extends Comparable<Ocket> {
         public String read() throws IOException {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             this.origin.read(baos);
-            return baos.toString(StandardCharsets.UTF_8.name());
+            return baos.toString(StandardCharsets.UTF_8);
         }
 
         /**
@@ -141,8 +140,7 @@ public interface Ocket extends Comparable<Ocket> {
             this.origin.write(
                 new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)),
                 HeadObjectResponse.builder()
-                    .contentType(type)
-                    .contentLength(
+                    .contentType(type).contentLength(
                         (long) text.getBytes(StandardCharsets.UTF_8).length
                     )
                     .contentEncoding(StandardCharsets.UTF_8.displayName())
@@ -190,13 +188,13 @@ public interface Ocket extends Comparable<Ocket> {
 
     /**
      * Ocket with no content at all.
-     *
      * @since 0.1
      */
     @ToString
     @EqualsAndHashCode
     @Loggable(Loggable.DEBUG)
     final class Empty implements Ocket {
+
         /**
          * Public ctor.
          */
@@ -239,7 +237,5 @@ public interface Ocket extends Comparable<Ocket> {
         public int compareTo(final Ocket ocket) {
             return 0;
         }
-
     }
-
 }

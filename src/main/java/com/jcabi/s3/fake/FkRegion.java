@@ -17,7 +17,6 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 /**
  * Mock/fake region.
- *
  * @since 0.6
  */
 @Immutable
@@ -63,6 +62,7 @@ public final class FkRegion implements Region {
      * @since 0.8.1
      */
     public FkRegion(final File file) {
+        // @checkstyle ConstructorsCodeFreeCheck (1 line)
         this.dir = FkRegion.path(file);
     }
 

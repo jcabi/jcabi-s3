@@ -5,7 +5,6 @@
 
 /**
  * Amazon S3 object layer, tests.
- *
  * @since 0.1
  */
 package com.jcabi.s3;

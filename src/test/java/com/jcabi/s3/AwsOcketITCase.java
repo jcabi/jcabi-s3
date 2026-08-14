@@ -13,7 +13,6 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 /**
  * Integration case for {@link AwsOcket}.
- *
  * @since 0.1
  */
 final class AwsOcketITCase {
@@ -34,7 +33,7 @@ final class AwsOcketITCase {
         final Bucket bucket = this.rule.bucket();
         final String name = "a/b/c/test.txt";
         final Ocket.Text ocket = new Ocket.Text(bucket.ocket(name));
-        final String content = "text \u20ac\n\t\rtest";
+        final String content = String.format("text €%n\ttest");
         ocket.write(content);
         ocket.write(content);
         try {
@@ -96,10 +95,9 @@ final class AwsOcketITCase {
      */
     @Test
     void doesntFindNonExistingObjectInBucket() throws Exception {
-        final Bucket bucket = this.rule.bucket();
         MatcherAssert.assertThat(
             "should be false",
-            bucket.ocket("a/b/ffo/test-2.txt").exists(),
+            this.rule.bucket().ocket("a/b/ffo/test-2.txt").exists(),
             Matchers.is(false)
         );
     }
@@ -119,5 +117,4 @@ final class AwsOcketITCase {
             "should throw OcketNotFoundException"
         );
     }
-
 }

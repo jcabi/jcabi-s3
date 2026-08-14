@@ -15,7 +15,6 @@ import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test case for {@link ReOcket}.
- *
  * @since 0.5
  */
 final class ReOcketTest {
@@ -37,11 +36,10 @@ final class ReOcketTest {
     @Test
     void delegatesBucketToOrigin(@TempDir final File temp) {
         final String name = UUID.randomUUID().toString();
-        final FkBucket bucket = new FkBucket(temp, name);
         MatcherAssert.assertThat(
             "bucket name was not delegated to origin",
             new ReOcket(
-                bucket.ocket(UUID.randomUUID().toString())
+                new FkBucket(temp, name).ocket(UUID.randomUUID().toString())
             ).bucket().name(),
             Matchers.equalTo(name)
         );
@@ -156,5 +154,4 @@ final class ReOcketTest {
             Matchers.equalTo(origin.toString())
         );
     }
-
 }

@@ -9,7 +9,6 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 
 /**
  * When ocket is not found in bucket.
- *
  * @since 0.1
  */
 public class OcketNotFoundException extends IOException {
@@ -24,8 +23,7 @@ public class OcketNotFoundException extends IOException {
      * @param msg Message to show
      * @param cause Cause of it
      */
-    public OcketNotFoundException(final String msg,
-        final S3Exception cause) {
+    public OcketNotFoundException(final String msg, final S3Exception cause) {
         super(msg, cause);
     }
 }

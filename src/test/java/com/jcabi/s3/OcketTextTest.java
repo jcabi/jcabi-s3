@@ -14,14 +14,13 @@ import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test case for {@link Ocket.Text}.
- *
  * @since 0.1
  */
 final class OcketTextTest {
 
     @Test
     void readsWrittenTextContent(@TempDir final File temp) throws Exception {
-        final String content = String.format("%s h\u00e9llo \u20ac", UUID.randomUUID());
+        final String content = String.format("%s héllo €", UUID.randomUUID());
         final FkBucket bucket = new FkBucket(
             temp, UUID.randomUUID().toString()
         );
@@ -71,11 +70,10 @@ final class OcketTextTest {
     @Test
     void delegatesBucketToOrigin(@TempDir final File temp) {
         final String name = UUID.randomUUID().toString();
-        final FkBucket bucket = new FkBucket(temp, name);
         MatcherAssert.assertThat(
             "bucket was not delegated to origin",
             new Ocket.Text(
-                bucket.ocket(UUID.randomUUID().toString())
+                new FkBucket(temp, name).ocket(UUID.randomUUID().toString())
             ).bucket().name(),
             Matchers.equalTo(name)
         );
@@ -123,5 +121,4 @@ final class OcketTextTest {
             Matchers.lessThan(0)
         );
     }
-
 }

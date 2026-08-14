@@ -14,7 +14,6 @@ import lombok.EqualsAndHashCode;
 
 /**
  * Cached bucket.
- *
  * @since 0.8
  */
 @Immutable

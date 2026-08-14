@@ -40,13 +40,13 @@ public interface Region {
 
     /**
      * Simple implementation.
-     *
      * @since 0.1
      */
     @ToString
     @EqualsAndHashCode(of = "server")
     @Loggable(Loggable.DEBUG)
     final class Simple implements Region {
+
         /**
          * AWS.
          */
@@ -71,14 +71,8 @@ public interface Region {
             final String region) {
             this(
                 S3Client.builder()
-                    .region(
-                        software.amazon.awssdk.regions.Region.of(region)
-                    )
-                    .credentialsProvider(
-                        StaticCredentialsProvider.create(
-                            AwsBasicCredentials.create(key, secret)
-                        )
-                    )
+                    .region(software.amazon.awssdk.regions.Region.of(region))
+                    .credentialsProvider(Simple.creds(key, secret))
                     .build()
             );
         }
@@ -99,6 +93,19 @@ public interface Region {
         @Override
         public S3Client aws() {
             return this.server;
+        }
+
+        /**
+         * Make credentials.
+         * @param key Amazon key
+         * @param secret Amazon secret
+         * @return Credentials provider
+         */
+        private static StaticCredentialsProvider creds(final String key,
+            final String secret) {
+            return StaticCredentialsProvider.create(
+                AwsBasicCredentials.create(key, secret)
+            );
         }
     }
 }

@@ -21,7 +21,6 @@ import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
 
 /**
  * Extension that creates and drops an AWS subj.
- *
  * @since 0.3
  */
 final class BucketRule implements BeforeEachCallback, AfterEachCallback {
@@ -63,7 +62,7 @@ final class BucketRule implements BeforeEachCallback, AfterEachCallback {
      * Get bucket.
      * @return Bucket
      */
-    public Bucket bucket() {
+    Bucket bucket() {
         return this.subj;
     }
 
@@ -77,7 +76,6 @@ final class BucketRule implements BeforeEachCallback, AfterEachCallback {
                 new Region.Simple(BucketRule.KEY, BucketRule.SECRET)
             )
         );
-        // @checkstyle MagicNumberCheck (3 line)
         final String name = String.format(
             "%s.s3.jcabi.com",
             RandomStringUtils.secure().nextAlphabetic(5)
@@ -115,5 +113,4 @@ final class BucketRule implements BeforeEachCallback, AfterEachCallback {
             );
         }
     }
-
 }

@@ -17,7 +17,6 @@ import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 /**
  * Ocket that retries a few times before giving up.
- *
  * @since 0.5
  */
 @Immutable

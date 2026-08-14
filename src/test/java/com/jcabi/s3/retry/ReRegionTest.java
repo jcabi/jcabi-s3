@@ -17,7 +17,6 @@ import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test case for {@link ReRegion}.
- *
  * @since 0.5
  */
 final class ReRegionTest {
@@ -56,5 +55,4 @@ final class ReRegionTest {
             Matchers.equalTo(content)
         );
     }
-
 }

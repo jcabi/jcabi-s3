@@ -4,8 +4,8 @@
  */
 package com.jcabi.s3;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
@@ -55,8 +55,7 @@ class AwsListIterator implements Iterator<String> {
      * @param bkt Bucket name
      * @param pfx Key prefix
      */
-    AwsListIterator(final Region rgn, final String bkt,
-        final String pfx) {
+    AwsListIterator(final Region rgn, final String bkt, final String pfx) {
         this.prefix = pfx;
         this.region = rgn;
         this.bucket = bkt;
@@ -107,7 +106,7 @@ class AwsListIterator implements Iterator<String> {
             } else {
                 this.more = false;
             }
-            final List<String> list = new LinkedList<>();
+            final List<String> list = new ArrayList<>(0);
             for (final S3Object sum : listing.contents()) {
                 list.add(sum.key());
             }
@@ -122,5 +121,4 @@ class AwsListIterator implements Iterator<String> {
             );
         }
     }
-
 }

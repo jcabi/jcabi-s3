@@ -19,7 +19,6 @@ import software.amazon.awssdk.services.s3.model.S3Object;
 
 /**
  * Test case for {@link AwsListIterator}.
- *
  * @since 0.10
  */
 final class AwsListIteratorTest {
@@ -78,15 +77,14 @@ final class AwsListIteratorTest {
         Mockito.when(
             aws.listObjectsV2(Mockito.any(ListObjectsV2Request.class))
         ).thenReturn(
-            ListObjectsV2Response.builder()
-                .contents(
-                    S3Object.builder()
-                        .key(UUID.randomUUID().toString())
-                        .build()
-                )
-                .isTruncated(true)
-                .nextContinuationToken("token-abc")
-                .build()
+            ListObjectsV2Response.builder().contents(
+                S3Object.builder()
+                    .key(UUID.randomUUID().toString())
+                    .build()
+            )
+            .isTruncated(true)
+            .nextContinuationToken("token-abc")
+            .build()
         ).thenReturn(
             ListObjectsV2Response.builder()
                 .contents(S3Object.builder().key(second).build())
@@ -137,5 +135,4 @@ final class AwsListIteratorTest {
             "remove() did not throw"
         );
     }
-
 }

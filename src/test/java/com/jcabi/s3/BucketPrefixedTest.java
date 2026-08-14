@@ -14,31 +14,30 @@ import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test case for {@link Bucket.Prefixed}.
- *
  * @since 0.1
  */
 final class BucketPrefixedTest {
 
     @Test
     void delegatesExistsToOrigin(@TempDir final File temp) throws Exception {
-        final Bucket bucket = new FkRegion(temp).bucket(
-            UUID.randomUUID().toString()
-        );
         MatcherAssert.assertThat(
             "exists was not delegated",
-            new Bucket.Prefixed(bucket, "pfx/").exists(),
+            new Bucket.Prefixed(
+                new FkRegion(temp).bucket(UUID.randomUUID().toString()),
+                "pfx/"
+            ).exists(),
             Matchers.is(true)
         );
     }
 
     @Test
     void delegatesRegionToOrigin(@TempDir final File temp) {
-        final Bucket bucket = new FkRegion(temp).bucket(
-            UUID.randomUUID().toString()
-        );
         MatcherAssert.assertThat(
             "region was not delegated",
-            new Bucket.Prefixed(bucket, "pfx/").region(),
+            new Bucket.Prefixed(
+                new FkRegion(temp).bucket(UUID.randomUUID().toString()),
+                "pfx/"
+            ).region(),
             Matchers.notNullValue()
         );
     }
@@ -46,10 +45,11 @@ final class BucketPrefixedTest {
     @Test
     void delegatesNameToOrigin(@TempDir final File temp) {
         final String name = UUID.randomUUID().toString();
-        final Bucket bucket = new FkRegion(temp).bucket(name);
         MatcherAssert.assertThat(
             "name was not delegated",
-            new Bucket.Prefixed(bucket, "pfx/").name(),
+            new Bucket.Prefixed(
+                new FkRegion(temp).bucket(name), "pfx/"
+            ).name(),
             Matchers.equalTo(name)
         );
     }
@@ -103,5 +103,4 @@ final class BucketPrefixedTest {
             Matchers.not(Matchers.hasItem(""))
         );
     }
-
 }

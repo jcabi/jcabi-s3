@@ -14,7 +14,6 @@ import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
 
 /**
  * Integration case for {@link AwsBucket}.
- *
  * @since 0.3
  */
 final class AwsBucketITCase {
@@ -176,10 +175,9 @@ final class AwsBucketITCase {
      */
     @Test
     void existsExistingBucket() throws IOException {
-        final Bucket bucket = this.rule.bucket();
         MatcherAssert.assertThat(
             "should be true",
-            bucket.exists(),
+            this.rule.bucket().exists(),
             Matchers.is(true)
         );
     }
@@ -203,5 +201,4 @@ final class AwsBucketITCase {
             Matchers.is(false)
         );
     }
-
 }

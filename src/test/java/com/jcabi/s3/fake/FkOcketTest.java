@@ -21,10 +21,8 @@ import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 /**
  * Test case for {@link FkOcket}.
- *
  * @since 0.10.1
  */
-@SuppressWarnings("PMD.TooManyMethods")
 final class FkOcketTest {
 
     @Test
@@ -63,27 +61,24 @@ final class FkOcketTest {
 
     @Test
     void readsDateFromMetadata(@TempDir final File temp) throws Exception {
-        final Bucket bucket = new FkRegion(temp).bucket(
-            UUID.randomUUID().toString()
-        );
-        final Ocket ocket = bucket.ocket(
-            String.format("%s.log", UUID.randomUUID())
-        );
         MatcherAssert.assertThat(
             "should be not null",
-            bucket.ocket(ocket.key()).meta().lastModified(),
+            new FkRegion(temp)
+                .bucket(UUID.randomUUID().toString())
+                .ocket(String.format("%s.log", UUID.randomUUID()))
+                .meta().lastModified(),
             Matchers.notNullValue()
         );
     }
 
     @Test
     void checksNonExistingOcket(@TempDir final File temp) throws Exception {
-        final Bucket bucket = new FkRegion(temp).bucket(
-            UUID.randomUUID().toString()
-        );
         MatcherAssert.assertThat(
             "non-existing ocket was reported as existing",
-            bucket.ocket(UUID.randomUUID().toString()).exists(),
+            new FkRegion(temp)
+                .bucket(UUID.randomUUID().toString())
+                .ocket(UUID.randomUUID().toString())
+                .exists(),
             Matchers.is(false)
         );
     }
@@ -113,7 +108,7 @@ final class FkOcketTest {
             String.format("%s.csv", UUID.randomUUID())
         );
         final String content =
-            String.format("%s \u00e9\u00e8\u00ea", UUID.randomUUID());
+            String.format("%s éèê", UUID.randomUUID());
         new Ocket.Text(ocket).write(content);
         MatcherAssert.assertThat(
             "written content was not read back correctly",
@@ -143,10 +138,10 @@ final class FkOcketTest {
     @Test
     void returnsBucket(@TempDir final File temp) {
         final String name = UUID.randomUUID().toString();
-        final Bucket bucket = new FkRegion(temp).bucket(name);
         MatcherAssert.assertThat(
             "bucket was not returned correctly",
-            bucket.ocket(UUID.randomUUID().toString()).bucket().name(),
+            new FkRegion(temp).bucket(name)
+                .ocket(UUID.randomUUID().toString()).bucket().name(),
             Matchers.equalTo(name)
         );
     }
@@ -154,12 +149,10 @@ final class FkOcketTest {
     @Test
     void returnsKey(@TempDir final File temp) {
         final String key = String.format("%s.txt", UUID.randomUUID());
-        final Bucket bucket = new FkRegion(temp).bucket(
-            UUID.randomUUID().toString()
-        );
         MatcherAssert.assertThat(
             "key was not returned correctly",
-            bucket.ocket(key).key(),
+            new FkRegion(temp).bucket(UUID.randomUUID().toString())
+                .ocket(key).key(),
             Matchers.equalTo(key)
         );
     }
@@ -244,5 +237,4 @@ final class FkOcketTest {
             Matchers.equalTo(content)
         );
     }
-
 }

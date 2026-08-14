@@ -16,7 +16,6 @@ import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test case for {@link FkBucket}.
- *
  * @since 0.8.1
  */
 final class FkBucketTest {
@@ -34,7 +33,6 @@ final class FkBucketTest {
             "should has all of items",
             new Bucket.Prefixed(bucket, "a/b").list(""),
             Matchers.allOf(
-                // @checkstyle MagicNumberCheck (1 line)
                 Matchers.<String>iterableWithSize(3),
                 Matchers.hasItem("/hello.txt"),
                 Matchers.hasItem("/f/2.txt"),
@@ -54,7 +52,6 @@ final class FkBucketTest {
         MatcherAssert.assertThat(
             "should be in list",
             new Bucket.Prefixed(bucket, "1/").list(""),
-            // @checkstyle MagicNumberCheck (1 line)
             Matchers.<String>iterableWithSize(3)
         );
     }
@@ -150,5 +147,4 @@ final class FkBucketTest {
             Matchers.emptyIterable()
         );
     }
-
 }
