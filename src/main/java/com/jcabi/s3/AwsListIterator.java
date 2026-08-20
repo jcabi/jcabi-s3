@@ -86,10 +86,6 @@ class AwsListIterator implements Iterator<String> {
         throw new UnsupportedOperationException("Remove is not supported");
     }
 
-    /**
-     * Loads next portion of data from S3.
-     * @return A list with next portion of data from S3
-     */
     private List<String> load() {
         try {
             final ListObjectsV2Request.Builder req =

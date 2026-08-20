@@ -66,10 +66,6 @@ final class BucketRule implements BeforeEachCallback, AfterEachCallback {
         return this.subj;
     }
 
-    /**
-     * Create S3 subj.
-     * @throws Exception If fails
-     */
     private void create() throws Exception {
         final Region region = new CdRegion(
             new ReRegion(
@@ -89,10 +85,6 @@ final class BucketRule implements BeforeEachCallback, AfterEachCallback {
         Logger.info(this, "S3 bucket %s created", name);
     }
 
-    /**
-     * Drop S3 subj.
-     * @throws Exception If fails
-     */
     private void drop() throws Exception {
         final S3Client aws = this.subj.region().aws();
         try {

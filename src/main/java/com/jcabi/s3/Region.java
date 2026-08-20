@@ -95,12 +95,6 @@ public interface Region {
             return this.server;
         }
 
-        /**
-         * Make credentials.
-         * @param key Amazon key
-         * @param secret Amazon secret
-         * @return Credentials provider
-         */
         private static StaticCredentialsProvider creds(final String key,
             final String secret) {
             return StaticCredentialsProvider.create(

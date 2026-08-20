@@ -82,11 +82,6 @@ public final class CdOcket implements Ocket {
         return this.origin.compareTo(ocket);
     }
 
-    /**
-     * Read byte array.
-     * @return Bytes
-     * @throws IOException If fails
-     */
     @Cacheable
     private byte[] read() throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();

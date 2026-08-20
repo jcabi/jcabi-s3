@@ -145,10 +145,6 @@ public final class FkBucket implements Bucket {
         return this.bkt.compareTo(bucket.name());
     }
 
-    /**
-     * Get my file.
-     * @return File
-     */
     private File home() {
         if (this.bkt.isEmpty()) {
             throw new IllegalStateException("Ocket name can't be empty");

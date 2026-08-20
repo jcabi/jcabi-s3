@@ -81,11 +81,6 @@ public final class FkRegion implements Region {
         throw new UnsupportedOperationException("#aws()");
     }
 
-    /**
-     * Convert it to a dir.
-     * @param file The file
-     * @return Absolute path
-     */
     private static String path(final File file) {
         if (!file.isDirectory()) {
             throw new IllegalArgumentException(

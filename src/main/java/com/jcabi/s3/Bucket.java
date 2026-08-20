@@ -183,11 +183,6 @@ public interface Bucket extends Comparable<Bucket> {
             return this.origin.compareTo(bucket);
         }
 
-        /**
-         * Extend name with a prefix.
-         * @param name The name to extend
-         * @return Extended
-         */
         private String extend(final String name) {
             return String.format("%s%s", this.prefix, name);
         }
