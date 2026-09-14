@@ -21,6 +21,7 @@ import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 /**
  * Mock/fake ocket.
+ *
  * @since 0.6
  */
 @Immutable
@@ -45,6 +46,7 @@ public final class FkOcket implements Ocket {
 
     /**
      * Ctor.
+     *
      * @throws IOException If fails
      * @since 0.17
      */
@@ -54,6 +56,7 @@ public final class FkOcket implements Ocket {
 
     /**
      * Ctor.
+     *
      * @param bucket Bucket
      * @param key Key
      * @throws IOException If fails
@@ -65,6 +68,7 @@ public final class FkOcket implements Ocket {
 
     /**
      * Ctor.
+     *
      * @param file Dir we're in
      * @param bucket Bucket
      * @param key Key
@@ -76,6 +80,7 @@ public final class FkOcket implements Ocket {
 
     /**
      * Ctor.
+     *
      * @param file Dir we're in
      * @param bucket Bucket
      * @param key Key
@@ -86,6 +91,7 @@ public final class FkOcket implements Ocket {
 
     /**
      * Ctor.
+     *
      * @param file Dir we're in
      * @param bucket Bucket
      * @param key Key
@@ -161,6 +167,7 @@ public final class FkOcket implements Ocket {
 
     /**
      * Get my file.
+     *
      * @return File
      */
     public File file() {

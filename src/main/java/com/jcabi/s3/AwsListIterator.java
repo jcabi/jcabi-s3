@@ -15,6 +15,7 @@ import software.amazon.awssdk.services.s3.model.S3Object;
 
 /**
  * Iterator for large lists returned by S3.
+ *
  * @since 0.10
  */
 class AwsListIterator implements Iterator<String> {
@@ -51,6 +52,7 @@ class AwsListIterator implements Iterator<String> {
 
     /**
      * Constructs AwsListIterator.
+     *
      * @param rgn Region we're in
      * @param bkt Bucket name
      * @param pfx Key prefix

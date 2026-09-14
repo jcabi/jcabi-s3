@@ -12,12 +12,14 @@ import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
 
 /**
  * Integration case for {@link Region}.
+ *
  * @since 0.1
  */
 final class RegionITCase {
 
     /**
      * Bucket we're working with.
+     *
      * @checkstyle VisibilityModifier (3 lines)
      */
     @RegisterExtension
@@ -25,6 +27,7 @@ final class RegionITCase {
 
     /**
      * Region can connect to AWS and check bucket existence.
+     *
      * @throws Exception If fails
      */
     @Test

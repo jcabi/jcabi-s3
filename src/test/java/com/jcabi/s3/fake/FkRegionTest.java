@@ -17,6 +17,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test case for {@link FkRegion}.
+ *
  * @since 0.8.1
  */
 final class FkRegionTest {

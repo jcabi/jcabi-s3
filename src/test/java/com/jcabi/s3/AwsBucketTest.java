@@ -23,6 +23,7 @@ import software.amazon.awssdk.services.s3.model.S3Object;
 
 /**
  * Test case for {@link AwsBucket}.
+ *
  * @since 0.1
  */
 final class AwsBucketTest {

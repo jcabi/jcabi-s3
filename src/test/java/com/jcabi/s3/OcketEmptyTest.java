@@ -16,6 +16,7 @@ import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 /**
  * Test case for {@link Ocket.Empty}.
+ *
  * @since 0.1
  */
 final class OcketEmptyTest {

@@ -14,12 +14,14 @@ import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
 
 /**
  * Integration case for {@link AwsBucket}.
+ *
  * @since 0.3
  */
 final class AwsBucketITCase {
 
     /**
      * Bucket we're working with.
+     *
      * @checkstyle VisibilityModifier (3 lines)
      */
     @RegisterExtension
@@ -27,6 +29,7 @@ final class AwsBucketITCase {
 
     /**
      * AwsBucket can list objects with empty prefix.
+     *
      * @throws Exception If fails
      */
     @Test
@@ -47,6 +50,7 @@ final class AwsBucketITCase {
 
     /**
      * AwsBucket can list objects with a matching prefix.
+     *
      * @throws Exception If fails
      */
     @Test
@@ -67,6 +71,7 @@ final class AwsBucketITCase {
 
     /**
      * AwsBucket returns empty list for non-matching prefix.
+     *
      * @throws Exception If fails
      */
     @Test
@@ -87,6 +92,7 @@ final class AwsBucketITCase {
 
     /**
      * AwsBucket can list objects in a prefixed bucket with empty prefix.
+     *
      * @throws Exception If fails
      */
     @Test
@@ -107,6 +113,7 @@ final class AwsBucketITCase {
 
     /**
      * AwsBucket can list objects in a prefixed bucket with sub-prefix.
+     *
      * @throws Exception If fails
      */
     @Test
@@ -127,6 +134,7 @@ final class AwsBucketITCase {
 
     /**
      * AwsBucket returns empty list in prefixed bucket for wrong prefix.
+     *
      * @throws Exception If fails
      */
     @Test
@@ -147,6 +155,7 @@ final class AwsBucketITCase {
 
     /**
      * AwsBucket can list objects in a prefixed bucket, without collisions.
+     *
      * @throws Exception If fails
      */
     @Test
@@ -171,6 +180,7 @@ final class AwsBucketITCase {
 
     /**
      * AwsBucket can correctly check the existence of the existing bucket.
+     *
      * @throws IOException If fails
      */
     @Test
@@ -184,6 +194,7 @@ final class AwsBucketITCase {
 
     /**
      * AwsBucket can correctly check the existence of the non-existing bucket.
+     *
      * @throws IOException If fails
      */
     @Test

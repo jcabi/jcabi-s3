@@ -17,6 +17,7 @@ import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 /**
  * Ocket that retries a few times before giving up.
+ *
  * @since 0.5
  */
 @Immutable
@@ -31,6 +32,7 @@ public final class ReOcket implements Ocket {
 
     /**
      * Public ctor.
+     *
      * @param okt Ocket we're in
      */
     public ReOcket(final Ocket okt) {

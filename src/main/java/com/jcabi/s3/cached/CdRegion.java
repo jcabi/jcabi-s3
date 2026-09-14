@@ -13,6 +13,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 /**
  * Cached region.
+ *
  * @since 0.8
  */
 @Immutable
@@ -27,6 +28,7 @@ public final class CdRegion implements Region {
 
     /**
      * Public ctor.
+     *
      * @param reg Region we're in
      */
     public CdRegion(final Region reg) {

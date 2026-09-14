@@ -14,6 +14,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test case for {@link Ocket.Text}.
+ *
  * @since 0.1
  */
 final class OcketTextTest {

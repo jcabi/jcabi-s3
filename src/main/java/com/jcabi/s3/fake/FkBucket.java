@@ -22,6 +22,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
  * Mock/fake bucket.
+ *
  * @since 0.6
  */
 @Immutable
@@ -41,6 +42,7 @@ public final class FkBucket implements Bucket {
 
     /**
      * Ctor.
+     *
      * @throws IOException If fails
      * @since 0.17
      */
@@ -50,6 +52,7 @@ public final class FkBucket implements Bucket {
 
     /**
      * Ctor.
+     *
      * @param name Name of the bucket
      * @throws IOException If fails
      * @since 0.17
@@ -60,6 +63,7 @@ public final class FkBucket implements Bucket {
 
     /**
      * Ctor.
+     *
      * @param file Directory to keep files in
      * @param name Name of the bucket
      */
@@ -69,6 +73,7 @@ public final class FkBucket implements Bucket {
 
     /**
      * Ctor.
+     *
      * @param file Directory to keep files in
      * @param name Name of the bucket
      * @since 0.17
@@ -79,6 +84,7 @@ public final class FkBucket implements Bucket {
 
     /**
      * Ctor.
+     *
      * @param file Directory to keep files in
      * @param name Name of the bucket
      * @since 0.17

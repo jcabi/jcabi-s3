@@ -17,6 +17,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 /**
  * Mock/fake region.
+ *
  * @since 0.6
  */
 @Immutable
@@ -31,6 +32,7 @@ public final class FkRegion implements Region {
 
     /**
      * Ctor.
+     *
      * @throws IOException If fails
      * @since 0.17
      */
@@ -40,6 +42,7 @@ public final class FkRegion implements Region {
 
     /**
      * Ctor.
+     *
      * @param file Directory to keep files in
      * @since 0.17
      */
@@ -49,6 +52,7 @@ public final class FkRegion implements Region {
 
     /**
      * Ctor.
+     *
      * @param file Directory to keep files in
      * @since 0.17
      */
@@ -58,6 +62,7 @@ public final class FkRegion implements Region {
 
     /**
      * Ctor.
+     *
      * @param file Directory to keep files in
      * @since 0.8.1
      */

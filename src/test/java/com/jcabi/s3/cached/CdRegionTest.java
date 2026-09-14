@@ -17,6 +17,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test case for {@link CdRegion}.
+ *
  * @since 0.8
  */
 final class CdRegionTest {

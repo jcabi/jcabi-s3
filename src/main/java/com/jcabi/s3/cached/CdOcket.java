@@ -18,6 +18,7 @@ import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 /**
  * Cached ocket.
+ *
  * @since 0.8
  */
 @Immutable
@@ -32,6 +33,7 @@ public final class CdOcket implements Ocket {
 
     /**
      * Public ctor.
+     *
      * @param okt Ocket original
      */
     public CdOcket(final Ocket okt) {

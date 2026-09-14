@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * Region that retries a few times before giving up.
+ *
  * @since 0.5
  */
 @Immutable
@@ -30,6 +31,7 @@ public final class ReBucket implements Bucket {
 
     /**
      * Public ctor.
+     *
      * @param bkt Bucket we're in
      */
     public ReBucket(final Bucket bkt) {

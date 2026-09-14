@@ -15,6 +15,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test case for {@link ReBucket}.
+ *
  * @since 0.5
  */
 final class ReBucketTest {

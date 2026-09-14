@@ -15,7 +15,7 @@ import lombok.ToString;
 /**
  * Amazon S3 bucket.
  *
- * <p>You get an instance of this interface from {@link Region}, for example:
+ * <p>You get an instance of this interface from {@link Region}, for example:</p>
  *
  * <pre> Region region = new Region.Simple(key, secret);
  * Bucket bucket = region.bucket("my.example.com");
@@ -32,18 +32,21 @@ public interface Bucket extends Comparable<Bucket> {
 
     /**
      * Get region we're in.
+     *
      * @return Region
      */
     Region region();
 
     /**
      * Get bucket name.
+     *
      * @return Bucket name
      */
     String name();
 
     /**
      * Get object.
+     *
      * @param key Name of it in the bucket
      * @return Ocket
      */
@@ -51,6 +54,7 @@ public interface Bucket extends Comparable<Bucket> {
 
     /**
      * Checks if the bucket exists.
+     *
      * @return If the bucket exists {@code true}, otherwise {@code false}
      * @throws IOException If any failure happens
      */
@@ -58,6 +62,7 @@ public interface Bucket extends Comparable<Bucket> {
 
     /**
      * Delete object from bucket.
+     *
      * @param key Name of it in the bucket
      * @throws IOException If not found or any other failure
      */
@@ -65,6 +70,7 @@ public interface Bucket extends Comparable<Bucket> {
 
     /**
      * List object names with a given prefix.
+     *
      * @param pfx Prefix to use
      * @return Iterable of names
      * @throws IOException If fails
@@ -77,9 +83,9 @@ public interface Bucket extends Comparable<Bucket> {
      *
      * <p>Basically this class is used to cut off ocket keys of underlying
      * bucket by some string known as prefix. If key is not started
-     * with prefix, it will be omitted
+     * with prefix, it will be omitted</p>
      *
-     * <p>Example of usage:
+     * <p>Example of usage:</p>
      * <pre>
      * final Region region = new MkRegion(
      *   new TemporaryFolder().newFolder()
@@ -115,6 +121,7 @@ public interface Bucket extends Comparable<Bucket> {
 
         /**
          * Public ctor.
+         *
          * @param bucket Original bucket
          * @param pfx Prefix
          */

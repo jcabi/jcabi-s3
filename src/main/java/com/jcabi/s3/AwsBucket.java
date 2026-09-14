@@ -17,6 +17,7 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 
 /**
  * Amazon S3 bucket.
+ *
  * @since 0.1
  */
 @EqualsAndHashCode(of = { "regn", "bkt" })
@@ -35,6 +36,7 @@ final class AwsBucket implements Bucket {
 
     /**
      * Public ctor.
+     *
      * @param reg Region we're in
      * @param name Bucket name
      */

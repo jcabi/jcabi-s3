@@ -18,14 +18,14 @@ import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 /**
  * Amazon S3 object abstraction.
  *
- * <p>You get an instance of this interface from {@link Bucket}, for example:
+ * <p>You get an instance of this interface from {@link Bucket}, for example:</p>
  *
  * <pre> Region region = new Region.Simple(key, secret);
  * Bucket bucket = region.bucket("my.example.com");
  * Ocket ocket = bucket.ocket("src/main/README.txt");</pre>
  *
  * <p>In order to read and write plain text content in Unicode we recommend
- * to use {@code Ocket.Text} decorator:
+ * to use {@code Ocket.Text} decorator:</p>
  *
  * <pre> Ocket.Text ocket = new Ocket.Smart(
  *   bucket.ocket("src/main/README.txt")
@@ -39,12 +39,14 @@ public interface Ocket extends Comparable<Ocket> {
 
     /**
      * Get bucket we're in.
+     *
      * @return Bucket
      */
     Bucket bucket();
 
     /**
      * Get object key.
+     *
      * @return Key
      */
     String key();
@@ -62,6 +64,7 @@ public interface Ocket extends Comparable<Ocket> {
 
     /**
      * Check whether this S3 object exists.
+     *
      * @return TRUE if it exists in S3, FALSE otherwise
      * @throws IOException If fails
      * @since 0.4
@@ -81,6 +84,7 @@ public interface Ocket extends Comparable<Ocket> {
 
     /**
      * Write new content to the object.
+     *
      * @param input Where to get content
      * @param meta Metadata to save
      * @throws IOException If fails
@@ -89,6 +93,7 @@ public interface Ocket extends Comparable<Ocket> {
 
     /**
      * Unicode text S3 object with supplementary functions.
+     *
      * @since 0.1
      */
     @ToString
@@ -103,6 +108,7 @@ public interface Ocket extends Comparable<Ocket> {
 
         /**
          * Public ctor.
+         *
          * @param ocket Original ocket
          */
         public Text(final Ocket ocket) {
@@ -111,6 +117,7 @@ public interface Ocket extends Comparable<Ocket> {
 
         /**
          * Read content as string.
+         *
          * @return Content
          * @throws IOException If fails
          */
@@ -122,6 +129,7 @@ public interface Ocket extends Comparable<Ocket> {
 
         /**
          * Write content as string.
+         *
          * @param text Text to write
          * @throws IOException If fails
          */
@@ -131,6 +139,7 @@ public interface Ocket extends Comparable<Ocket> {
 
         /**
          * Write content as string, with a specified content type.
+         *
          * @param text Text to write
          * @param type Content type
          * @throws IOException If fails
@@ -188,6 +197,7 @@ public interface Ocket extends Comparable<Ocket> {
 
     /**
      * Ocket with no content at all.
+     *
      * @since 0.1
      */
     @ToString

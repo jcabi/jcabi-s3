@@ -13,6 +13,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 /**
  * Region that retries a few times before giving up.
+ *
  * @since 0.5
  */
 @Immutable
@@ -27,6 +28,7 @@ public final class ReRegion implements Region {
 
     /**
      * Public ctor.
+     *
      * @param reg Region we're in
      */
     public ReRegion(final Region reg) {

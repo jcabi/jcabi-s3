@@ -19,6 +19,7 @@ import software.amazon.awssdk.services.s3.model.S3Object;
 
 /**
  * Test case for {@link AwsListIterator}.
+ *
  * @since 0.10
  */
 final class AwsListIteratorTest {

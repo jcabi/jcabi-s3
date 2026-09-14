@@ -21,6 +21,7 @@ import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 /**
  * Test case for {@link FkOcket}.
+ *
  * @since 0.10.1
  */
 final class FkOcketTest {

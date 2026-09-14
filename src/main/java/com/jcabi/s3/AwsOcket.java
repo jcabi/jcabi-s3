@@ -21,6 +21,7 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 
 /**
  * Amazon S3 bucket.
+ *
  * @since 0.1
  */
 @EqualsAndHashCode(of = { "bkt", "name" })
@@ -39,6 +40,7 @@ final class AwsOcket implements Ocket {
 
     /**
      * Public ctor.
+     *
      * @param bucket Bucket name
      * @param obj Object name
      */

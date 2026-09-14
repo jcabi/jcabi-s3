@@ -21,6 +21,7 @@ import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
 
 /**
  * Extension that creates and drops an AWS subj.
+ *
  * @since 0.3
  */
 final class BucketRule implements BeforeEachCallback, AfterEachCallback {
@@ -60,6 +61,7 @@ final class BucketRule implements BeforeEachCallback, AfterEachCallback {
 
     /**
      * Get bucket.
+     *
      * @return Bucket
      */
     Bucket bucket() {

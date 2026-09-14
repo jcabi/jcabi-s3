@@ -7,7 +7,7 @@
  * Amazon S3 object layer.
  *
  * <p>The only dependency you need is (check our latest version available
- * at <a href="http://s3.jcabi.com">s3.jcabi.com</a>):
+ * at <a href="http://s3.jcabi.com">s3.jcabi.com</a>):</p>
  *
  * <pre>&lt;dependency&gt;
  *   &lt;groupId&gt;com.jcabi&lt;/groupId&gt;

@@ -15,7 +15,7 @@ import software.amazon.awssdk.services.s3.S3Client;
  * Amazon S3 abstraction.
  *
  * <p>To get an instance of this interface, instantiate {@code Region.Simple},
- * for example:
+ * for example:</p>
  *
  * <pre> Region region = new Region.Simple(key, secret);
  * Bucket bucket = region.bucket("my.example.com");
@@ -27,6 +27,7 @@ public interface Region {
 
     /**
      * Get bucket.
+     *
      * @param name Name of the bucket to get
      * @return Bucket
      */
@@ -34,12 +35,14 @@ public interface Region {
 
     /**
      * Get a client.
+     *
      * @return Amazon S3
      */
     S3Client aws();
 
     /**
      * Simple implementation.
+     *
      * @since 0.1
      */
     @ToString
@@ -54,6 +57,7 @@ public interface Region {
 
         /**
          * Public ctor.
+         *
          * @param key Amazon key
          * @param secret Amazon secret
          */
@@ -63,6 +67,7 @@ public interface Region {
 
         /**
          * Public ctor.
+         *
          * @param key Amazon key
          * @param secret Amazon secret
          * @param region Region
@@ -79,6 +84,7 @@ public interface Region {
 
         /**
          * Public ctor.
+         *
          * @param aws Amazon S3 server
          */
         public Simple(final S3Client aws) {

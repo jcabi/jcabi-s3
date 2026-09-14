@@ -5,6 +5,7 @@
 
 /**
  * Cached objects, tests.
+ *
  * @since 0.8
  */
 package com.jcabi.s3.cached;

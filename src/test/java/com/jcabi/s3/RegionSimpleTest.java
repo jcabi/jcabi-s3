@@ -13,6 +13,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 /**
  * Test case for {@link Region.Simple}.
+ *
  * @since 0.1
  */
 final class RegionSimpleTest {

@@ -5,6 +5,7 @@
 
 /**
  * Auto-retry classes.
+ *
  * @since 0.5
  */
 package com.jcabi.s3.retry;

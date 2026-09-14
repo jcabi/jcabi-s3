@@ -13,12 +13,14 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 /**
  * Integration case for {@link AwsOcket}.
+ *
  * @since 0.1
  */
 final class AwsOcketITCase {
 
     /**
      * Bucket we're working with.
+     *
      * @checkstyle VisibilityModifier (3 lines)
      */
     @RegisterExtension
@@ -26,6 +28,7 @@ final class AwsOcketITCase {
 
     /**
      * AwsOcket can read and write S3 content.
+     *
      * @throws Exception If fails
      */
     @Test
@@ -49,6 +52,7 @@ final class AwsOcketITCase {
 
     /**
      * AwsOcket can read and write large S3 content.
+     *
      * @throws Exception If fails
      */
     @Test
@@ -71,6 +75,7 @@ final class AwsOcketITCase {
 
     /**
      * AwsOcket can find an existing S3 object.
+     *
      * @throws Exception If fails
      */
     @Test
@@ -91,6 +96,7 @@ final class AwsOcketITCase {
 
     /**
      * AwsOcket cannot find a non-existing S3 object.
+     *
      * @throws Exception If fails
      */
     @Test
@@ -104,6 +110,7 @@ final class AwsOcketITCase {
 
     /**
      * Region can throw when ocket is absent.
+     *
      * @throws Exception If fails
      */
     @Test

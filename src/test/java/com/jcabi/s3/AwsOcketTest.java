@@ -32,6 +32,7 @@ import software.amazon.awssdk.services.s3.model.S3Object;
 
 /**
  * Test case for {@link AwsOcket}.
+ *
  * @since 0.1
  */
 final class AwsOcketTest {

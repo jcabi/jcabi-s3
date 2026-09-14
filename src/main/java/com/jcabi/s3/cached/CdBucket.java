@@ -14,6 +14,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * Cached bucket.
+ *
  * @since 0.8
  */
 @Immutable
@@ -28,6 +29,7 @@ public final class CdBucket implements Bucket {
 
     /**
      * Public ctor.
+     *
      * @param bkt Bucket original
      */
     public CdBucket(final Bucket bkt) {
