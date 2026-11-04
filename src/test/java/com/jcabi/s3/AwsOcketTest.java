@@ -7,8 +7,8 @@ package com.jcabi.s3;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.UUID;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -25,6 +25,7 @@ import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
 import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
+import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import software.amazon.awssdk.services.s3.model.S3Exception;
@@ -113,14 +114,8 @@ final class AwsOcketTest {
     void existsForExistingObject() throws Exception {
         final S3Client aws = Mockito.mock(S3Client.class);
         Mockito.when(
-            aws.listObjectsV2(Mockito.any(ListObjectsV2Request.class))
-        ).thenReturn(
-            ListObjectsV2Response.builder().contents(
-                S3Object.builder()
-                    .key(UUID.randomUUID().toString())
-                    .build()
-            ).build()
-        );
+            aws.headObject(Mockito.any(HeadObjectRequest.class))
+        ).thenReturn(HeadObjectResponse.builder().build());
         final Region region = Mockito.mock(Region.class);
         Mockito.doReturn(aws).when(region).aws();
         final Bucket bucket = Mockito.mock(Bucket.class);
@@ -137,12 +132,8 @@ final class AwsOcketTest {
     void doesntExistForAbsentObject() throws Exception {
         final S3Client aws = Mockito.mock(S3Client.class);
         Mockito.when(
-            aws.listObjectsV2(Mockito.any(ListObjectsV2Request.class))
-        ).thenReturn(
-            ListObjectsV2Response.builder()
-                .contents(Collections.emptyList())
-                .build()
-        );
+            aws.headObject(Mockito.any(HeadObjectRequest.class))
+        ).thenThrow(NoSuchKeyException.builder().build());
         final Region region = Mockito.mock(Region.class);
         Mockito.doReturn(aws).when(region).aws();
         final Bucket bucket = Mockito.mock(Bucket.class);
@@ -156,12 +147,45 @@ final class AwsOcketTest {
     }
 
     @Test
-    void throwsOnExistsWhenAwsFails() {
+    void doesntExistWhenOnlyLongerKeySharesPrefix() throws Exception {
+        final String key = UUID.randomUUID().toString();
         final S3Client aws = Mockito.mock(S3Client.class);
         Mockito.when(
             aws.listObjectsV2(Mockito.any(ListObjectsV2Request.class))
+        ).thenReturn(
+            ListObjectsV2Response.builder().contents(
+                S3Object.builder().key(String.format("%s.bak", key)).build()
+            ).build()
+        );
+        Mockito.when(
+            aws.headObject(Mockito.any(HeadObjectRequest.class))
         ).thenThrow(
-            S3Exception.builder().message("access denied").build()
+            NoSuchKeyException.builder()
+                .statusCode(HttpURLConnection.HTTP_NOT_FOUND)
+                .build()
+        );
+        final Region region = Mockito.mock(Region.class);
+        Mockito.doReturn(aws).when(region).aws();
+        final Bucket bucket = Mockito.mock(Bucket.class);
+        Mockito.doReturn(region).when(bucket).region();
+        Mockito.doReturn(UUID.randomUUID().toString()).when(bucket).name();
+        MatcherAssert.assertThat(
+            "ocket was reported as existing while only a longer key exists",
+            new AwsOcket(bucket, key).exists(),
+            Matchers.is(false)
+        );
+    }
+
+    @Test
+    void throwsOnExistsWhenAwsFails() {
+        final S3Client aws = Mockito.mock(S3Client.class);
+        Mockito.when(
+            aws.headObject(Mockito.any(HeadObjectRequest.class))
+        ).thenThrow(
+            S3Exception.builder()
+                .message("access denied")
+                .statusCode(HttpURLConnection.HTTP_FORBIDDEN)
+                .build()
         );
         final Region region = Mockito.mock(Region.class);
         Mockito.doReturn(aws).when(region).aws();
