@@ -8,6 +8,7 @@ import com.jcabi.aspects.Loggable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BoundedInputStream;
@@ -15,7 +16,7 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
 import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
+import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
@@ -86,23 +87,29 @@ final class AwsOcket implements Ocket {
 
     @Override
     public boolean exists() throws IOException {
+        boolean exists = true;
         try {
-            return !this.bkt.region().aws().listObjectsV2(
-                ListObjectsV2Request.builder()
+            this.bkt.region().aws().headObject(
+                HeadObjectRequest.builder()
                     .bucket(this.bkt.name())
-                    .prefix(this.name)
-                    .maxKeys(1)
+                    .key(this.name)
                     .build()
-            ).contents().isEmpty();
-        } catch (final S3Exception ex) {
-            throw new IOException(
-                String.format(
-                    "failed to check existence of '%s' in '%s'",
-                    this.name, this.bkt
-                ),
-                ex
             );
+        } catch (final NoSuchKeyException ex) {
+            exists = false;
+        } catch (final S3Exception ex) {
+            if (ex.statusCode() != HttpURLConnection.HTTP_NOT_FOUND) {
+                throw new IOException(
+                    String.format(
+                        "failed to check existence of '%s' in '%s'",
+                        this.name, this.bkt
+                    ),
+                    ex
+                );
+            }
+            exists = false;
         }
+        return exists;
     }
 
     @Override
