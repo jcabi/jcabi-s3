@@ -148,4 +148,29 @@ final class FkBucketTest {
             Matchers.emptyIterable()
         );
     }
+
+    @Test
+    void listsOcketsByPlainStringPrefix(@TempDir final File temp)
+        throws Exception {
+        final Bucket bucket = new FkRegion(temp).bucket("pfx");
+        new Ocket.Text(bucket.ocket("a/b.txt")).write("");
+        new Ocket.Text(bucket.ocket("a/c.txt")).write("");
+        MatcherAssert.assertThat(
+            "prefix was not treated as a plain string",
+            bucket.list("a/b"),
+            Matchers.contains("a/b.txt")
+        );
+    }
+
+    @Test
+    void listsNothingForMissingPrefix(@TempDir final File temp)
+        throws Exception {
+        final Bucket bucket = new FkRegion(temp).bucket("none");
+        new Ocket.Text(bucket.ocket("a/b.txt")).write("");
+        MatcherAssert.assertThat(
+            "missing prefix did not give empty list",
+            bucket.list("missing/"),
+            Matchers.emptyIterable()
+        );
+    }
 }
