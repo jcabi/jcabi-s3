@@ -127,22 +127,25 @@ public final class FkBucket implements Bucket {
     @Override
     public Iterable<String> list(final String pfx) {
         final File home = this.home();
-        return Iterables.transform(
-            FileUtils.listFiles(
-                new File(home, pfx),
-                TrueFileFilter.INSTANCE,
-                TrueFileFilter.INSTANCE
-            ),
-            new Function<File, String>() {
-                @Override
-                public String apply(final File file) {
-                    return FilenameUtils.separatorsToUnix(
-                        file.getAbsolutePath().substring(
-                            home.getAbsolutePath().length() + 1
-                        )
-                    );
+        return Iterables.filter(
+            Iterables.transform(
+                FileUtils.listFiles(
+                    home,
+                    TrueFileFilter.INSTANCE,
+                    TrueFileFilter.INSTANCE
+                ),
+                new Function<File, String>() {
+                    @Override
+                    public String apply(final File file) {
+                        return FilenameUtils.separatorsToUnix(
+                            file.getAbsolutePath().substring(
+                                home.getAbsolutePath().length() + 1
+                            )
+                        );
+                    }
                 }
-            }
+            ),
+            key -> key.startsWith(pfx)
         );
     }
 
