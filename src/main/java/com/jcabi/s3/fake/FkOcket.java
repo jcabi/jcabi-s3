@@ -139,9 +139,7 @@ public final class FkOcket implements Ocket {
             InputStream input = Files.newInputStream(this.file().toPath());
             OutputStream ous = output
         ) {
-            while (input.available() > 0) {
-                ous.write(input.read());
-            }
+            input.transferTo(ous);
         }
     }
 
@@ -154,9 +152,7 @@ public final class FkOcket implements Ocket {
             InputStream ins = input;
             OutputStream output = Files.newOutputStream(file.toPath())
         ) {
-            while (ins.available() > 0) {
-                output.write(input.read());
-            }
+            ins.transferTo(output);
         }
     }
 
