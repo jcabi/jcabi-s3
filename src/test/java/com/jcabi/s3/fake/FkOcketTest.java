@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import org.hamcrest.MatcherAssert;
@@ -237,5 +238,83 @@ final class FkOcketTest {
             new Ocket.Text(bucket.ocket(ocket.key())).read(),
             Matchers.equalTo(content)
         );
+    }
+
+    @Test
+    void writesStreamReportingNoAvailableBytes(@TempDir final File temp)
+        throws Exception {
+        final Bucket bucket = new FkRegion(temp).bucket(
+            UUID.randomUUID().toString()
+        );
+        final Ocket ocket = bucket.ocket(
+            String.format("%s.dat", UUID.randomUUID())
+        );
+        final byte[] bytes = UUID.randomUUID().toString()
+            .getBytes(StandardCharsets.UTF_8);
+        try (InputStream stream = new FkOcketTest.DrainedStream(bytes)) {
+            ocket.write(stream, HeadObjectResponse.builder().build());
+        }
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        bucket.ocket(ocket.key()).read(output);
+        MatcherAssert.assertThat(
+            "content from a stream reporting zero available bytes was lost",
+            output.toByteArray(),
+            Matchers.equalTo(bytes)
+        );
+    }
+
+    /**
+     * Input stream that holds bytes but always reports zero available,
+     * like a socket or pipe momentarily drained.
+     *
+     * @since 0.24.3
+     */
+    private static final class DrainedStream extends InputStream {
+
+        /**
+         * Bytes to serve.
+         */
+        private final transient byte[] bytes;
+
+        /**
+         * Position of the next byte.
+         */
+        private transient int pos;
+
+        /**
+         * Ctor.
+         *
+         * @param data Bytes to serve
+         */
+        DrainedStream(final byte[] data) {
+            super();
+            this.bytes = data.clone();
+        }
+
+        @Override
+        public int read() {
+            final int next;
+            if (this.pos < this.bytes.length) {
+                next = this.bytes[this.pos] & 0xFF;
+                this.pos += 1;
+            } else {
+                next = -1;
+            }
+            return next;
+        }
+
+        @Override
+        public int read(final byte[] buf, final int off, final int len) {
+            final int result;
+            if (this.pos >= this.bytes.length) {
+                result = -1;
+            } else {
+                final int count = Math.min(len, this.bytes.length - this.pos);
+                System.arraycopy(this.bytes, this.pos, buf, off, count);
+                this.pos += count;
+                result = count;
+            }
+            return result;
+        }
     }
 }
